@@ -102,8 +102,8 @@ dataSource:
     jmxExport: true
     driverClassName: com.mysql.cj.jdbc.Driver
     dialect: org.hibernate.dialect.MySQL8Dialect
-    username: # Insert username
-    password: # Insert password
+    username: yourUsernameHere
+    password: yourPasswordHere
 
 environments:
     development:
