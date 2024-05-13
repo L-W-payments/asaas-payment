@@ -9,6 +9,14 @@ class BasePerson extends BaseEntity {
     String phone
     String cpfCnpj
     PersonType personType
+    String cep
+    String number
+    String complement
+    String country
+    String city
+    String state
+    String district
+    String street
 
     static constraints = {
         email email: true
