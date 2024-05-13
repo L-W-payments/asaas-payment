@@ -2,5 +2,9 @@ package com.miniasaaslw.controller.customer
 
 class CustomerController {
 
-    def register() {}
+    def index(){
+    }
+
+    def save() {
+    }
 }

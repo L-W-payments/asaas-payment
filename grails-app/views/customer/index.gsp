@@ -5,7 +5,7 @@
   <title>Registrar Cliente</title>
 
 <body>
-<form action="">
+<form action="${createLink(controller: "customer", action: "save")}" method="POST">
   <div>
     <label for="name">Nome</label>
     <br>
