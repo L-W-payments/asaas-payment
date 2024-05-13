@@ -11,10 +11,8 @@ class BasePerson extends BaseEntity {
     PersonType personType
 
     static constraints = {
-        name blank: false
-        email blank: false, email: true
-        phone blank: false, size: 10..11
-        cpfCnpj blank: false, size: 11..14
-        personType blank: false
+        email email: true
+        phone size: 10..11
+        cpfCnpj size: 11..14
     }
 }
