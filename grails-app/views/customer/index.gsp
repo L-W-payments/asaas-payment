@@ -27,8 +27,8 @@
     <label for="personType">Você é uma pessoa física ou juridica?</label>
     <br>
     <select id="personType" name="personType">
-      <option value="cpf">Física</option>
-      <option value="cnpj">Jurídica</option>
+      <option value="fisica">Física</option>
+      <option value="juridica">Jurídica</option>
     </select>
   </div>
   <div>
