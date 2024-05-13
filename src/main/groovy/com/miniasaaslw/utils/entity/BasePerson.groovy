@@ -1,4 +1,6 @@
-package utils.entity
+package com.miniasaaslw.utils.entity
+
+import com.miniasaaslw.utils.entity.enums.PersonType
 
 class BasePerson extends BaseEntity {
 
