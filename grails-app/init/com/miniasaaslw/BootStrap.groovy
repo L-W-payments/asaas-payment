@@ -1,4 +1,4 @@
-package com.miniasaaaslw
+package com.miniasaaslw
 
 class BootStrap {
 

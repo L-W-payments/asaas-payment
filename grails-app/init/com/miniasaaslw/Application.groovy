@@ -1,4 +1,4 @@
-package com.miniasaaaslw
+package com.miniasaaslw
 
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration

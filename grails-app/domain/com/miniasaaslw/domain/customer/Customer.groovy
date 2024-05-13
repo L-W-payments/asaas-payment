@@ -1,4 +1,4 @@
-package com.miniasaaaslw.domain.customer
+package com.miniasaaslw.domain.customer
 
 import com.miniasaaslw.utils.entity.BasePerson
 
