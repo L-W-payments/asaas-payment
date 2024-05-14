@@ -34,5 +34,6 @@ class BasePerson extends BaseEntity {
         email email: true
         phone size: 10..11
         cpfCnpj size: 11..14
+        complement blank: true, nullable: true
     }
 }
