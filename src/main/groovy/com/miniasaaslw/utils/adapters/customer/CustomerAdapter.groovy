@@ -48,7 +48,4 @@ class CustomerAdapter {
         this.street = params.street
     }
 
-    public Customer toDomain(){
-        return new Customer(name: this.name, email: this.email, phone: this.phone, cpfCnpj: this.cpfCnpj, personType: this.personType, cep: this.cep, number: this.number, complement: this.complement, country: this.country, city: this.city, state: this.state, district: this.district, street: this.street)
-    }
 }
