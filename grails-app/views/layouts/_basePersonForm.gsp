@@ -2,7 +2,7 @@
 <div>
   <label for="name">Nome</label>
   <br>
-  <input type="text" id="name" name="name" placeholder="Insira o nome" ${person ? 'value=' + person.name : ''}/>
+  <input type="text" id="name" name="name" placeholder="Insira o nome" ${person ? 'value=' + person.name : ''}>
 </div>
 
 <div>
@@ -18,7 +18,7 @@
 </div>
 
 <div>
-  <label for="personType">Pessoa física ou juridica?</label>
+  <label for="personType">Pessoa física ou jurídica?</label>
   <br>
   <select id="personType" name="personType" ${person ? 'value=' + person.personType : ''}>
     <option value="natural">Física</option>
