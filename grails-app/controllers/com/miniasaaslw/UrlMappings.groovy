@@ -1,4 +1,4 @@
-
+package com.miniasaaslw
 
 class UrlMappings {
 
