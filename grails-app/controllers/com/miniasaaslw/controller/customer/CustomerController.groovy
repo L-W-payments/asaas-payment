@@ -14,10 +14,22 @@ class CustomerController {
 
     def save() {
         try{
-            customerService.save(new CustomerAdapter(params))
-            redirect(action: 'index')
+            Customer customer = customerService.save(new CustomerAdapter(params))
+            redirect(action: 'show', params : [id: customer.id])
         } catch (ValidationException exception){
             render exception.errors.allErrors.defaultMessage.join(",  <br>")
+        }
+    }
+
+    def show(){
+        try{
+            Customer customer = customerService.find(params.long("id"))
+            if(customer){
+                return [customer: customer]
+            }
+        } catch (Exception e){
+            e.printStackTrace()
+            redirect(uri: "/customer")
         }
     }
 }

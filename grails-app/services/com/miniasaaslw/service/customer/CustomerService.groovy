@@ -32,6 +32,15 @@ class CustomerService {
         return customer.save(failOnError: true)
     }
 
+    public Customer find(Long id){
+        Customer customer = Customer.get(id)
+
+        if(!customer){
+            throw new Exception("Cliente não encontrado")
+        }
+        return customer
+    }
+
     private static Customer validateCustomer(CustomerAdapter customerAdapter){
         Customer customer = new Customer()
 
