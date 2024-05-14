@@ -5,17 +5,29 @@ import com.miniasaaslw.utils.entity.enums.PersonType
 class BasePerson extends BaseEntity {
 
     String name
+
     String email
+
     String phone
+
     String cpfCnpj
+
     PersonType personType
+
     String cep
+
     String number
+
     String complement
+
     String country
+
     String city
+
     String state
+
     String district
+
     String street
 
     static constraints = {
