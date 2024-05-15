@@ -7,7 +7,6 @@
 <body>
 <g:if test="errors">
   <div>
-    <p>Erro ao cadastrar conta</p>
     <g:each var="error" in="${errors}">
       <p>${error}</p>
     </g:each>
