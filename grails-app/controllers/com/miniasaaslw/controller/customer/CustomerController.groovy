@@ -49,7 +49,7 @@ class CustomerController {
         try{
             customerService.delete(id)
             redirect(uri: "/customer")
-        }catch (Exception e){
+        }catch (RuntimeException e){
             e.printStackTrace()
             redirect(uri: "/customer")
         }
