@@ -14,6 +14,7 @@
 
     <g:render template="/layouts/basePersonForm" model="${[person: payer]}"/>
     <button type="submit">Salvar</button>
+    <a href="${createLink(controller: 'payer', action: 'delete', id: payer.id)}">Deletar</a>
 </form>
 </body>
 
