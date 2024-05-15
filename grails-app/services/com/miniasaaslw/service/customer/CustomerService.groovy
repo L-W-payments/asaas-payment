@@ -45,7 +45,7 @@ class CustomerService {
 
 
     public Customer find(Long id){
-        Customer customer = Customer.get(id)
+        Customer customer = Customer.findById(['id': id]).get()
 
         if(!customer){
             throw new RuntimeException("Cliente não encontrado")
