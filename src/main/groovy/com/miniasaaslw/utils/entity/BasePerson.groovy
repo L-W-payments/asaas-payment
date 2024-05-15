@@ -1,7 +1,9 @@
 package com.miniasaaslw.utils.entity
 
 import com.miniasaaslw.utils.entity.enums.PersonType
+import grails.gorm.dirty.checking.DirtyCheck
 
+@DirtyCheck
 class BasePerson extends BaseEntity {
 
     String name
