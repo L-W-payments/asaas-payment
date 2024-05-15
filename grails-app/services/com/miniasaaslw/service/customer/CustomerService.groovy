@@ -59,6 +59,18 @@ class CustomerService {
         return customer.save()
     }
 
+    public void delete(Long id){
+        Customer customer = Customer.get(id)
+
+        if(!customer){
+            throw new Exception("Cliente não encontrado")
+        }
+
+        customer.deleted = true
+        customer.save().deleted
+    }
+
+
     public Customer find(Long id){
         Customer customer = Customer.get(id)
 

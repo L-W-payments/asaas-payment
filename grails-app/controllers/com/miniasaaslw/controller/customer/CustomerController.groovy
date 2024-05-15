@@ -43,4 +43,16 @@ class CustomerController {
             render exception.errors.allErrors.defaultMessage.join(",  <br>")
         }
     }
+
+    def delete(){
+        long id = params.long("id")
+
+        try{
+            customerService.delete(id)
+            redirect(uri: "/customer")
+        }catch (Exception e){
+            e.printStackTrace()
+            redirect(uri: "/customer")
+        }
+    }
 }
