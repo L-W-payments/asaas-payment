@@ -27,8 +27,7 @@ class CustomerController {
             if(customer){
                 return [customer: customer]
             }
-        } catch (Exception e){
-            e.printStackTrace()
+        } catch (RuntimeException e){
             redirect(uri: "/customer")
         }
     }

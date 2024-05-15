@@ -56,14 +56,15 @@ class CustomerService {
         customer.street = customerAdapter.street
 
 
-        return customer.save()
+        customer.save(failOnError: true)
+        return customer
     }
 
     public void delete(Long id){
         Customer customer = Customer.get(id)
 
         if(!customer){
-            throw new Exception("Cliente não encontrado")
+            throw new RuntimeException("Cliente não encontrado")
         }
 
         customer.deleted = true
@@ -75,12 +76,13 @@ class CustomerService {
         Customer customer = Customer.get(id)
 
         if(!customer){
-            throw new Exception("Cliente não encontrado")
+            throw new RuntimeException("Cliente não encontrado")
         }
+
         return customer
     }
 
-    private static Customer validateCustomer(CustomerAdapter customerAdapter){
+    private Customer validateCustomer(CustomerAdapter customerAdapter){
         Customer customer = new Customer()
 
         if(!customerAdapter.name){
