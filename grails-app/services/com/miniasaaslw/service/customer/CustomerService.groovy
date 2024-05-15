@@ -15,8 +15,7 @@ class CustomerService {
             throw new ValidationException("Erro ao salvar sua conta", customer.errors)
         }
 
-        customer = new Customer()
-        copyFromCustomerAdapter(customerAdapter, customer)
+        customer = defineCustomerProperties(customerAdapter, new Customer())
 
         return customer.save(failOnError: true)
     }
@@ -27,8 +26,7 @@ class CustomerService {
             throw new ValidationException("Erro ao salvar sua conta", customer.errors)
         }
 
-        customer = this.find(id)
-        copyFromCustomerAdapter(customerAdapter, customer)
+        customer = defineCustomerProperties(customerAdapter, this.find(id))
 
         customer.save(failOnError: true)
         return customer
@@ -110,7 +108,7 @@ class CustomerService {
         return customer
     }
 
-    private void copyFromCustomerAdapter(CustomerAdapter customerAdapter, Customer customer) {
+    private Customer defineCustomerProperties(CustomerAdapter customerAdapter, Customer customer) {
         customer.name = customerAdapter.name
         customer.email = customerAdapter.email
         customer.phone = customerAdapter.phone
@@ -124,6 +122,7 @@ class CustomerService {
         customer.state = customerAdapter.state
         customer.district = customerAdapter.district
         customer.street = customerAdapter.street
+        return customer
     }
 
 }
