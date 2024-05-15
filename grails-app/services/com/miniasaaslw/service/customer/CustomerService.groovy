@@ -15,23 +15,11 @@ class CustomerService {
             throw new ValidationException("Erro ao salvar sua conta", customer.errors)
         }
 
-        customer = new Customer(name: customerAdapter.name,
-                email: customerAdapter.email,
-                phone: customerAdapter.phone,
-                cpfCnpj: customerAdapter.cpfCnpj,
-                personType: customerAdapter.personType,
-                cep: customerAdapter.cep,
-                number: customerAdapter.number,
-                complement: customerAdapter.complement,
-                country: customerAdapter.country,
-                city: customerAdapter.city,
-                state: customerAdapter.state,
-                district: customerAdapter.district,
-                street: customerAdapter.street)
+        customer = new Customer()
+        copyFromCustomerAdapter(customerAdapter, customer)
 
         return customer.save(failOnError: true)
     }
-
 
     public Customer update(long id, CustomerAdapter customerAdapter){
         Customer customer = validateCustomer(customerAdapter)
@@ -40,21 +28,7 @@ class CustomerService {
         }
 
         customer = this.find(id)
-
-        customer.name = customerAdapter.name
-        customer.email = customerAdapter.email
-        customer.phone = customerAdapter.phone
-        customer.cpfCnpj = customerAdapter.cpfCnpj
-        customer.personType = customerAdapter.personType
-        customer.cep = customerAdapter.cep
-        customer.number = customerAdapter.number
-        customer.complement = customerAdapter.complement
-        customer.country = customerAdapter.country
-        customer.city = customerAdapter.city
-        customer.state = customerAdapter.state
-        customer.district = customerAdapter.district
-        customer.street = customerAdapter.street
-
+        copyFromCustomerAdapter(customerAdapter, customer)
 
         customer.save(failOnError: true)
         return customer
@@ -136,5 +110,20 @@ class CustomerService {
         return customer
     }
 
+    private void copyFromCustomerAdapter(CustomerAdapter customerAdapter, Customer customer) {
+        customer.name = customerAdapter.name
+        customer.email = customerAdapter.email
+        customer.phone = customerAdapter.phone
+        customer.cpfCnpj = customerAdapter.cpfCnpj
+        customer.personType = customerAdapter.personType
+        customer.cep = customerAdapter.cep
+        customer.number = customerAdapter.number
+        customer.complement = customerAdapter.complement
+        customer.country = customerAdapter.country
+        customer.city = customerAdapter.city
+        customer.state = customerAdapter.state
+        customer.district = customerAdapter.district
+        customer.street = customerAdapter.street
+    }
 
 }
