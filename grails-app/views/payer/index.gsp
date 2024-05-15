@@ -13,6 +13,14 @@
         <g:render template="/layouts/basePersonForm" />
         <button type="submit">Enviar</button>
     </form>
+
+    <g:if test="errors">
+        <div>
+            <g:each var="error" in="${errors}">
+                <p>${error}</p>
+            </g:each>
+        </div>
+    </g:if>
 </body>
 
 </html>
