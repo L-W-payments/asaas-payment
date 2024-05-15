@@ -3,6 +3,13 @@
     <title>Cliente</title>
 </head>
 <body>
+    <g:if test="errors">
+        <div>
+            <g:each var="error" in="${errors}">
+                <p>${error}</p>
+            </g:each>
+        </div>
+    </g:if>
     <form action="${createLink(controller: 'customer', action: 'update')}" method="POST">
     <input type="hidden" name="id" value="${customer.id}">
       <g:render template="/layouts/basePersonForm" model="${[person: customer]}"/>

@@ -10,6 +10,10 @@ class CustomerController {
     def customerService
 
     def index(){
+        def errors = flash.errors
+        if(errors){
+            return [errors: errors]
+        }
     }
 
     def save() {
@@ -17,14 +21,19 @@ class CustomerController {
             Customer customer = customerService.save(new CustomerAdapter(params))
             redirect(action: 'show', params : [id: customer.id])
         } catch (ValidationException exception){
-            render exception.errors.allErrors.defaultMessage.join(",  <br>")
+            flash.errors = exception.errors.allErrors.collect { it.defaultMessage }
+            redirect(uri: '/customer')
         }
     }
 
     def show(){
+        def errors = flash.errors
         try{
             Customer customer = customerService.find(params.long("id"))
             if(customer){
+                if(errors){
+                    return [customer: customer, errors: errors]
+                }
                 return [customer: customer]
             }
         } catch (RuntimeException e){
@@ -39,7 +48,8 @@ class CustomerController {
             Customer customer = customerService.update(id, new CustomerAdapter(params))
             redirect(action: 'show', params : [id: customer.id])
         }catch (ValidationException exception){
-            render exception.errors.allErrors.defaultMessage.join(",  <br>")
+            flash.errors = exception.errors.allErrors.collect { it.defaultMessage }
+            redirect(uri: ('/customer/show/' + id))
         }
     }
 
