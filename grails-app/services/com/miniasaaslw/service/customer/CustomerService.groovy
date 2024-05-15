@@ -32,6 +32,33 @@ class CustomerService {
         return customer.save(failOnError: true)
     }
 
+
+    public Customer update(long id, CustomerAdapter customerAdapter){
+        Customer customer = validateCustomer(customerAdapter)
+        if(customer.hasErrors()){
+            throw new ValidationException("Erro ao salvar sua conta", customer.errors)
+        }
+
+        customer = this.find(id)
+
+        customer.name = customerAdapter.name
+        customer.email = customerAdapter.email
+        customer.phone = customerAdapter.phone
+        customer.cpfCnpj = customerAdapter.cpfCnpj
+        customer.personType = customerAdapter.personType
+        customer.cep = customerAdapter.cep
+        customer.number = customerAdapter.number
+        customer.complement = customerAdapter.complement
+        customer.country = customerAdapter.country
+        customer.city = customerAdapter.city
+        customer.state = customerAdapter.state
+        customer.district = customerAdapter.district
+        customer.street = customerAdapter.street
+
+
+        return customer.merge()
+    }
+
     public Customer find(Long id){
         Customer customer = Customer.get(id)
 

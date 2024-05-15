@@ -32,4 +32,15 @@ class CustomerController {
             redirect(uri: "/customer")
         }
     }
+
+    def update(){
+        long id = params.long("id")
+
+        try{
+            Customer customer = customerService.update(id, new CustomerAdapter(params))
+            redirect(action: 'show', params : [id: customer.id])
+        }catch (ValidationException exception){
+            render exception.errors.allErrors.defaultMessage.join(",  <br>")
+        }
+    }
 }
