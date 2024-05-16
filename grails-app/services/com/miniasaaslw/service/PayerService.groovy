@@ -1,8 +1,10 @@
 package com.miniasaaslw.service
 
 import com.miniasaaslw.domain.payer.Payer
-import com.miniasaaslw.utils.adapters.payer.PayerAdapter
-import com.miniasaaslw.utils.entity.enums.PersonType
+import com.miniasaaslw.adapters.payer.PayerAdapter
+import com.miniasaaslw.entity.enums.PersonType
+import com.miniasaaslw.utils.CpfCnpjUtils
+import com.miniasaaslw.utils.PhoneUtils
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -13,7 +15,7 @@ class PayerService {
         return Payer.notDeleted.list()
     }
 
-    public Payer find(long id) {
+    public Payer find(Long id) {
         Payer payer = Payer.findById([id: id]).get()
 
         if (!payer) throw new RuntimeException("Pagador não encontrado")
@@ -21,7 +23,7 @@ class PayerService {
         return payer
     }
 
-    public void delete(long id) {
+    public void delete(Long id) {
         Payer payer = find(id)
 
         if (payer.deleted) {
@@ -33,14 +35,14 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
-    public Payer update(long id, PayerAdapter payerAdapter) {
+    public Payer update(Long id, PayerAdapter payerAdapter) {
         Payer payerValues = validatePayerParams(payerAdapter)
 
         if (payerValues.hasErrors()) {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = definePayerProperties(find(id), payerAdapter)
+        Payer payer = buildPayerProperties(find(id), payerAdapter)
         payer.save(failOnError: true)
 
         return payer
@@ -53,7 +55,7 @@ class PayerService {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = definePayerProperties(new Payer(), payerAdapter)
+        Payer payer = buildPayerProperties(new Payer(), payerAdapter)
         payer.save(failOnError: true)
 
         return payer
@@ -86,12 +88,16 @@ class PayerService {
             payer.errors.reject("personType", null, "O tipo de pessoa do pagador não é válido")
         }
 
-        if (!payerAdapter.cep) {
-            payer.errors.reject("cep", null, "O CEP do pagador é obrigatório")
+        if (payerAdapter.personType == PersonType.LEGAL && !CpfCnpjUtils.isValidCnpj(payerAdapter.cpfCnpj)) {
+            payer.errors.reject("cpfCnpj", null, "O CNPJ do pagador não é válido")
         }
 
         if (!payerAdapter.number) {
             payer.errors.reject("number", null, "O número do pagador é obrigatório")
+        }
+
+        if (!PhoneUtils.isValidPhone(payerAdapter.phone)) {
+            payer.errors.reject("phone", null, "O telefone do pagador não é válido")
         }
 
         if (!payerAdapter.country) {
@@ -117,7 +123,7 @@ class PayerService {
         return payer
     }
 
-    private Payer definePayerProperties(Payer payer, PayerAdapter payerAdapter) {
+    private Payer buildPayerProperties(Payer payer, PayerAdapter payerAdapter) {
         payer.name = payerAdapter.name
         payer.email = payerAdapter.email
         payer.phone = payerAdapter.phone
