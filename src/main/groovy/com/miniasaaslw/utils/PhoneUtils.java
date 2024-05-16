@@ -21,10 +21,14 @@ public class PhoneUtils {
         Pattern pattern = Pattern.compile("^\\d{11}$");
         Matcher matcher = pattern.matcher(rawPhone);
 
-        if (matcher.matches()) return false;
+        if (!matcher.matches()) return false;
 
         int ddd = Integer.parseInt(rawPhone.substring(0, 2));
 
-        return brasilDDDs.contains(ddd);
+        if (!brasilDDDs.contains(ddd)) return false;
+
+        int firstDigit = Integer.parseInt(rawPhone.substring(2, 3));
+
+        return firstDigit == 9;
     }
 }
