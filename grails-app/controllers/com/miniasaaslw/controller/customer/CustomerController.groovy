@@ -23,6 +23,9 @@ class CustomerController {
         } catch (ValidationException exception){
             flash.errors = exception.errors.allErrors.collect { it.defaultMessage }
             redirect(uri: '/customer')
+        }catch (Exception exception){
+            flash.errors = ["Erro ao salvar sua conta"]
+            redirect(uri: '/customer')
         }
     }
 
@@ -36,8 +39,11 @@ class CustomerController {
                 }
                 return [customer: customer]
             }
-        } catch (RuntimeException e){
+        } catch (RuntimeException runtimeException){
             redirect(uri: "/customer")
+        } catch (Exception exception){
+            flash.errors = ["Erro ao buscar sua conta"]
+            redirect(uri: '/customer')
         }
     }
 
@@ -47,8 +53,8 @@ class CustomerController {
         try{
             Customer customer = customerService.update(id, new CustomerAdapter(params))
             redirect(action: 'show', params : [id: customer.id])
-        }catch (ValidationException exception){
-            flash.errors = exception.errors.allErrors.collect { it.defaultMessage }
+        }catch (ValidationException validationException){
+            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
             redirect(uri: ('/customer/show/' + id))
         }
     }
@@ -59,8 +65,11 @@ class CustomerController {
         try{
             customerService.delete(id)
             redirect(uri: "/customer")
-        }catch (RuntimeException e){
-            e.printStackTrace()
+        }catch (RuntimeException runtimeException){
+            runtimeException.printStackTrace()
+            redirect(uri: "/customer")
+        }catch (Exception exception){
+            flash.errors = ["Erro ao deletar sua conta"]
             redirect(uri: "/customer")
         }
     }
