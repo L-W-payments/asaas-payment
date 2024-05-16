@@ -108,7 +108,7 @@ class CustomerService {
         return customer
     }
 
-    private Customer defineCustomerProperties(CustomerAdapter customerAdapter, Customer customer) {
+    private Customer buildCustomerProperties(CustomerAdapter customerAdapter, Customer customer) {
         customer.name = customerAdapter.name
         customer.email = customerAdapter.email
         customer.phone = customerAdapter.phone
