@@ -1,6 +1,6 @@
-package com.miniasaaslw.utils.entity
+package com.miniasaaslw.entity
 
-import com.miniasaaslw.utils.entity.enums.PersonType
+import com.miniasaaslw.entity.enums.PersonType
 
 class BasePerson extends BaseEntity {
 
@@ -34,6 +34,8 @@ class BasePerson extends BaseEntity {
         email email: true
         phone size: 10..11
         cpfCnpj size: 11..14
+        cep blank: true, nullable: true, size: 8..8
         complement blank: true, nullable: true
+        state size: 2..2
     }
 }
