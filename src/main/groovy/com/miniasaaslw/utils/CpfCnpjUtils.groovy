@@ -5,6 +5,10 @@ class CpfCnpjUtils {
     public static Boolean validateCpf(String cpf){
         int[] numbers = new int[11]
 
+        if(cpf == null || cpf.isEmpty()){
+            return false
+        }
+
         for(int i = 0; i < 11; i++){
             numbers[i] = Integer.parseInt(cpf.substring(i, i+1))
         }

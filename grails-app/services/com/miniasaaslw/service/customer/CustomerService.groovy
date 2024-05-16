@@ -4,6 +4,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
 import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.utils.CpfCnpjUtils
+import com.miniasaaslw.utils.EmailUtils
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -107,10 +108,12 @@ class CustomerService {
             customer.errors.reject("street", null, "Rua é obrigatória!")
         }
 
-        if(customerAdapter.personType.equals(PersonType.NATURAL)){
-            if(!CpfCnpjUtils.validateCpf(customerAdapter.cpfCnpj)){
-                customer.errors.reject("cpfCnpj", null, "CPF inválido!")
-            }
+        if((customerAdapter.personType == PersonType.NATURAL) && (!CpfCnpjUtils.validateCpf(customerAdapter.cpfCnpj))){
+            customer.errors.reject("cpfCnpj", null, "CPF inválido!")
+        }
+
+        if(!EmailUtils.validateEmail(customerAdapter.email)){
+            customer.errors.reject("email", null, "Email inválido!")
         }
 
         return customer
