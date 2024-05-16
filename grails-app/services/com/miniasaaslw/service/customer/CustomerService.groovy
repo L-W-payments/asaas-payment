@@ -40,7 +40,7 @@ class CustomerService {
         }
 
         customer.deleted = true
-        customer.save()
+        customer.save(failOnError: true)
     }
 
 
