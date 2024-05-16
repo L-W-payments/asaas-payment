@@ -1,4 +1,4 @@
-package com.miniasaaslw.utils.entity
+package com.miniasaaslw.entity
 
 abstract class BaseEntity {
 

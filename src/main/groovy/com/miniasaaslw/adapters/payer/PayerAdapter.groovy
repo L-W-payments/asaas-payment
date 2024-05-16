@@ -1,6 +1,6 @@
-package com.miniasaaslw.utils.adapters.payer
+package com.miniasaaslw.adapters.payer
 
-import com.miniasaaslw.utils.entity.enums.PersonType
+import com.miniasaaslw.entity.enums.PersonType
 
 class PayerAdapter {
 
