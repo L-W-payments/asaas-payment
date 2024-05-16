@@ -2,6 +2,8 @@ package com.miniasaaslw.service.customer
 
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
+import com.miniasaaslw.entity.enums.PersonType
+import com.miniasaaslw.utils.CpfCnpjUtils
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -103,6 +105,12 @@ class CustomerService {
 
         if(!customerAdapter.street){
             customer.errors.reject("street", null, "Rua é obrigatória!")
+        }
+
+        if(customerAdapter.personType.equals(PersonType.NATURAL)){
+            if(!CpfCnpjUtils.validateCpf(customerAdapter.cpfCnpj)){
+                customer.errors.reject("cpfCnpj", null, "CPF inválido!")
+            }
         }
 
         return customer
