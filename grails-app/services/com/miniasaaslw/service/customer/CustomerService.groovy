@@ -80,10 +80,6 @@ class CustomerService {
             customer.errors.reject("personType", null, "Tipo de pessoa é obrigatório!")
         }
 
-        if(!customerAdapter.cep){
-            customer.errors.reject("cep", null, "CEP é obrigatório!")
-        }
-
         if(!customerAdapter.number){
             customer.errors.reject("number", null, "Número é obrigatório!")
         }

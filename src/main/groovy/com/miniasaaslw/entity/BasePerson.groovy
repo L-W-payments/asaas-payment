@@ -1,5 +1,7 @@
 package com.miniasaaslw.entity
 
+import com.miniasaaslw.entity.enums.PersonType
+
 class BasePerson extends BaseEntity {
 
     String name
@@ -10,7 +12,7 @@ class BasePerson extends BaseEntity {
 
     String cpfCnpj
 
-    com.miniasaaslw.entity.enums.PersonType personType
+    PersonType personType
 
     String cep
 
@@ -32,6 +34,8 @@ class BasePerson extends BaseEntity {
         email email: true
         phone size: 10..11
         cpfCnpj size: 11..14
+        cep blank: true, nullable: true, size: 8..8
         complement blank: true, nullable: true
+        state size: 2..2
     }
 }
