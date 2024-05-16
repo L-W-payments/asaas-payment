@@ -1,7 +1,7 @@
 package com.miniasaaslw.service.customer
 
 import com.miniasaaslw.domain.customer.Customer
-import com.miniasaaslw.utils.adapters.customer.CustomerAdapter
+import com.miniasaaslw.adapters.customer.CustomerAdapter
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -15,7 +15,7 @@ class CustomerService {
             throw new ValidationException("Erro ao salvar sua conta", customer.errors)
         }
 
-        customer = defineCustomerProperties(customerAdapter, new Customer())
+        customer = buildCustomerProperties(customerAdapter, new Customer())
 
         return customer.save(failOnError: true)
     }
@@ -26,7 +26,7 @@ class CustomerService {
             throw new ValidationException("Erro ao salvar sua conta", customer.errors)
         }
 
-        customer = defineCustomerProperties(customerAdapter, this.find(id))
+        customer = buildCustomerProperties(customerAdapter, this.find(id))
 
         customer.save(failOnError: true)
         return customer

@@ -1,7 +1,7 @@
 package com.miniasaaslw.controller.customer
 
 import com.miniasaaslw.domain.customer.Customer
-import com.miniasaaslw.utils.adapters.customer.CustomerAdapter
+import com.miniasaaslw.adapters.customer.CustomerAdapter
 import grails.validation.ValidationException
 
 

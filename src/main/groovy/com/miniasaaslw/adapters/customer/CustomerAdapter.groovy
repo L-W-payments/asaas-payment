@@ -1,7 +1,6 @@
-package com.miniasaaslw.utils.adapters.customer
+package com.miniasaaslw.adapters.customer
 
-import com.miniasaaslw.domain.customer.Customer
-import com.miniasaaslw.utils.entity.enums.PersonType
+import com.miniasaaslw.entity.enums.PersonType
 
 class CustomerAdapter {
 
@@ -13,7 +12,7 @@ class CustomerAdapter {
 
     String cpfCnpj
 
-    PersonType personType
+   PersonType personType
 
     String cep
 

@@ -1,6 +1,4 @@
-package com.miniasaaslw.utils.entity
-
-import com.miniasaaslw.utils.entity.enums.PersonType
+package com.miniasaaslw.entity
 
 class BasePerson extends BaseEntity {
 
@@ -12,7 +10,7 @@ class BasePerson extends BaseEntity {
 
     String cpfCnpj
 
-    PersonType personType
+    com.miniasaaslw.entity.enums.PersonType personType
 
     String cep
 

@@ -1,4 +1,4 @@
-<%@ page import="com.miniasaaslw.utils.entity.enums.PersonType" %>
+<%@ page import="com.miniasaaslw.entity.enums.PersonType" %>
 
 <h2>Dados Pessoais</h2>
 

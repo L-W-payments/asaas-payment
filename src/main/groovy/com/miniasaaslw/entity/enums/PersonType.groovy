@@ -1,4 +1,4 @@
-package com.miniasaaslw.utils.entity.enums
+package com.miniasaaslw.entity.enums
 
 enum PersonType {
     NATURAL,
