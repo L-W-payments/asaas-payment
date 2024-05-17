@@ -1,6 +1,6 @@
 package com.miniasaaslw.utils;
 
-public class StringUtils {
+class StringUtils {
 
     public static String removeNonNumeric(String source) {
         if (source == null) return null;
