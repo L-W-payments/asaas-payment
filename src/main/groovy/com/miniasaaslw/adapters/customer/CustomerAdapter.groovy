@@ -1,7 +1,6 @@
 package com.miniasaaslw.adapters.customer
 
 import com.miniasaaslw.entity.enums.PersonType
-import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.StringUtils
 
 class CustomerAdapter {

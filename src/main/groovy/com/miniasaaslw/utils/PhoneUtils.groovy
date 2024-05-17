@@ -1,10 +1,9 @@
 package com.miniasaaslw.utils;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PhoneUtils {
+class PhoneUtils {
 
     private static final List<Integer> brasilDDDs = List.of(
             11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22,
@@ -13,22 +12,23 @@ public class PhoneUtils {
             62, 63, 64, 65, 66, 67, 68, 69, 71, 73, 74, 75,
             77, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 91,
             92, 93, 94, 95, 96, 97, 98, 99
-    );
+    )
 
     public static boolean isValidPhone(String rawPhone) {
-        if (rawPhone == null || rawPhone.length() != 11) return false;
+        if (rawPhone == null || rawPhone.length() != 11) return false
 
-        Pattern pattern = Pattern.compile("^\\d{11}$");
-        Matcher matcher = pattern.matcher(rawPhone);
+        Pattern pattern = Pattern.compile("^\\d{11}\$");
 
-        if (!matcher.matches()) return false;
+        Matcher matcher = pattern.matcher(rawPhone)
 
-        int ddd = Integer.parseInt(rawPhone.substring(0, 2));
+        if (!matcher.matches()) return false
 
-        if (!brasilDDDs.contains(ddd)) return false;
+        int ddd = Integer.parseInt(rawPhone.substring(0, 2))
 
-        int firstDigit = Integer.parseInt(rawPhone.substring(2, 3));
+        if (!brasilDDDs.contains(ddd)) return false
 
-        return firstDigit == 9;
+        int firstDigit = Integer.parseInt(rawPhone.substring(2, 3))
+
+        return firstDigit == 9
     }
 }
