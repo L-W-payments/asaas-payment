@@ -74,8 +74,4 @@ class CpfCnpjUtils {
 
         return secondDigit == numbers[10]
     }
-
-    public static String parseCpf(String cpf){
-        return cpf.replaceAll("[.-]", "")
-    }
 }

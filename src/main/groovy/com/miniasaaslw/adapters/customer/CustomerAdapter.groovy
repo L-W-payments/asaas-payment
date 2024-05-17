@@ -2,6 +2,7 @@ package com.miniasaaslw.adapters.customer
 
 import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.utils.CpfCnpjUtils
+import com.miniasaaslw.utils.StringUtils
 
 class CustomerAdapter {
 
@@ -36,7 +37,7 @@ class CustomerAdapter {
         this.name = params.name
         this.email = params.email
         this.phone = params.phone
-        this.cpfCnpj = CpfCnpjUtils.parseCpf(params.cpfCnpj as String)
+        this.cpfCnpj = StringUtils.removeNonNumeric(params.cpfCnpj as String)
         this.personType = PersonType.valueOf(params.personType.toString().toUpperCase())
         this.cep = params.cep
         this.number = params.number
