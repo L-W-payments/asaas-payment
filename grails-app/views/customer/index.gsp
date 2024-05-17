@@ -13,7 +13,7 @@
   </div>
 </g:if>
 <form action="${createLink(controller: 'customer', action: 'save')}" method="POST">
-  <g:render template="/layouts/basePersonForm" />
+  <g:render template="/templates/basePersonForm" />
   <button type="submit">Enviar</button>
 </form>
 </body>

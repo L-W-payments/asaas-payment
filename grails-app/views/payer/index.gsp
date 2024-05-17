@@ -10,7 +10,7 @@
     <h1>Registrar Pagador</h1>
 
     <form action="${createLink(controller: 'payer', action: 'save')}" method="POST">
-        <g:render template="/layouts/basePersonForm" />
+        <g:render template="/templates/basePersonForm" />
         <button type="submit">Enviar</button>
     </form>
 

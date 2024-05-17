@@ -12,7 +12,7 @@
 <form action="${createLink(controller: 'payer', action: 'update')}" method="POST">
     <input type="hidden" name="id" value="${payer.id}"/>
 
-    <g:render template="/layouts/basePersonForm" model="${[person: payer]}"/>
+    <g:render template="/templates/basePersonForm" model="${[person: payer]}"/>
     <button type="submit">Salvar</button>
     <a href="${createLink(controller: 'payer', action: 'delete', id: payer.id)}">Deletar</a>
 </form>
