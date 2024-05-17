@@ -3,6 +3,7 @@ package com.miniasaaslw.service.customer
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
 import com.miniasaaslw.entity.enums.PersonType
+import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.EmailUtils
 import grails.gorm.transactions.Transactional
@@ -12,9 +13,8 @@ import grails.validation.ValidationException
 class CustomerService {
 
     public Customer save(CustomerAdapter customerAdapter) {
-
         Customer customer = validateCustomer(customerAdapter)
-        if(customer.hasErrors()){
+        if (customer.hasErrors()) {
             throw new ValidationException("Erro ao salvar sua conta", customer.errors)
         }
 
@@ -23,9 +23,9 @@ class CustomerService {
         return customer.save(failOnError: true)
     }
 
-    public Customer update(long id, CustomerAdapter customerAdapter){
+    public Customer update(long id, CustomerAdapter customerAdapter) {
         Customer customer = validateCustomer(customerAdapter)
-        if(customer.hasErrors()){
+        if (customer.hasErrors()) {
             throw new ValidationException("Erro ao salvar sua conta", customer.errors)
         }
 
@@ -35,80 +35,75 @@ class CustomerService {
         return customer
     }
 
-    public void delete(Long id){
-        Customer customer = Customer.get(id)
-
-        if(!customer){
-            throw new RuntimeException("Cliente não encontrado")
-        }
+    public void delete(Long id) {
+        Customer customer = find(id)
 
         customer.deleted = true
         customer.save(failOnError: true)
     }
 
+    public Customer find(Long id) {
+        Customer customer = CustomerRepository.query([id: id]).get()
 
-    public Customer find(Long id){
-        Customer customer = Customer.findById(['id': id]).get()
-
-        if(!customer){
+        if (!customer) {
             throw new RuntimeException("Cliente não encontrado")
         }
 
         return customer
     }
 
-    private Customer validateCustomer(CustomerAdapter customerAdapter){
+    private Customer validateCustomer(CustomerAdapter customerAdapter) {
         Customer customer = new Customer()
 
-        if(!customerAdapter.name){
+        if (!customerAdapter.name) {
             customer.errors.reject("name", null, "Nome é obrigatório!")
         }
 
-        if(!customerAdapter.email){
+        if (!customerAdapter.email) {
             customer.errors.reject("email", null, "Email é obrigatório!")
         }
 
-        if(!customerAdapter.phone){
+        if (!customerAdapter.phone) {
             customer.errors.reject("phone", null, "Telefone é obrigatório!")
         }
 
-        if(!customerAdapter.cpfCnpj){
+        if (!customerAdapter.cpfCnpj) {
             customer.errors.reject("cpfCnpj", null, "CPF/CNPJ é obrigatório!")
         }
 
-        if(!customerAdapter.personType){
+        if (!customerAdapter.personType) {
             customer.errors.reject("personType", null, "Tipo de pessoa é obrigatório!")
         }
 
-        if(!customerAdapter.number){
+        if (!customerAdapter.number) {
             customer.errors.reject("number", null, "Número é obrigatório!")
         }
 
-        if(!customerAdapter.country){
+        if (!customerAdapter.country) {
             customer.errors.reject("country", null, "País é obrigatório!")
         }
 
-        if(!customerAdapter.city){
+        if (!customerAdapter.city) {
             customer.errors.reject("city", null, "Cidade é obrigatória!")
         }
 
-        if(!customerAdapter.state){
+        if (!customerAdapter.state) {
             customer.errors.reject("state", null, "Estado é obrigatório!")
         }
 
-        if(!customerAdapter.district){
+        if (!customerAdapter.district) {
             customer.errors.reject("district", null, "Bairro é obrigatório!")
         }
 
-        if(!customerAdapter.street){
+        if (!customerAdapter.street) {
             customer.errors.reject("street", null, "Rua é obrigatória!")
         }
 
-        if((customerAdapter.personType == PersonType.NATURAL) && (!CpfCnpjUtils.validateCpf(customerAdapter.cpfCnpj))){
+        if ((customerAdapter.personType == PersonType.NATURAL) && (!CpfCnpjUtils.validateCpf(customerAdapter.cpfCnpj))) {
             customer.errors.reject("cpfCnpj", null, "CPF inválido!")
         }
 
-        if(!EmailUtils.validateEmail(customerAdapter.email)){
+        if (!EmailUtils.validateEmail(customerAdapter.email)) {
             customer.errors.reject("email", null, "Email inválido!")
         }
 

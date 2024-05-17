@@ -3,6 +3,7 @@ package com.miniasaaslw.service.payer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.entity.enums.PersonType
+import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.PhoneUtils
 import grails.gorm.transactions.Transactional
@@ -12,11 +13,11 @@ import grails.validation.ValidationException
 class PayerService {
 
     public List<Payer> list() {
-        return Payer.notDeleted.list()
+        return PayerRepository.query([:]).list()
     }
 
     public Payer find(Long id) {
-        Payer payer = Payer.findById([id: id]).get()
+        Payer payer = PayerRepository.query([id: id]).get()
 
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
