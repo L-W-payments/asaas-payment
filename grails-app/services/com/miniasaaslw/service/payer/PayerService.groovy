@@ -1,4 +1,4 @@
-package com.miniasaaslw.service
+package com.miniasaaslw.service.payer
 
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
