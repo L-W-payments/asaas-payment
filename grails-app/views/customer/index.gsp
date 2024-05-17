@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta name="layout" content="main" />
-  <title>Registrar Cliente</title>
+  <title>Cliente- Asaas</title>
 </head>
 <body page-title="Cadastro de Cliente">
 <atlas-panel class="js-person-form">
@@ -14,6 +14,5 @@
     <atlas-button submit description="Salvar"></atlas-button>
   </atlas-form>
 </atlas-panel>
-<asset:javascript src="PersonController.js"/>
 </body>
 </html>

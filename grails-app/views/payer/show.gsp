@@ -2,20 +2,21 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Dados do Pagador</title>
+    <meta name="layout" content="main" />
+    <title>Pagadores - asaas</title>
 </head>
 
-<body>
-<h1>Dados de ${payer.name}</h1>
+<body page-title="Cadastro do pagador" >
+<atlas-form-panel header="Dados de ${payer.name}" class="js-person-form" action="${createLink(controller: 'payer', action: 'update', id: payer.id)}">
 
-<form action="${createLink(controller: 'payer', action: 'update')}" method="POST">
-    <input type="hidden" name="id" value="${payer.id}"/>
+    <atlas-button slot="actions" data-panel-start-editing icon="pencil" description="Editar"></atlas-button>
+    <atlas-button type="outlined" slot="actions" href="${createLink(controller: 'payer', action: 'delete', id: payer.id)}"
+                  description="Apagar"></atlas-button>
+    <atlas-input hidden name="country" value="Brasil"></atlas-input>
+        <g:render template="/templates/basePersonForm"
+                  model="${[person: payer]}"></g:render>
 
-    <g:render template="/templates/basePersonForm" model="${[person: payer]}"/>
-    <button type="submit">Salvar</button>
-    <a href="${createLink(controller: 'payer', action: 'delete', id: payer.id)}">Deletar</a>
-</form>
+</atlas-form-panel>
 </body>
 
 </html>
