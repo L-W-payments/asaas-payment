@@ -97,19 +97,20 @@ hibernate:
         queries: false
         use_second_level_cache: false
         use_query_cache: false
+    hibernateDirtyChecking: true
 dataSource:
     pooled: true
     jmxExport: true
     driverClassName: com.mysql.cj.jdbc.Driver
     dialect: org.hibernate.dialect.MySQL8Dialect
-    username: yourUsernameHere
-    password: yourPasswordHere
+    username: root
+    password: root
 
 environments:
     development:
         dataSource:
             dbCreate: update
-            url: jdbc:mysql://127.0.0.1:3306/mini_asaas
+            url: jdbc:mysql://127.0.0.1:3306/miniasaas
     test:
         dataSource:
             dbCreate: update

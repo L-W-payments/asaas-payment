@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql
+    container_name: miniasaas-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: miniasaas
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
