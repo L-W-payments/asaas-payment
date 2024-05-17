@@ -35,7 +35,7 @@ class CustomerAdapter {
     public CustomerAdapter(Map params) {
         this.name = params.name
         this.email = params.email
-        this.phone = params.phone
+        this.phone = StringUtils.removeNonNumeric(params.phone as String)
         this.cpfCnpj = StringUtils.removeNonNumeric(params.cpfCnpj as String)
         this.personType = PersonType.valueOf(params.personType.toString().toUpperCase())
         this.cep = StringUtils.removeNonNumeric(params.cep as String)
