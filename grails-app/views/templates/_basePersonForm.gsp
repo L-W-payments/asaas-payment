@@ -1,89 +1,90 @@
 <%@ page import="com.miniasaaslw.entity.enums.PersonType" %>
 
-<h2>Dados Pessoais</h2>
-
-<div>
-    <label for="name">Nome</label>
-    <br>
-    <input type="text" id="name" name="name" placeholder="Insira o nome" value="${person?.name ?: ''}">
-</div>
-
-<div>
-    <label for="email">Email</label>
-    <br>
-    <input type="text" id="email" name="email" placeholder="Insira o email" value="${person?.email ?: ''}">
-</div>
-
-<div>
-    <label for="phone">Telefone</label>
-    <br>
-    <input type="text" id="phone" name="phone" placeholder="Insira o telefone" minlength="10" maxlength="11"
-           value="${person?.phone ?: ''}">
-</div>
-
-<div>
-    <label for="personType">Pessoa física ou jurídica?</label>
-    <br>
-    <select id="personType" name="personType">
-        <option value="natural" ${person?.personType == PersonType.NATURAL ? 'selected' : ''}>Física</option>
-        <option value="legal" ${person?.personType == PersonType.LEGAL ? 'selected' : ''}>Jurídica</option>
-    </select>
-</div>
-
-<div>
-    <label for="cpfCnpj">Cpf/Cnpj</label>
-    <br>
-    <input type="text" id="cpfCnpj" name="cpfCnpj" placeholder="Insira o cpf/cnpj" minlength="11" maxlength="14"
-           value="${person?.cpfCnpj ?: ''}">
-</div>
-
-<h2>Endereço</h2>
-
-<div>
-    <label for="cep">CEP</label>
-    <br>
-    <input type="text" id="cep" name="cep" placeholder="Insira o cep" value="${person?.cep ?: ''}">
-</div>
-
-<div>
-    <label for="country">País</label>
-    <br>
-    <input type="text" id="country" name="country" placeholder="Insira o país" value="${person?.country ?: ''}">
-</div>
-
-<div>
-    <label for="state">Estado</label>
-    <br>
-    <input type="text" id="state" name="state" placeholder="Insira o estado" value="${person?.state ?: ''}">
-</div>
-
-<div>
-    <label for="city">Cidade</label>
-    <br>
-    <input type="text" id="city" name="city" placeholder="Insira a cidade" value="${person?.city ?: ''}">
-</div>
-
-<div>
-    <label for="district">Bairro</label>
-    <br>
-    <input type="text" id="district" name="district" placeholder="Insira o bairro" value="${person?.district ?: ''}">
-</div>
-
-<div>
-    <label for="street">Rua</label>
-    <br>
-    <input type="text" id="street" name="street" placeholder="Insira a rua" value="${person?.street ?: ''}">
-</div>
-
-<div>
-    <label for="number">Número</label>
-    <br>
-    <input type="text" id="number" name="number" placeholder="Insira o número" value="${person?.number ?: ''}">
-</div>
-
-<div>
-    <label for="complement">Complemento</label>
-    <br>
-    <input type="text" id="complement" name="complement" placeholder="Insira o complemento"
-           value="${person?.complement ?: ''}">
-</div>
+<atlas-section header="${ tittle }">
+    <atlas-grid>
+        <atlas-row>
+            <atlas-col>
+                <atlas-input label="Nome" name="name" required="true" placeholder="Maria Bernadete">
+                </atlas-input>
+            </atlas-col>
+        </atlas-row>
+        <atlas-row>
+            <atlas-col>
+                <atlas-masked-input label="Email" name="email" mask-alias="email" required="true"
+                                    placeholder="maria.bernadete@asaas.com.br">
+                </atlas-masked-input>
+            </atlas-col>
+        </atlas-row>
+        <atlas-row>
+            <atlas-col>
+                <atlas-layout gap="3">
+                    <atlas-text>Tipo de pessoa</atlas-text>
+                    <atlas-toggle>
+                        <g:each var="personType" in="${ PersonType.getPersonTypeList() }">
+                            <atlas-toggle-item
+                                    value="${personType}"
+                                    label="${message(code: "personType.${personType}.label")}"
+                                ${personType==PersonType.NATURAL ? 'checked' : '' }
+                            ></atlas-toggle-item>
+                        </g:each>
+                    </atlas-toggle>
+                </atlas-layout>
+            </atlas-col>
+        </atlas-row>
+        <atlas-row>
+            <atlas-col lg="6" md="6">
+                <atlas-masked-input label="CPF ou CNPJ" name="cpfCnpj" mask-alias="cpf-cnpj"
+                                    required="true">
+                </atlas-masked-input>
+            </atlas-col>
+            <atlas-col lg="6" md="6">
+                <atlas-masked-input label="Celular" name="phone" mask-alias="cell-phone"
+                                    required="true">
+                </atlas-masked-input>
+            </atlas-col>
+        </atlas-row>
+    </atlas-grid>
+</atlas-section>
+<atlas-section header="Endereço">
+    <atlas-grid>
+        <atlas-row>
+            <atlas-col lg="4" md="4">
+                <atlas-postal-code label="CEP" disable-search></atlas-postal-code>
+            </atlas-col>
+            <atlas-col lg="4" md="4">
+                <atlas-input label="Estado" id="state" name="state" required="true" placeholder="SC"
+                             maxlength="2">
+                </atlas-input>
+            </atlas-col>
+            <atlas-col lg="4" md="4">
+                <atlas-input label="Cidade" id="city" name="city" required="true"
+                             placeholder="Joinville">
+                </atlas-input>
+            </atlas-col>
+        </atlas-row>
+        <atlas-row>
+            <atlas-col lg="4" md="4">
+                <atlas-input label="Bairro" id="district" name="district" required="true"
+                             placeholder="Bom Retiro">
+                </atlas-input>
+            </atlas-col>
+            <atlas-col lg="4" md="4">
+                <atlas-input label="Número" id="number" name="number" required="true"
+                             placeholder="A2024">
+                </atlas-input>
+            </atlas-col>
+            <atlas-col lg="4" md="4">
+                <atlas-input label="Complemento" id="complement" name="complement"
+                             placeholder="Lado ímpar">
+                </atlas-input>
+            </atlas-col>
+        </atlas-row>
+        <atlas-row>
+            <atlas-col>
+                <atlas-input label="Rua" id="street" name="street" required="true"
+                             placeholder="Avenida Rolf Wiest">
+                </atlas-input>
+            </atlas-col>
+        </atlas-row>
+    </atlas-grid>
+</atlas-section>
