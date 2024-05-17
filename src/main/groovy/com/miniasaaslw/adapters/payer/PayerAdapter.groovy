@@ -1,6 +1,7 @@
 package com.miniasaaslw.adapters.payer
 
 import com.miniasaaslw.entity.enums.PersonType
+import com.miniasaaslw.utils.StringUtils
 
 class PayerAdapter {
 
@@ -33,8 +34,8 @@ class PayerAdapter {
     public PayerAdapter(Map params) {
         this.name = params.name
         this.email = params.email
-        this.phone = params.phone
-        this.cpfCnpj = params.cpfCnpj
+        this.phone = StringUtils.removeNonNumeric(params.phone as String)
+        this.cpfCnpj = StringUtils.removeNonNumeric(params.cpfCnpj as String)
         this.personType = PersonType.valueOf(params.personType.toString().toUpperCase())
         this.cep = params.cep
         this.number = params.number
