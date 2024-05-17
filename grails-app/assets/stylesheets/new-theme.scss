@@ -1,0 +1,43 @@
+/* stylelint-disable color-no-hex */
+// Colors
+@function to-rgb($value) {
+  @return red($value), green($value), blue($value);
+}
+
+html, body {
+  height: 100%;
+}
+
+$base-color: #000000;
+$base-secondary-color: #3B69FF;
+
+//cores atlas
+body {
+  --atlas-primary: $base-color;
+  --atlas-primary-rgb: to-rgb($base-color);
+
+  @for $i from 1 through 4 {
+    $percentage: (100 - ($i * 20)) * 1%;
+    $color-number: $i * 100;
+
+    $color-light: mix(white, $base-color, $percentage);
+
+    --atlas-primary-#{$color-number}: $color-light;
+    --atlas-primary-#{$color-number}-rgb: to-rgb($color-light);
+  }
+
+  --atlas-primary-500: $base-color;
+
+  @for $i from 1 through 4 {
+    $percentage: $i * 20%;
+    $color-number: ($i * 100) + 500;
+
+    $color-dark: mix(black, $base-color, $percentage);
+
+    --atlas-primary-#{$color-number}: $color-dark;
+    --atlas-primary-#{$color-number}-rgb: to-rgb($color-dark);
+  }
+
+
+}
+/* stylelint-enable color-no-hex */
