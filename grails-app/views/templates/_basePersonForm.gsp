@@ -1,6 +1,6 @@
 <%@ page import="com.miniasaaslw.entity.enums.PersonType" %>
 
-<atlas-section header="${ tittle }">
+<atlas-section header="${ title }">
     <atlas-grid>
         <atlas-row>
             <atlas-col>

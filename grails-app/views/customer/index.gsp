@@ -9,7 +9,7 @@
   <atlas-form action="${createLink(controller: 'customer', action: 'save' )}">
     <atlas-input hidden name="country" value="Brasil"></atlas-input>
     <g:render template="/templates/basePersonForm"
-              model="${[tittle: "Cadastro de Cliente"]}" ></g:render>
+              model="${[title: "Cadastro de Cliente"]}" ></g:render>
 
     <atlas-button submit description="Salvar"></atlas-button>
   </atlas-form>
