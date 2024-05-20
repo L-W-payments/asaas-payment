@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta name="layout" content="main" />
-    <title>Cliente - asaas</title>
+    <title>Cliente - Asaas</title>
 </head>
 <body page-title="Dados do cliente">
 <atlas-form-panel header="Seus dados" class="js-person-form" action="${createLink(controller: 'customer', action: 'update', id: customer.id)}">

@@ -3,7 +3,7 @@
 
 <head>
     <meta name="layout" content="main" />
-    <title>Pagadores - asaas</title>
+    <title>Pagadores - Asaas</title>
 </head>
 
 <body page-title="Cadastro do pagador" >
