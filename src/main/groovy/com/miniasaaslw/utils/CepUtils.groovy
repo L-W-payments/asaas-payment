@@ -7,6 +7,15 @@ class CepUtils {
             return false
         }
 
+        if(!allDigitsAreNumbers(cep)){
+            return false
+        }
+
         return true
     }
+
+    private static boolean allDigitsAreNumbers(String cep){
+        return cep.matches('\\d{8}')
+    }
+
 }
