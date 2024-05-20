@@ -11,7 +11,7 @@ class NameUtils {
 
         if (!name.matches('^[a-zA-Z0-9 ]+$')) return false
 
-        if (name.split(" ").length < 1) return false
+        if (name.split(" ").length < 2) return false
 
         return true
     }
