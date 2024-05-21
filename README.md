@@ -48,8 +48,9 @@ delete para registros no banco de dados.
 
 - [ ] A senha do cliente deve ser criptografada;
 - [x] Todos os domínios devem possuir um campo `dateCreated`, `lastUpdated` e `deleted`;
-- [x] Nenhuma entidade deve ser deletada explicitamente;
-- [x] Services devem ser implementados de maneira explícita;
+- [x] Todos os domínios devem possuir um adapter;
+- [x] Todos os services devem ser implementados de maneira explícita;
+- [x] Nenhum domínio deve ser deletado explicitamente;
 - [x] Os dados da aplicação devem estar persistido em um banco MySQL;
 - [x] A aplicação deve ser desenvolvida em Grails;
 - [x] A aplicação deve ser desenvolvida em Groovy;
