@@ -5,6 +5,6 @@ import com.miniasaaslw.entity.BasePerson
 
 class Payer extends BasePerson {
 
-    static hasOne = [customer: Customer]
+    Customer customer
 
 }
