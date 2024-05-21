@@ -18,9 +18,10 @@ class PayerController {
 
     def update() {
         Long id = params.long("id")
+        Long customerId = params.long("customerId")
 
         try {
-            Payer payer = payerService.update(id, new PayerAdapter(params))
+            Payer payer = payerService.update(id, new PayerAdapter(params), customerId)
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
@@ -33,8 +34,10 @@ class PayerController {
     }
 
     def save() {
+        Long customerId = params.long("customerId")
+
         try {
-            Payer payer = payerService.save(new PayerAdapter(params))
+            Payer payer = payerService.save(new PayerAdapter(params), customerId)
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {

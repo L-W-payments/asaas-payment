@@ -4,7 +4,6 @@ import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.utils.StringUtils
 
 class PayerAdapter {
-
     String name
 
     String email

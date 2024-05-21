@@ -1,5 +1,6 @@
 package com.miniasaaslw.service.payer
 
+import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.entity.enums.PersonType
@@ -11,6 +12,8 @@ import grails.validation.ValidationException
 
 @Transactional
 class PayerService {
+
+    def customerService;
 
     public List<Payer> list() {
         return PayerRepository.query([:]).list()
@@ -36,27 +39,27 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
-    public Payer update(Long id, PayerAdapter payerAdapter) {
+    public Payer update(Long id, PayerAdapter payerAdapter, Long customerId) {
         Payer payerValues = validatePayerParams(payerAdapter)
 
         if (payerValues.hasErrors()) {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = buildPayerProperties(find(id), payerAdapter)
+        Payer payer = buildPayerProperties(find(id), payerAdapter, customerService.find(customerId))
         payer.save(failOnError: true)
 
         return payer
     }
 
-    public Payer save(PayerAdapter payerAdapter) {
+    public Payer save(PayerAdapter payerAdapter, Long customerId) {
         Payer payerValues = validatePayerParams(payerAdapter)
 
         if (payerValues.hasErrors()) {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = buildPayerProperties(new Payer(), payerAdapter)
+        Payer payer = buildPayerProperties(new Payer(), payerAdapter, customerService.find(customerId))
         payer.save(failOnError: true)
 
         return payer
@@ -124,7 +127,7 @@ class PayerService {
         return payer
     }
 
-    private Payer buildPayerProperties(Payer payer, PayerAdapter payerAdapter) {
+    private Payer buildPayerProperties(Payer payer, PayerAdapter payerAdapter, Customer customer) {
         payer.name = payerAdapter.name
         payer.email = payerAdapter.email
         payer.phone = payerAdapter.phone
@@ -138,6 +141,7 @@ class PayerService {
         payer.state = payerAdapter.state
         payer.district = payerAdapter.district
         payer.street = payerAdapter.street
+        payer.customer = customer
 
         return payer
     }
