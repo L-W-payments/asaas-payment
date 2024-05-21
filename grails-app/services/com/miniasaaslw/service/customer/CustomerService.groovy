@@ -6,6 +6,9 @@ import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.EmailUtils
+import com.miniasaaslw.utils.NameUtils
+import com.miniasaaslw.utils.PhoneUtils
+import com.miniasaaslw.utils.StateUtils
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -99,12 +102,28 @@ class CustomerService {
             customer.errors.reject("street", null, "Rua é obrigatória!")
         }
 
-        if ((customerAdapter.personType == PersonType.NATURAL) && (!CpfCnpjUtils.validateCpf(customerAdapter.cpfCnpj))) {
-            customer.errors.reject("cpfCnpj", null, "CPF inválido!")
+        if (!NameUtils.isNameValid(customerAdapter.name)) {
+            customer.errors.reject("name", null, "Nome inválido!")
         }
 
         if (!EmailUtils.validateEmail(customerAdapter.email)) {
             customer.errors.reject("email", null, "Email inválido!")
+        }
+
+        if (!PhoneUtils.isValidPhone(customerAdapter.phone)) {
+            customer.errors.reject("phone", null, "Telefone inválido!")
+        }
+
+        if ((customerAdapter.personType == PersonType.LEGAL) && (!CpfCnpjUtils.isValidCnpj(customerAdapter.cpfCnpj))) {
+            customer.errors.reject("cpfCnpj", null, "CNPJ inválido!")
+        }
+
+        if ((customerAdapter.personType == PersonType.NATURAL) && (!CpfCnpjUtils.validateCpf(customerAdapter.cpfCnpj))) {
+            customer.errors.reject("cpfCnpj", null, "CPF inválido!")
+        }
+
+        if (!StateUtils.isStateValid(customerAdapter.state)) {
+            customer.errors.reject("state", null, "Estado inválido!")
         }
 
         return customer
