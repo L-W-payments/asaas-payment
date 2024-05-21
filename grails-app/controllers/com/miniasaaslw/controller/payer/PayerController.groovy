@@ -1,5 +1,6 @@
 package com.miniasaaslw.controller.payer
 
+import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import grails.validation.ValidationException
@@ -7,6 +8,8 @@ import grails.validation.ValidationException
 class PayerController {
 
     def payerService
+
+    def customerService
 
     def index() {
         def errors = flash.errors
@@ -18,10 +21,9 @@ class PayerController {
 
     def update() {
         Long id = params.long("id")
-        Long customerId = params.long("customerId")
 
         try {
-            Payer payer = payerService.update(id, new PayerAdapter(params), customerId)
+            Payer payer = payerService.update(id, new PayerAdapter(params))
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
