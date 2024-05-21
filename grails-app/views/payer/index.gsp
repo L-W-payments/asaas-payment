@@ -1,26 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Registrar Pagador</title>
+    <meta name="layout" content="main" />
+    <title>Pagadores - Asaas</title>
 </head>
+<body page-title="Cadastro de Pagador">
+<atlas-panel class="js-person-form">
+    <atlas-form action="${createLink(controller: 'payer', action: 'save' )}">
+        <atlas-input hidden name="country" value="Brasil"></atlas-input>
+        <g:render template="/templates/basePersonForm"
+                  model="${[title: "Cadastro de Pagador"]}" ></g:render>
+        <atlas-button submit description="Salvar"></atlas-button>
+    </atlas-form>
+</atlas-panel>
 
-<body>
-    <h1>Registrar Pagador</h1>
-
-    <form action="${createLink(controller: 'payer', action: 'save')}" method="POST">
-        <g:render template="/layouts/basePersonForm" />
-        <button type="submit">Enviar</button>
-    </form>
-
-    <g:if test="errors">
-        <div>
-            <g:each var="error" in="${errors}">
-                <p>${error}</p>
-            </g:each>
-        </div>
-    </g:if>
 </body>
-
 </html>

@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Registrar Cliente</title>
+  <meta name="layout" content="main" />
+  <title>Cliente - Asaas</title>
 </head>
-<body>
-<g:if test="errors">
-  <div>
-    <g:each var="error" in="${errors}">
-      <p>${error}</p>
-    </g:each>
-  </div>
-</g:if>
-<form action="${createLink(controller: 'customer', action: 'save')}" method="POST">
-  <g:render template="/layouts/basePersonForm" />
-  <button type="submit">Enviar</button>
-</form>
+<body page-title="Cadastro de Cliente">
+<atlas-panel class="js-person-form">
+  <atlas-form action="${createLink(controller: 'customer', action: 'save' )}">
+    <atlas-input hidden name="country" value="Brasil"></atlas-input>
+    <g:render template="/templates/basePersonForm"
+              model="${[title: "Cadastro de Cliente"]}" ></g:render>
+
+    <atlas-button submit description="Salvar"></atlas-button>
+  </atlas-form>
+</atlas-panel>
 </body>
 </html>

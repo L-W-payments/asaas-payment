@@ -1,21 +1,18 @@
 <html>
 <head>
-    <title>Cliente</title>
+    <meta name="layout" content="main" />
+    <title>Cliente - Asaas</title>
 </head>
-<body>
-    <g:if test="errors">
-        <div>
-            <g:each var="error" in="${errors}">
-                <p>${error}</p>
-            </g:each>
-        </div>
-    </g:if>
-    <form action="${createLink(controller: 'customer', action: 'update')}" method="POST">
-    <input type="hidden" name="id" value="${customer.id}">
-      <g:render template="/layouts/basePersonForm" model="${[person: customer]}"/>
-      <button value="submit">Salvar</button>
-    </form>
-    <a href="${createLink(controller: 'customer', action: 'delete', id: customer.id)}">Apagar</a>
+<body page-title="Dados do cliente">
+<atlas-form-panel header="Seus dados" class="js-person-form" action="${createLink(controller: 'customer', action: 'update', id: customer.id)}">
 
+    <atlas-button slot="actions" data-panel-start-editing icon="pencil" description="Editar"></atlas-button>
+    <atlas-button type="outlined" slot="actions" href="${createLink(controller: 'customer', action: 'delete', id: customer.id)}"
+                  description="Apagar"></atlas-button>
+    <atlas-input hidden name="country" value="Brasil"></atlas-input>
+    <g:render template="/templates/basePersonForm"
+              model="${[person: customer]}"></g:render>
+
+</atlas-form-panel>
 </body>
 </html>
