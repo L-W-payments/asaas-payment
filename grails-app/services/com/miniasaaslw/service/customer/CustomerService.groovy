@@ -4,6 +4,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
 import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.repository.customer.CustomerRepository
+import com.miniasaaslw.utils.CepUtils
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.EmailUtils
 import com.miniasaaslw.utils.NameUtils
@@ -124,6 +125,10 @@ class CustomerService {
 
         if (!StateUtils.isStateValid(customerAdapter.state)) {
             customer.errors.reject("state", null, "Estado inválido!")
+        }
+
+        if(!CepUtils.validadeCep(customerAdapter.cep)){
+            customer.errors.reject("cep", null, "CEP inválido!")
         }
 
         return customer
