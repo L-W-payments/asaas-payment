@@ -14,9 +14,13 @@ class PayerController {
     def index() {
         def errors = flash.errors
 
+        List<Customer> customers = customerService.list()
+
         if (errors) {
-            return [errors: errors]
+            return [errors: errors, customers : customers]
         }
+
+        return [customers: customers]
     }
 
     def update() {
