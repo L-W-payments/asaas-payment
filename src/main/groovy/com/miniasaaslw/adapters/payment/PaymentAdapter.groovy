@@ -15,7 +15,7 @@ class PaymentAdapter {
 
     Date dueDate
 
-    public PaymentAdapter(Map params){
+    public PaymentAdapter(Map params) {
         this.paymentType = PaymentType.valueOf(params.paymentType.toString().toUpperCase())
         this.paymentStatus = PaymentStatus.valueOf(params.paymentStatus.toString().toUpperCase())
         this.description = params.description
