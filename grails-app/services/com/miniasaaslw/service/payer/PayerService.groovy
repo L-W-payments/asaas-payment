@@ -46,9 +46,9 @@ class PayerService {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer updatePayer = find(id)
+        Payer payer = find(id)
 
-        Payer payer = buildPayerProperties(updatePayer, payerAdapter, updatePayer.customer)
+        payer = buildPayerProperties(payer, payerAdapter, payer.customer)
         payer.save(failOnError: true)
 
         return payer
