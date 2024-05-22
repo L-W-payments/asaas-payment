@@ -9,6 +9,12 @@ class PayerRepository implements BaseEntityRepository {
     public static DetachedCriteria<Payer> query(Map search) {
         DetachedCriteria<Payer> query = Payer.where(defaultQuery(search))
 
+        query = query.where {
+            if (search.customerId) {
+                eq('customerId', Long.valueOf(search.customerId))
+            }
+        }
+
         return query
     }
 }
