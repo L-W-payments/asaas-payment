@@ -52,9 +52,6 @@ class CustomerService {
         return customer
     }
 
-    public List<Customer> list(){
-        return CustomerRepository.query([:]).list()
-    }
 
     private Customer validateCustomer(CustomerAdapter customerAdapter) {
         Customer customer = new Customer()
