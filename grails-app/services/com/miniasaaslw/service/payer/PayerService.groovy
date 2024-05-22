@@ -133,7 +133,7 @@ class PayerService {
             payer.errors.reject("cpfCnpj", null, "O CPF não é válido!")
         }
 
-        if (!StateUtils.isStateValid(payerAdapter.state)) {
+        if (!StateUtils.validateState(payerAdapter.state)) {
             payer.errors.reject("state", null, "O estado não é válido!")
         }
 

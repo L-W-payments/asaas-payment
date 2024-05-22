@@ -123,7 +123,7 @@ class CustomerService {
             customer.errors.reject("cpfCnpj", null, "CPF inválido!")
         }
 
-        if (!StateUtils.isStateValid(customerAdapter.state)) {
+        if (!StateUtils.validateState(customerAdapter.state)) {
             customer.errors.reject("state", null, "Estado inválido!")
         }
 
