@@ -103,7 +103,7 @@ class CustomerService {
             customer.errors.reject("street", null, "Rua é obrigatória!")
         }
 
-        if (!NameUtils.isNameValid(customerAdapter.name)) {
+        if (!NameUtils.validateName(customerAdapter.name)) {
             customer.errors.reject("name", null, "Nome inválido!")
         }
 

@@ -113,7 +113,7 @@ class PayerService {
             payer.errors.reject("street", null, "A rua do pagador é obrigatória")
         }
 
-        if (!NameUtils.isNameValid(payerAdapter.name)) {
+        if (!NameUtils.validateName(payerAdapter.name)) {
             payer.errors.reject("name", null, "O nome não é válido!")
         }
 
