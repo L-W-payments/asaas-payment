@@ -31,6 +31,8 @@ class PayerAdapter {
 
     String street
 
+    Long customerId
+
     public PayerAdapter(Map params) {
         this.name = params.name
         this.email = params.email
@@ -45,5 +47,6 @@ class PayerAdapter {
         this.state = params.state
         this.district = params.district
         this.street = params.street
+        this.customerId = params.customerId as Long
     }
 }

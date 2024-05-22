@@ -54,14 +54,14 @@ class PayerService {
         return payer
     }
 
-    public Payer save(PayerAdapter payerAdapter, Long customerId) {
+    public Payer save(PayerAdapter payerAdapter) {
         Payer payerValues = validatePayerParams(payerAdapter)
 
         if (payerValues.hasErrors()) {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = buildPayerProperties(new Payer(), payerAdapter, customerService.find(customerId))
+        Payer payer = buildPayerProperties(new Payer(), payerAdapter, customerService.find(payerAdapter.customerId))
         payer.save(failOnError: true)
 
         return payer
