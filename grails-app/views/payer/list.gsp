@@ -8,19 +8,14 @@
 
 <body page-title="Lista de pagadores">
 
-<atlas-panel>
+<atlas-panel header="${payers ? 'Seus pagadores' : ''}">
     <g:if test="${payers}">
-        <atlas-toolbar>
-            <atlas-heading size="h3" slot="search">
-                Seus pagadores
-            </atlas-heading>
+        <atlas-button
+                icon="plus"
+                description="Adicionar pagador"
+                href="/payer"
+                slot="actions"></atlas-button>
 
-            <atlas-button
-                    icon="plus"
-                    description="Adicionar pagador"
-                    href="/payer/"
-                    slot="actions"></atlas-button>
-        </atlas-toolbar>
         <atlas-table has-actions>
             <atlas-table-header slot="header">
                 <atlas-table-col>
@@ -61,6 +56,19 @@
             </atlas-table-body>
         </atlas-table>
     </g:if>
+    <g:else>
+        <atlas-empty-state
+                illustration="schedule-user-avatar"
+                header="Sem pagadores cadastrados">
+            Aqui você pode cadastrar os pagadores que deseja utilizar em suas transações.
+
+            <atlas-button
+                    icon="plus"
+                    description="Adicionar pagador"
+                    href="/payer"
+                    slot="button"></atlas-button>
+        </atlas-empty-state>
+    </g:else>
 </atlas-panel>
 
 </body>
