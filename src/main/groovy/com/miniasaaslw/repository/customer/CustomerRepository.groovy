@@ -17,4 +17,8 @@ class CustomerRepository implements BaseEntityRepository {
 
         return query
     }
+
+    public static Boolean exists(Map search) {
+        return query(search).get().asBoolean()
+    }
 }
