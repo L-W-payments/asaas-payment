@@ -125,7 +125,7 @@ class PayerService {
             payer.errors.reject("phone", null, "O telefone não é válido!")
         }
 
-        if (payerAdapter.personType == PersonType.LEGAL && !CpfCnpjUtils.isValidCnpj(payerAdapter.cpfCnpj)) {
+        if (payerAdapter.personType == PersonType.LEGAL && !CpfCnpjUtils.validateCnpj(payerAdapter.cpfCnpj)) {
             payer.errors.reject("cpfCnpj", null, "O CNPJ não é válido!")
         }
 

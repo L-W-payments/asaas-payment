@@ -75,15 +75,15 @@ class CpfCnpjUtils {
         return secondDigit == numbers[10]
     }
 
-    public static boolean isValidCnpj(String rawCnpj) {
+    public static boolean validateCnpj(String rawCnpj) {
         if (rawCnpj == null || rawCnpj.length() != 14) return false;
 
         int[] digits = rawCnpj.chars().map(Character::getNumericValue).toArray();
 
-        return isValidCnpjDigit(digits, 12, 5) && isValidCnpjDigit(digits, 13, 6);
+        return validateCnpjDigit(digits, 12, 5) && validateCnpjDigit(digits, 13, 6);
     }
 
-    private static boolean isValidCnpjDigit(int[] digits, int index, int initialWeight) {
+    private static boolean validateCnpjDigit(int[] digits, int index, int initialWeight) {
         int sum = 0;
         int weight = initialWeight;
         for (int i = 0; i < index; i++) {

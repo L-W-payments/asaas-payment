@@ -115,7 +115,7 @@ class CustomerService {
             customer.errors.reject("phone", null, "Telefone inválido!")
         }
 
-        if ((customerAdapter.personType == PersonType.LEGAL) && (!CpfCnpjUtils.isValidCnpj(customerAdapter.cpfCnpj))) {
+        if ((customerAdapter.personType == PersonType.LEGAL) && (!CpfCnpjUtils.validateCnpj(customerAdapter.cpfCnpj))) {
             customer.errors.reject("cpfCnpj", null, "CNPJ inválido!")
         }
 
