@@ -111,7 +111,7 @@ class CustomerService {
             customer.errors.reject("email", null, "Email inválido!")
         }
 
-        if (!PhoneUtils.isValidPhone(customerAdapter.phone)) {
+        if (!PhoneUtils.validatePhone(customerAdapter.phone)) {
             customer.errors.reject("phone", null, "Telefone inválido!")
         }
 

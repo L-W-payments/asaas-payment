@@ -121,7 +121,7 @@ class PayerService {
             payer.errors.reject("email", null, "O e-mail não é válido!")
         }
 
-        if (!PhoneUtils.isValidPhone(payerAdapter.phone)) {
+        if (!PhoneUtils.validatePhone(payerAdapter.phone)) {
             payer.errors.reject("phone", null, "O telefone não é válido!")
         }
 
