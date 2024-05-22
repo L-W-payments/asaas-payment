@@ -12,10 +12,6 @@ import grails.validation.ValidationException
 @Transactional
 class CustomerService {
 
-    public boolean exists(Map search) {
-        return CustomerRepository.query(search).get() != null
-    }
-
     public Customer save(CustomerAdapter customerAdapter) {
         Customer customer = validateCustomer(customerAdapter)
         if (customer.hasErrors()) {
@@ -75,7 +71,7 @@ class CustomerService {
             customer.errors.reject("cpfCnpj", null, "CPF/CNPJ é obrigatório!")
         }
 
-        if (exists([cpfCnpj: customerAdapter.cpfCnpj])) {
+        if (CustomerRepository.exists([cpfCnpj: customerAdapter.cpfCnpj])) {
             customer.errors.reject("cpfCnpj", null, "CPF/CNPJ já cadastrado!")
         }
 
