@@ -4,8 +4,12 @@ import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.repository.payer.PayerRepository
+import com.miniasaaslw.utils.CepUtils
 import com.miniasaaslw.utils.CpfCnpjUtils
+import com.miniasaaslw.utils.EmailUtils
+import com.miniasaaslw.utils.NameUtils
 import com.miniasaaslw.utils.PhoneUtils
+import com.miniasaaslw.utils.StateUtils
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -85,20 +89,8 @@ class PayerService {
             payer.errors.reject("personType", null, "O tipo de pessoa do pagador é obrigatório")
         }
 
-        if (payerAdapter.personType != PersonType.NATURAL && payerAdapter.personType != PersonType.LEGAL) {
-            payer.errors.reject("personType", null, "O tipo de pessoa do pagador não é válido")
-        }
-
-        if (payerAdapter.personType == PersonType.LEGAL && !CpfCnpjUtils.isValidCnpj(payerAdapter.cpfCnpj)) {
-            payer.errors.reject("cpfCnpj", null, "O CNPJ do pagador não é válido")
-        }
-
         if (!payerAdapter.number) {
             payer.errors.reject("number", null, "O número do pagador é obrigatório")
-        }
-
-        if (!PhoneUtils.isValidPhone(payerAdapter.phone)) {
-            payer.errors.reject("phone", null, "O telefone do pagador não é válido")
         }
 
         if (!payerAdapter.country) {
@@ -119,6 +111,34 @@ class PayerService {
 
         if (!payerAdapter.street) {
             payer.errors.reject("street", null, "A rua do pagador é obrigatória")
+        }
+
+        if (!NameUtils.isNameValid(payerAdapter.name)) {
+            payer.errors.reject("name", null, "O nome não é válido!")
+        }
+
+        if (!EmailUtils.validateEmail(payerAdapter.email)) {
+            payer.errors.reject("email", null, "O e-mail não é válido!")
+        }
+
+        if (!PhoneUtils.isValidPhone(payerAdapter.phone)) {
+            payer.errors.reject("phone", null, "O telefone não é válido!")
+        }
+
+        if (payerAdapter.personType == PersonType.LEGAL && !CpfCnpjUtils.isValidCnpj(payerAdapter.cpfCnpj)) {
+            payer.errors.reject("cpfCnpj", null, "O CNPJ não é válido!")
+        }
+
+        if (payerAdapter.personType == PersonType.NATURAL && !CpfCnpjUtils.validateCpf(payerAdapter.cpfCnpj)) {
+            payer.errors.reject("cpfCnpj", null, "O CPF não é válido!")
+        }
+
+        if (!StateUtils.isStateValid(payerAdapter.state)) {
+            payer.errors.reject("state", null, "O estado não é válido!")
+        }
+
+        if (payerAdapter.cep != null && CepUtils.validadeCep(payerAdapter.cep)) {
+            payer.errors.reject("cep", null, "O CEP não é válido!")
         }
 
         return payer
