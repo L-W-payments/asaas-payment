@@ -137,7 +137,7 @@ class PayerService {
             payer.errors.reject("state", null, "O estado não é válido!")
         }
 
-        if (payerAdapter.cep != null && CepUtils.validadeCep(payerAdapter.cep)) {
+        if (payerAdapter.cep != null && CepUtils.validateCep(payerAdapter.cep)) {
             payer.errors.reject("cep", null, "O CEP não é válido!")
         }
 

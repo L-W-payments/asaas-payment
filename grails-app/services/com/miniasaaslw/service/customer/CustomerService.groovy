@@ -127,7 +127,7 @@ class CustomerService {
             customer.errors.reject("state", null, "Estado inválido!")
         }
 
-        if (customerAdapter.cep != null && !CepUtils.validadeCep(customerAdapter.cep)) {
+        if (customerAdapter.cep != null && !CepUtils.validateCep(customerAdapter.cep)) {
             customer.errors.reject("cep", null, "CEP inválido!")
         }
 
