@@ -31,6 +31,7 @@ class PaymentService {
 
         return payment
     }
+
     private Payment validatePayment(PaymentAdapter paymentAdapter) {
         Payment payment = new Payment()
 
@@ -57,5 +58,13 @@ class PaymentService {
         if (!paymentAdapter.dueDate) {
             payment.errors.reject("A Data de vencimento é obrigatória")
         }
+        if (paymentAdapter.description != null && !validateDescription(paymentAdapter.description)) {
+            payment.errors.reject("A descrição do pagamento deve ter no máximo 500 caracteres")
+        }
+    private Boolean validateDescription(String description) {
+        if (description.length() > 500) return false
+
+        return true
+    }
     }
 }
