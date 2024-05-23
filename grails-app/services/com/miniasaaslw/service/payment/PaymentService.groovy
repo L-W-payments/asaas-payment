@@ -59,7 +59,7 @@ class PaymentService {
             payment.errors.reject("A Data de vencimento é obrigatória")
         }
 
-        if (paymentAdapter.description != null && !validateDescription(paymentAdapter.description)) {
+        if (!validateDescription(paymentAdapter.description)) {
             payment.errors.reject("A descrição da cobrança deve ter no máximo 500 caracteres")
         }
 
@@ -75,6 +75,8 @@ class PaymentService {
     }
 
     private Boolean validateDescription(String description) {
+        if(!description) return true
+
         if (description.length() > 500) return false
 
         return true
