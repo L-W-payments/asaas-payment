@@ -18,7 +18,10 @@ class PaymentService {
 
         if (!payment) throw new RuntimeException("Pagamento não encontrado!")
 
-        payment.delete(flush: true)
+        if (payment.deleted) return
+
+        payment.deleted = true
+        payment.save(failOnError: true)
     }
 
     Payment save(PaymentAdapter paymentAdapter) {
