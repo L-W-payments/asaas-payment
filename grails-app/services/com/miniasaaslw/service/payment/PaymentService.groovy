@@ -1,24 +1,26 @@
 package com.miniasaaslw.service.payment
 
 import com.miniasaaslw.adapters.payment.PaymentAdapter
-import com.miniasaaslw.domain.customer.Customer
-import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.domain.payment.Payment
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
+import groovy.time.TimeCategory
 
 @Transactional
 class PaymentService {
 
-    def payerService
-    def customerService
 
-    Payment save(PaymentAdapter paymentAdapter) {
-        Payer payer = payerService.find(paymentAdapter.payerId)
-        Customer customer = customerService.find(paymentAdapter.customerId)
+    public Payment save(PaymentAdapter paymentAdapter) {
+
+        Payment paymentValues = validatePayment(paymentAdapter)
+
+        if (paymentValues.hasErrors()){
+            throw new ValidationException("Erro ao validar os parâmetros do pagamento", paymentValues.errors)
+        }
 
         Payment payment = new Payment(
-                payer: payer,
-                customer: customer,
+                payer: paymentAdapter.payer,
+                customer: paymentAdapter.customer,
                 value: paymentAdapter.value,
                 dueDate: paymentAdapter.dueDate,
                 paymentStatus: paymentAdapter.paymentStatus,
@@ -28,5 +30,32 @@ class PaymentService {
         payment.save(failOnError: true)
 
         return payment
+    }
+    private Payment validatePayment(PaymentAdapter paymentAdapter) {
+        Payment payment = new Payment()
+
+        if (!paymentAdapter.customer) {
+            payment.errors.reject("Cliente não encontrado")
+        }
+
+        if (!paymentAdapter.payer) {
+            payment.errors.reject("Pagador não encontrado")
+        }
+
+        if (!paymentAdapter.paymentType) {
+            payment.errors.reject("O tipo de pagamento é obrigatório")
+        }
+
+        if (!paymentAdapter.paymentStatus) {
+            payment.errors.reject("O Status do pagamento é obrigatório")
+        }
+
+        if (!paymentAdapter.value) {
+            payment.errors.reject("O Valor do pagamento é obrigatório")
+        }
+
+        if (!paymentAdapter.dueDate) {
+            payment.errors.reject("A Data de vencimento é obrigatória")
+        }
     }
 }
