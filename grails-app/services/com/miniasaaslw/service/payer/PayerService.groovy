@@ -4,6 +4,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.entity.enums.PersonType
+import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.PhoneUtils
@@ -12,8 +13,6 @@ import grails.validation.ValidationException
 
 @Transactional
 class PayerService {
-
-    def customerService;
 
     public List<Payer> list() {
         return PayerRepository.query([:]).list()
@@ -61,7 +60,7 @@ class PayerService {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = buildPayerProperties(new Payer(), payerAdapter, customerService.find(payerAdapter.customerId))
+        Payer payer = buildPayerProperties(new Payer(), payerAdapter, CustomerRepository.query(id : payerAdapter.customerId).get())
         payer.save(failOnError: true)
 
         return payer

@@ -44,7 +44,7 @@ class PayerController {
         Long customerId = params.long("customerId")
 
         try {
-            Payer payer = payerService.save(new PayerAdapter(params), customerId)
+            Payer payer = payerService.save(new PayerAdapter(params))
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
