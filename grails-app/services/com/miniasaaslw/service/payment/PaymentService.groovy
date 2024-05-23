@@ -96,9 +96,9 @@ class PaymentService {
     }
 
     private Boolean validateValue(BigDecimal value) {
-        if (value < new BigDecimal("10")) return false
+        if (value < new BigDecimal("10.00")) return false
 
-        if (value > new BigDecimal("10.000")) return false
+        if (value > new BigDecimal("10000.00")) return false
 
         return true
     }
