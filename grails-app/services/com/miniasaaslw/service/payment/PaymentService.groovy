@@ -12,10 +12,10 @@ class PaymentService {
 
     public Payment save(PaymentAdapter paymentAdapter) {
 
-        Payment paymentValues = validatePayment(paymentAdapter)
+        Payment paymentData = validatePayment(paymentAdapter)
 
-        if (paymentValues.hasErrors()) {
-            throw new ValidationException("Erro ao validar os parâmetros do pagamento", paymentValues.errors)
+        if (paymentData.hasErrors()) {
+            throw new ValidationException("Erro ao validar os parâmetros do pagamento", paymentData.errors)
         }
 
         Payment payment = new Payment(
