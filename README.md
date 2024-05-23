@@ -36,13 +36,13 @@ delete para registros no banco de dados.
 - [ ] O cliente não deve deletar sua conta se possuir cobranças em aberto;
 - [ ] O cliente não deve deletar um pagador que possui cobranças em aberto;
 - [ ] O cliente não deve alterar uma cobrança;
-- [ ] O cliente não deve criar uma cobrança com data de vencimento menor que a data atual;
-- [ ] O cliente não deve criar uma cobrança com data de vencimento maior que 6 meses;
-- [ ] O cliente não deve criar uma cobrança com valor menor que R$ 10;
-- [ ] O cliente não deve criar uma cobrança com valor maior que R$ 10.000;
-- [ ] O cliente não deve criar uma cobrança com descrição maior que 500 caracteres;
-- [ ] O cliente não deve criar uma cobrança sem uma forma de pagamento;
-- [ ] O cliente não deve criar uma cobrança sem um pagador;
+- [x] O cliente não deve criar uma cobrança com data de vencimento menor que a data atual;
+- [x] O cliente não deve criar uma cobrança com data de vencimento maior que 6 meses;
+- [x] O cliente não deve criar uma cobrança com valor menor que R$ 10;
+- [x] O cliente não deve criar uma cobrança com valor maior que R$ 10.000;
+- [x] O cliente não deve criar uma cobrança com descrição maior que 500 caracteres;
+- [x] O cliente não deve criar uma cobrança sem uma forma de pagamento;
+- [x] O cliente não deve criar uma cobrança sem um pagador;
 
 ## RNFs (Requisitos não funcionais)
 
