@@ -67,6 +67,10 @@ class PaymentService {
             payment.errors.reject("O Valor do pagamento deve ser entre 10 e 10.000")
         }
 
+        if (!validateDueDate(paymentAdapter.dueDate)) {
+            payment.errors.reject("A Data de vencimento deve ser no futuro e no máximo 6 meses")
+        }
+
         return payment
     }
 
@@ -80,6 +84,21 @@ class PaymentService {
         if (value < new BigDecimal("10")) return false
 
         if (value > new BigDecimal("10.000")) return false
+
+        return true
+    }
+
+
+    private Boolean validateDueDate(Date dueDate) {
+        if (dueDate.before(new Date())) return false
+
+        Date dateLimit = new Date()
+
+        use(TimeCategory) {
+            dateLimit += 6.months
+        }
+
+        if (dueDate.after(dateLimit)) return false
 
         return true
     }
