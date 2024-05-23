@@ -75,6 +75,10 @@ class CustomerService {
             customer.errors.reject("cpfCnpj", null, "CPF/CNPJ é obrigatório!")
         }
 
+        if (CustomerRepository.exists([cpfCnpj: customerAdapter.cpfCnpj])) {
+            customer.errors.reject("cpfCnpj", null, "CPF/CNPJ já cadastrado!")
+        }
+
         if (!customerAdapter.personType) {
             customer.errors.reject("personType", null, "Tipo de pessoa é obrigatório!")
         }
