@@ -25,4 +25,15 @@ class PaymentController {
 
         redirect(uri: "/payment")
     }
+
+    def show() {
+        Long id = params.long("id")
+
+        try {
+            return [payment: paymentService.find(id)]
+        } catch (Exception exception) {
+            flash.errors = ["Pagamento não encontrado!"]
+            redirect(uri: "/payment")
+        }
+    }
 }
