@@ -56,6 +56,7 @@ class CustomerService {
         return customer
     }
 
+
     private Customer validateCustomer(CustomerAdapter customerAdapter) {
         Customer customer = new Customer()
 

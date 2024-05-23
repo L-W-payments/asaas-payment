@@ -1,8 +1,10 @@
 package com.miniasaaslw.service.payer
 
+import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.entity.enums.PersonType
+import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.utils.CepUtils
 import com.miniasaaslw.utils.CpfCnpjUtils
@@ -47,7 +49,9 @@ class PayerService {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = buildPayerProperties(find(id), payerAdapter)
+        Payer payer = find(id)
+
+        payer = buildPayerProperties(payer, payerAdapter, payer.customer)
         payer.save(failOnError: true)
 
         return payer
@@ -60,7 +64,7 @@ class PayerService {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = buildPayerProperties(new Payer(), payerAdapter)
+        Payer payer = buildPayerProperties(new Payer(), payerAdapter, payerAdapter.customer)
         payer.save(failOnError: true)
 
         return payer
@@ -113,6 +117,10 @@ class PayerService {
             payer.errors.reject("street", null, "A rua do pagador é obrigatória")
         }
 
+        if(!payerAdapter.customer){
+            payer.errors.reject("customer", null, "Cliente Inválido")
+        }
+      
         if (!NameUtils.validateName(payerAdapter.name)) {
             payer.errors.reject("name", null, "O nome não é válido!")
         }
@@ -144,7 +152,7 @@ class PayerService {
         return payer
     }
 
-    private Payer buildPayerProperties(Payer payer, PayerAdapter payerAdapter) {
+    private Payer buildPayerProperties(Payer payer, PayerAdapter payerAdapter, Customer customer) {
         payer.name = payerAdapter.name
         payer.email = payerAdapter.email
         payer.phone = payerAdapter.phone
@@ -158,6 +166,7 @@ class PayerService {
         payer.state = payerAdapter.state
         payer.district = payerAdapter.district
         payer.street = payerAdapter.street
+        payer.customer = customer
 
         return payer
     }
