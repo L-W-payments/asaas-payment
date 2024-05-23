@@ -113,7 +113,7 @@ class PayerService {
             payer.errors.reject("street", null, "A rua do pagador é obrigatória")
         }
 
-        if (!NameUtils.isNameValid(payerAdapter.name)) {
+        if (!NameUtils.validateName(payerAdapter.name)) {
             payer.errors.reject("name", null, "O nome não é válido!")
         }
 
@@ -121,11 +121,11 @@ class PayerService {
             payer.errors.reject("email", null, "O e-mail não é válido!")
         }
 
-        if (!PhoneUtils.isValidPhone(payerAdapter.phone)) {
+        if (!PhoneUtils.validatePhone(payerAdapter.phone)) {
             payer.errors.reject("phone", null, "O telefone não é válido!")
         }
 
-        if (payerAdapter.personType == PersonType.LEGAL && !CpfCnpjUtils.isValidCnpj(payerAdapter.cpfCnpj)) {
+        if (payerAdapter.personType == PersonType.LEGAL && !CpfCnpjUtils.validateCnpj(payerAdapter.cpfCnpj)) {
             payer.errors.reject("cpfCnpj", null, "O CNPJ não é válido!")
         }
 
@@ -133,11 +133,11 @@ class PayerService {
             payer.errors.reject("cpfCnpj", null, "O CPF não é válido!")
         }
 
-        if (!StateUtils.isStateValid(payerAdapter.state)) {
+        if (!StateUtils.validateState(payerAdapter.state)) {
             payer.errors.reject("state", null, "O estado não é válido!")
         }
 
-        if (payerAdapter.cep != null && CepUtils.validadeCep(payerAdapter.cep)) {
+        if (payerAdapter.cep != null && CepUtils.validateCep(payerAdapter.cep)) {
             payer.errors.reject("cep", null, "O CEP não é válido!")
         }
 

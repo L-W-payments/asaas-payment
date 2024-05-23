@@ -14,7 +14,7 @@ class PhoneUtils {
             92, 93, 94, 95, 96, 97, 98, 99
     )
 
-    public static boolean isValidPhone(String rawPhone) {
+    public static boolean validatePhone(String rawPhone) {
         if (rawPhone == null || rawPhone.length() != 11) return false
 
         Pattern pattern = Pattern.compile("^\\d{11}\$");

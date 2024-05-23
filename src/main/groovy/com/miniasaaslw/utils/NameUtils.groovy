@@ -2,7 +2,7 @@ package com.miniasaaslw.utils
 
 class NameUtils {
 
-    public static boolean isNameValid(String name) {
+    public static boolean validateName(String name) {
         if (name == null) return false
 
         if (name.startsWith(" ")) return false

@@ -2,7 +2,7 @@ package com.miniasaaslw.utils
 
 class CepUtils {
 
-    public static boolean validadeCep(String cep){
+    public static boolean validateCep(String cep){
         if(cep == null) return false
 
         if(cep.length() != 8) return false

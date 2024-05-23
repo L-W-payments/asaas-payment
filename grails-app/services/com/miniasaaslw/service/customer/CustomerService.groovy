@@ -107,7 +107,7 @@ class CustomerService {
             customer.errors.reject("street", null, "Rua é obrigatória!")
         }
 
-        if (!NameUtils.isNameValid(customerAdapter.name)) {
+        if (!NameUtils.validateName(customerAdapter.name)) {
             customer.errors.reject("name", null, "Nome inválido!")
         }
 
@@ -115,11 +115,11 @@ class CustomerService {
             customer.errors.reject("email", null, "Email inválido!")
         }
 
-        if (!PhoneUtils.isValidPhone(customerAdapter.phone)) {
+        if (!PhoneUtils.validatePhone(customerAdapter.phone)) {
             customer.errors.reject("phone", null, "Telefone inválido!")
         }
 
-        if ((customerAdapter.personType == PersonType.LEGAL) && (!CpfCnpjUtils.isValidCnpj(customerAdapter.cpfCnpj))) {
+        if ((customerAdapter.personType == PersonType.LEGAL) && (!CpfCnpjUtils.validateCnpj(customerAdapter.cpfCnpj))) {
             customer.errors.reject("cpfCnpj", null, "CNPJ inválido!")
         }
 
@@ -127,11 +127,11 @@ class CustomerService {
             customer.errors.reject("cpfCnpj", null, "CPF inválido!")
         }
 
-        if (!StateUtils.isStateValid(customerAdapter.state)) {
+        if (!StateUtils.validateState(customerAdapter.state)) {
             customer.errors.reject("state", null, "Estado inválido!")
         }
 
-        if (customerAdapter.cep != null && !CepUtils.validadeCep(customerAdapter.cep)) {
+        if (customerAdapter.cep != null && !CepUtils.validateCep(customerAdapter.cep)) {
             customer.errors.reject("cep", null, "CEP inválido!")
         }
 

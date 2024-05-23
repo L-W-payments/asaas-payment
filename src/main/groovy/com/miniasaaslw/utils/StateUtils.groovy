@@ -8,7 +8,7 @@ class StateUtils {
         "RR", "SC", "SP", "SE", "TO"
     ]
 
-    public static boolean isStateValid(String state) {
+    public static boolean validateState(String state) {
         if (state == null) return false
 
         if (state.length() != 2) return false
