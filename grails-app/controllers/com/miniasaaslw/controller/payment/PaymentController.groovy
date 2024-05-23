@@ -36,10 +36,7 @@ class PaymentController {
 
     def save(){
         try{
-            PaymentAdapter paymentAdapter = new PaymentAdapter(params)
-            paymentAdapter.customer = LoggedCustomer.CUSTOMER
-
-            paymentService.save(paymentAdapter)
+            paymentService.save(new PaymentAdapter(params))
         }catch (ValidationException validationException){
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
         }catch (Exception exception){
