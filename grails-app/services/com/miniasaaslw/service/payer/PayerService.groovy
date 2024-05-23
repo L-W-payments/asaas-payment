@@ -60,7 +60,7 @@ class PayerService {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = buildPayerProperties(new Payer(), payerAdapter, CustomerRepository.query(id : payerAdapter.customerId).get())
+        Payer payer = buildPayerProperties(new Payer(), payerAdapter, payerAdapter.customer)
         payer.save(failOnError: true)
 
         return payer
@@ -123,6 +123,10 @@ class PayerService {
 
         if (!payerAdapter.street) {
             payer.errors.reject("street", null, "A rua do pagador é obrigatória")
+        }
+
+        if(!payerAdapter.customer){
+            payer.errors.reject("customer", null, "Cliente Inválido")
         }
 
         return payer
