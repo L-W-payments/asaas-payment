@@ -15,7 +15,7 @@ class PaymentService {
         Payment paymentData = validatePayment(paymentAdapter)
 
         if (paymentData.hasErrors()) {
-            throw new ValidationException("Erro ao validar os parâmetros do pagamento", paymentData.errors)
+            throw new ValidationException("Erro ao validar os parâmetros da cobrança", paymentData.errors)
         }
 
         Payment payment = new Payment(
@@ -44,15 +44,15 @@ class PaymentService {
         }
 
         if (!paymentAdapter.paymentType) {
-            payment.errors.reject("O tipo de pagamento é obrigatório")
+            payment.errors.reject("O tipo da cobrança é obrigatório")
         }
 
         if (!paymentAdapter.paymentStatus) {
-            payment.errors.reject("O Status do pagamento é obrigatório")
+            payment.errors.reject("O Status da cobrança é obrigatório")
         }
 
         if (!paymentAdapter.value) {
-            payment.errors.reject("O Valor do pagamento é obrigatório")
+            payment.errors.reject("O Valor da cobrança é obrigatório")
         }
 
         if (!paymentAdapter.dueDate) {
@@ -60,11 +60,11 @@ class PaymentService {
         }
 
         if (paymentAdapter.description != null && !validateDescription(paymentAdapter.description)) {
-            payment.errors.reject("A descrição do pagamento deve ter no máximo 500 caracteres")
+            payment.errors.reject("A descrição da cobrança deve ter no máximo 500 caracteres")
         }
 
         if (!validateValue(paymentAdapter.value)) {
-            payment.errors.reject("O Valor do pagamento deve ser entre 10 e 10.000")
+            payment.errors.reject("O Valor da cobrança deve ser entre 10 e 10.000")
         }
 
         if (!validateDueDate(paymentAdapter.dueDate)) {
