@@ -7,6 +7,9 @@
 </head>
 <body page-title="Criar cobrança">
 <atlas-panel>
+      <g:if test="${params.success}">
+        <atlas-alert message="${params.success}" type="success"></atlas-alert>
+      </g:if>
       <atlas-section header="${payers ? 'Quem você vai cobrar?' : ''}">
         <g:if test="${payers}">
           <atlas-form action="${createLink(controller: 'payment', action: 'save' )}">
