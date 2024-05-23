@@ -10,8 +10,6 @@ class PayerController {
 
     def payerService
 
-    def customerService
-
     def index() {
         def errors = flash.errors
 
