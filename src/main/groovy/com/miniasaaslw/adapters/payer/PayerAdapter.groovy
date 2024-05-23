@@ -1,6 +1,8 @@
 package com.miniasaaslw.adapters.payer
 
+import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.entity.enums.PersonType
+import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.utils.StringUtils
 
 class PayerAdapter {
@@ -31,7 +33,7 @@ class PayerAdapter {
 
     String street
 
-    Long customerId
+    Customer customer
 
     public PayerAdapter(Map params) {
         this.name = params.name
@@ -47,6 +49,6 @@ class PayerAdapter {
         this.state = params.state
         this.district = params.district
         this.street = params.street
-        this.customerId = params.customerId as Long
+        this.customer = CustomerRepository.query([id: params.customerId as Long]).get()
     }
 }
