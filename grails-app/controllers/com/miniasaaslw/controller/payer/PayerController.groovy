@@ -73,4 +73,8 @@ class PayerController {
 
         redirect(uri: "/payer")
     }
+
+    def list() {
+        return [payers: payerService.list()]
+    }
 }
