@@ -6,6 +6,7 @@ import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.entity.enums.payment.PaymentType
 import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.repository.payer.PayerRepository
+import com.miniasaaslw.utils.LoggedCustomer
 
 class PaymentAdapter {
 
@@ -24,7 +25,7 @@ class PaymentAdapter {
     Date dueDate
 
     public PaymentAdapter(Map params) {
-        this.customer = CustomerRepository.query([id: params.customerId as Long]).get()
+        this.customer = LoggedCustomer.CUSTOMER
         this.payer = PayerRepository.query([id: params.payerId as Long]).get()
         this.paymentType = PaymentType.valueOf(params.paymentType.toString().toUpperCase())
         this.paymentStatus = PaymentStatus.valueOf(params.paymentStatus.toString().toUpperCase())
