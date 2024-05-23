@@ -16,8 +16,6 @@ class PaymentAdapter {
 
     PaymentType paymentType
 
-    PaymentStatus paymentStatus
-
     String description
 
     BigDecimal value
@@ -28,7 +26,6 @@ class PaymentAdapter {
         this.customer = LoggedCustomer.CUSTOMER
         this.payer = PayerRepository.query([id: params.payerId as Long]).get()
         this.paymentType = PaymentType.valueOf(params.paymentType.toString().toUpperCase())
-        this.paymentStatus = PaymentStatus.valueOf(params.paymentStatus.toString().toUpperCase())
         this.description = params.description?.toString()?.trim()
         this.value = new BigDecimal(params.value as String)
         this.dueDate = new Date(params.dueDate as String)

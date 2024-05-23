@@ -3,6 +3,7 @@ package com.miniasaaslw.service.payment
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
+import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import grails.gorm.transactions.Transactional
 import com.miniasaaslw.repository.payment.PaymentRepository
 import grails.validation.ValidationException
@@ -24,7 +25,7 @@ class PaymentService {
                 customer: paymentAdapter.customer,
                 value: paymentAdapter.value,
                 dueDate: paymentAdapter.dueDate,
-                paymentStatus: paymentAdapter.paymentStatus,
+                paymentStatus: PaymentStatus.PENDING,
                 paymentType: paymentAdapter.paymentType
         )
 
@@ -58,10 +59,6 @@ class PaymentService {
 
         if (!paymentAdapter.paymentType) {
             payment.errors.reject("O tipo da cobrança é obrigatório")
-        }
-
-        if (!paymentAdapter.paymentStatus) {
-            payment.errors.reject("O Status da cobrança é obrigatório")
         }
 
         if (!paymentAdapter.value) {
