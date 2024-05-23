@@ -56,6 +56,7 @@ class CustomerService {
         return customer
     }
 
+
     private Customer validateCustomer(CustomerAdapter customerAdapter) {
         Customer customer = new Customer()
 
@@ -73,10 +74,6 @@ class CustomerService {
 
         if (!customerAdapter.cpfCnpj) {
             customer.errors.reject("cpfCnpj", null, "CPF/CNPJ é obrigatório!")
-        }
-
-        if (CustomerRepository.exists([cpfCnpj: customerAdapter.cpfCnpj])) {
-            customer.errors.reject("cpfCnpj", null, "CPF/CNPJ já cadastrado!")
         }
 
         if (!customerAdapter.personType) {
@@ -133,6 +130,14 @@ class CustomerService {
 
         if (customerAdapter.cep != null && !CepUtils.validateCep(customerAdapter.cep)) {
             customer.errors.reject("cep", null, "CEP inválido!")
+        }
+
+        if (CustomerRepository.exists([cpfCnpj: customerAdapter.cpfCnpj])) {
+            customer.errors.reject("cpfCnpj", null, "CPF/CNPJ já cadastrado!")
+        }
+
+        if (CustomerRepository.exists([email: customerAdapter.email])) {
+            customer.errors.reject("email", null, "Email já cadastrado!")
         }
 
         return customer

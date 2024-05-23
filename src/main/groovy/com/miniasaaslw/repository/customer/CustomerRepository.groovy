@@ -10,8 +10,12 @@ class CustomerRepository implements BaseEntityRepository {
         DetachedCriteria<Customer> query = Customer.where(defaultQuery(search))
 
         query = query.where {
-            if (search.cpfCnpj) {
+            if (search.containsKey("cpfCnpj")) {
                 eq("cpfCnpj", search.cpfCnpj)
+            }
+
+            if (search.containsKey("email")) {
+                eq("email", search.email)
             }
         }
 

@@ -1,7 +1,9 @@
 package com.miniasaaslw.controller.payer
 
+import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
+import com.miniasaaslw.repository.customer.CustomerRepository
 import grails.validation.ValidationException
 
 class PayerController {
@@ -11,9 +13,13 @@ class PayerController {
     def index() {
         def errors = flash.errors
 
+        List<Customer> customers = CustomerRepository.query([:]).list()
+
         if (errors) {
-            return [errors: errors]
+            return [errors: errors, customers : customers]
         }
+
+        return [customers: customers]
     }
 
     def update() {
@@ -33,6 +39,8 @@ class PayerController {
     }
 
     def save() {
+        Long customerId = params.long("customerId")
+
         try {
             Payer payer = payerService.save(new PayerAdapter(params))
 

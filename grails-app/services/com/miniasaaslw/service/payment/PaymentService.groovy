@@ -1,14 +1,17 @@
 package com.miniasaaslw.service.payment
 
 import com.miniasaaslw.adapters.payment.PaymentAdapter
+import com.miniasaaslw.domain.customer.Customer
+import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.domain.payment.Payment
+import com.miniasaaslw.repository.payment.PaymentRepository
 import grails.gorm.transactions.Transactional
+import com.miniasaaslw.repository.payment.PaymentRepository
 import grails.validation.ValidationException
 import groovy.time.TimeCategory
 
 @Transactional
 class PaymentService {
-
 
     public Payment save(PaymentAdapter paymentAdapter) {
 
@@ -31,6 +34,18 @@ class PaymentService {
 
         return payment
     }
+
+    public void delete(Customer customer, Long paymentId) {
+        Payment payment = PaymentRepository.query([id: paymentId, customer: customer]).get()
+
+        if (!payment) throw new RuntimeException("Pagamento não encontrado!")
+
+        if (payment.deleted) return
+
+        payment.deleted = true
+        payment.save(failOnError: true)
+    }
+
 
     private Payment validatePayment(PaymentAdapter paymentAdapter) {
         Payment payment = new Payment()

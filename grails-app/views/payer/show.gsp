@@ -12,6 +12,7 @@
     <atlas-button slot="actions" data-panel-start-editing icon="pencil" description="Editar"></atlas-button>
     <atlas-button type="outlined" slot="actions" href="${createLink(controller: 'payer', action: 'delete', id: payer.id)}"
                   description="Apagar"></atlas-button>
+    <atlas-input hidden name="customerId" value="${payer.customerId}"></atlas-input>
     <atlas-input hidden name="country" value="Brasil"></atlas-input>
         <g:render template="/templates/basePersonForm"
                   model="${[person: payer]}"></g:render>
