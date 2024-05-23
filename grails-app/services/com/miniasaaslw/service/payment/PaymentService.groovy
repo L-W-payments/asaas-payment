@@ -14,7 +14,7 @@ class PaymentService {
 
         Payment paymentValues = validatePayment(paymentAdapter)
 
-        if (paymentValues.hasErrors()){
+        if (paymentValues.hasErrors()) {
             throw new ValidationException("Erro ao validar os parâmetros do pagamento", paymentValues.errors)
         }
 
