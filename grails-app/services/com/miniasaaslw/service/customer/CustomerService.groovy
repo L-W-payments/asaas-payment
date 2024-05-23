@@ -4,8 +4,12 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
 import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.repository.customer.CustomerRepository
+import com.miniasaaslw.utils.CepUtils
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.EmailUtils
+import com.miniasaaslw.utils.NameUtils
+import com.miniasaaslw.utils.PhoneUtils
+import com.miniasaaslw.utils.StateUtils
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -72,6 +76,10 @@ class CustomerService {
             customer.errors.reject("cpfCnpj", null, "CPF/CNPJ é obrigatório!")
         }
 
+        if (CustomerRepository.exists([cpfCnpj: customerAdapter.cpfCnpj])) {
+            customer.errors.reject("cpfCnpj", null, "CPF/CNPJ já cadastrado!")
+        }
+
         if (!customerAdapter.personType) {
             customer.errors.reject("personType", null, "Tipo de pessoa é obrigatório!")
         }
@@ -100,12 +108,32 @@ class CustomerService {
             customer.errors.reject("street", null, "Rua é obrigatória!")
         }
 
-        if ((customerAdapter.personType == PersonType.NATURAL) && (!CpfCnpjUtils.validateCpf(customerAdapter.cpfCnpj))) {
-            customer.errors.reject("cpfCnpj", null, "CPF inválido!")
+        if (!NameUtils.validateName(customerAdapter.name)) {
+            customer.errors.reject("name", null, "Nome inválido!")
         }
 
         if (!EmailUtils.validateEmail(customerAdapter.email)) {
             customer.errors.reject("email", null, "Email inválido!")
+        }
+
+        if (!PhoneUtils.validatePhone(customerAdapter.phone)) {
+            customer.errors.reject("phone", null, "Telefone inválido!")
+        }
+
+        if ((customerAdapter.personType == PersonType.LEGAL) && (!CpfCnpjUtils.validateCnpj(customerAdapter.cpfCnpj))) {
+            customer.errors.reject("cpfCnpj", null, "CNPJ inválido!")
+        }
+
+        if ((customerAdapter.personType == PersonType.NATURAL) && (!CpfCnpjUtils.validateCpf(customerAdapter.cpfCnpj))) {
+            customer.errors.reject("cpfCnpj", null, "CPF inválido!")
+        }
+
+        if (!StateUtils.validateState(customerAdapter.state)) {
+            customer.errors.reject("state", null, "Estado inválido!")
+        }
+
+        if (customerAdapter.cep != null && !CepUtils.validateCep(customerAdapter.cep)) {
+            customer.errors.reject("cep", null, "CEP inválido!")
         }
 
         return customer
