@@ -58,13 +58,29 @@ class PaymentService {
         if (!paymentAdapter.dueDate) {
             payment.errors.reject("A Data de vencimento é obrigatória")
         }
+
         if (paymentAdapter.description != null && !validateDescription(paymentAdapter.description)) {
             payment.errors.reject("A descrição do pagamento deve ter no máximo 500 caracteres")
         }
+
+        if (!validateValue(paymentAdapter.value)) {
+            payment.errors.reject("O Valor do pagamento deve ser entre 10 e 10.000")
+        }
+
+        return payment
+    }
+
     private Boolean validateDescription(String description) {
         if (description.length() > 500) return false
 
         return true
     }
+
+    private Boolean validateValue(BigDecimal value) {
+        if (value < new BigDecimal("10")) return false
+
+        if (value > new BigDecimal("10.000")) return false
+
+        return true
     }
 }
