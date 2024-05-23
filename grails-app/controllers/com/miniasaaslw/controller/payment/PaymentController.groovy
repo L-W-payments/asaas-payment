@@ -1,7 +1,9 @@
 package com.miniasaaslw.controller.payment
 
 import com.miniasaaslw.adapters.payment.PaymentAdapter
+import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.domain.payment.Payment
+import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.utils.LoggedCustomer
 import grails.validation.ValidationException
 
@@ -11,10 +13,13 @@ class PaymentController {
 
     def index() {
         def errors = flash.errors
+        List<Payer> payers = PayerRepository.query([:]).list()
 
         if (errors) {
-            return [errors: errors]
+            return [payers: payers, errors: errors]
         }
+
+        return [payers: payers]
     }
 
     def delete() {
