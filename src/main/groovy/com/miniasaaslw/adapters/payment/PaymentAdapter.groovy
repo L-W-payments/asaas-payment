@@ -2,9 +2,7 @@ package com.miniasaaslw.adapters.payment
 
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
-import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.entity.enums.payment.PaymentType
-import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.utils.LoggedCustomer
 
@@ -27,7 +25,7 @@ class PaymentAdapter {
         this.payer = PayerRepository.query([id: params.payerId as Long]).get()
         this.paymentType = PaymentType.valueOf(params.paymentType.toString().toUpperCase())
         this.description = params.description?.toString()?.trim()
-        this.value = new BigDecimal(params.value as String)
+        this.value = new BigDecimal((params.value as String).replace(",", "."))
         this.dueDate = new Date(params.dueDate as String)
     }
 }
