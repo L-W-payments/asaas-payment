@@ -4,7 +4,6 @@ class AlertTagLib {
     static namespace = "alertTagLib"
 
     def showAlerts = { attrs, body ->
-        println("Sim")
         String alertType = attrs.alertType
         def alerts = attrs.alerts
 
