@@ -1,60 +1,34 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-
+<html>
 <head>
-    <meta name="layout" content="main"/>
     <title>Pagadores - Asaas</title>
+    <meta name="layout" content="main">
 </head>
 
 <body page-title="Lista de pagadores">
+<atlas-panel class="js-payer-panel">
+    <g:if test="${payerList}">
+        <atlas-toolbar>
+            <atlas-search-input class="js-payer-search-input" placeholder="Pesquisar" icon="magnifier"
+                                slot="search"></atlas-search-input>
+            <atlas-filter description="Filtro" slot="filter">
+                <atlas-filter-form slot="simple-filter">
+                    <atlas-filter-group header="Category 1" name="category1" required-fields="1">
+                        <atlas-checkbox value="1">Label 1.1</atlas-checkbox>
+                        <atlas-checkbox value="2">Label 1.2</atlas-checkbox>
+                        <atlas-checkbox value="3">Label 1.3</atlas-checkbox>
+                    </atlas-filter-group>
 
-<atlas-panel header="${payers ? 'Seus pagadores' : ''}">
-    <g:if test="${payers}">
-        <atlas-button
-                icon="plus"
-                description="Adicionar pagador"
-                href="/payer"
-                slot="actions"></atlas-button>
+                    <atlas-filter-group header="Category 2" name="category2">
+                        <atlas-radio value="1">Label 2.1</atlas-radio>
+                        <atlas-radio value="2">Label 2.2</atlas-radio>
+                    </atlas-filter-group>
+                </atlas-filter-form>
+            </atlas-filter>
+            <atlas-button description="Adicionar" icon="plus" slot="actions"></atlas-button>
+        </atlas-toolbar>
 
-        <atlas-table has-actions>
-            <atlas-table-header slot="header">
-                <atlas-table-col>
-                    Nome
-                </atlas-table-col>
-                <atlas-table-col>
-                    E-mail
-                </atlas-table-col>
-
-                <atlas-table-col>
-                    Data de criação
-                </atlas-table-col>
-            </atlas-table-header>
-            <atlas-table-body slot="body">
-                <g:each var="payer" in="${payers}">
-                    <atlas-table-row href="${createLink(controller: "payer", action: "show", id: payer.id)}">
-                        <atlas-table-col>
-                            ${payer.name}
-                        </atlas-table-col>
-
-                        <atlas-table-col>
-                            ${payer.email}
-                        </atlas-table-col>
-
-                        <atlas-table-col>
-                            <g:formatDate date="${payer.dateCreated}" format="dd/MM/yyyy"/>
-                        </atlas-table-col>
-
-                        <atlas-button-group slot="actions" group-all>
-                            <atlas-icon-button
-                                    icon="pencil"
-                                    theme="primary"
-                                    description="Editar pagador">
-                            </atlas-icon-button>
-                        </atlas-button-group>
-                    </atlas-table-row>
-                </g:each>
-            </atlas-table-body>
-        </atlas-table>
+        <g:render template="/payer/templates/table"/>
+        <asset:javascript src="PayerListController.js"/>
     </g:if>
     <g:else>
         <atlas-empty-state
@@ -72,5 +46,4 @@
 </atlas-panel>
 
 </body>
-
 </html>
