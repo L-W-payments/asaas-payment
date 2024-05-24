@@ -4,11 +4,11 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.entity.enums.PersonType
-import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.utils.CepUtils
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.EmailUtils
+import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.utils.NameUtils
 import com.miniasaaslw.utils.PhoneUtils
 import com.miniasaaslw.utils.StateUtils
@@ -25,7 +25,7 @@ class PayerService {
     public Payer find(Long id) {
         Payer payer = PayerRepository.query([id: id]).get()
 
-        if (!payer) throw new RuntimeException("Pagador não encontrado")
+        if (!payer) throw new RuntimeException(MessageUtils.getMessage("general.errors.notFound", ["Pagador"]))
 
         return payer
     }
@@ -34,7 +34,7 @@ class PayerService {
         Payer payer = find(id)
 
         if (payer.deleted) {
-            throw new RuntimeException("O pagador já foi deletado")
+            throw new RuntimeException(MessageUtils.getMessage("payer.errors.delete.unknown"))
         }
 
         payer.deleted = true
@@ -46,7 +46,7 @@ class PayerService {
         Payer payerValues = validatePayerParams(payerAdapter)
 
         if (payerValues.hasErrors()) {
-            throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
+            throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), payerValues.errors)
         }
 
         Payer payer = find(id)
@@ -61,7 +61,7 @@ class PayerService {
         Payer payerValues = validatePayerParams(payerAdapter)
 
         if (payerValues.hasErrors()) {
-            throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
+            throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), payerValues.errors)
         }
 
         Payer payer = buildPayerProperties(new Payer(), payerAdapter, payerAdapter.customer)
@@ -74,79 +74,79 @@ class PayerService {
         Payer payer = new Payer()
 
         if (!payerAdapter.name) {
-            payer.errors.reject("name", null, "O nome do pagador é obrigatório")
+            payer.errors.reject("name", null, MessageUtils.getMessage('general.errors.required', ['O nome do pagador']))
         }
 
         if (!payerAdapter.email) {
-            payer.errors.reject("email", null, "O e-mail do pagador é obrigatório")
+            payer.errors.reject("email", null, MessageUtils.getMessage('general.errors.required', ['O e-mail do pagador']))
         }
 
         if (!payerAdapter.phone) {
-            payer.errors.reject("phone", null, "O telefone do pagador é obrigatório")
+            payer.errors.reject("phone", null, MessageUtils.getMessage('general.errors.required', ['O número de celular do pagador']))
         }
 
         if (!payerAdapter.cpfCnpj) {
-            payer.errors.reject("cpfCnpj", null, "O CPF/CNPJ do pagador é obrigatório")
+            payer.errors.reject("cpfCnpj", null, MessageUtils.getMessage('general.errors.required', ['O CPF/CNPJ do pagador']))
         }
 
         if (!payerAdapter.personType) {
-            payer.errors.reject("personType", null, "O tipo de pessoa do pagador é obrigatório")
+            payer.errors.reject("personType", null, MessageUtils.getMessage('general.errors.required', ['O CPF/CNPJ do pagador']))
         }
 
         if (!payerAdapter.number) {
-            payer.errors.reject("number", null, "O número do pagador é obrigatório")
+            payer.errors.reject("number", null, MessageUtils.getMessage('general.errors.required', ['O número da residência do pagador']))
         }
 
         if (!payerAdapter.country) {
-            payer.errors.reject("country", null, "O país do pagador é obrigatório")
+            payer.errors.reject("country", null, MessageUtils.getMessage('general.errors.required', ['O país do pagador']))
         }
 
         if (!payerAdapter.city) {
-            payer.errors.reject("city", null, "A cidade do pagador é obrigatória")
+            payer.errors.reject("city", null, MessageUtils.getMessage('general.errors.required', ['A cidade do pagador']))
         }
 
         if (!payerAdapter.state) {
-            payer.errors.reject("state", null, "O estado do pagador é obrigatório")
+            payer.errors.reject("state", null, MessageUtils.getMessage('general.errors.required', ['O estado']))
         }
 
         if (!payerAdapter.district) {
-            payer.errors.reject("district", null, "O bairro do pagador é obrigatório")
+            payer.errors.reject("district", null, MessageUtils.getMessage('general.errors.required', ['O bairro do pagador']))
         }
 
         if (!payerAdapter.street) {
-            payer.errors.reject("street", null, "A rua do pagador é obrigatória")
+            payer.errors.reject("street", null, MessageUtils.getMessage('general.errors.required', ['A rua do pagador']))
         }
 
-        if(!payerAdapter.customer){
-            payer.errors.reject("customer", null, "Cliente Inválido")
+        if (!payerAdapter.customer) {
+            payer.errors.reject("customer", null, MessageUtils.getMessage('general.errors.invalid', ['O cliente responsável pelo pagador']))
         }
-      
+
         if (!NameUtils.validateName(payerAdapter.name)) {
-            payer.errors.reject("name", null, "O nome não é válido!")
+            payer.errors.reject("name", null, MessageUtils.getMessage('general.errors.invalid', ['O nome do pagador']))
         }
 
         if (!EmailUtils.validateEmail(payerAdapter.email)) {
-            payer.errors.reject("email", null, "O e-mail não é válido!")
+            payer.errors.reject("email", null, MessageUtils.getMessage('general.errors.invalid', ['O e-mail do pagador']))
         }
 
         if (!PhoneUtils.validatePhone(payerAdapter.phone)) {
-            payer.errors.reject("phone", null, "O telefone não é válido!")
+            payer.errors.reject("phone", null, MessageUtils.getMessage('general.errors.invalid', ['O número de celular do pagador']))
         }
 
         if (payerAdapter.personType == PersonType.LEGAL && !CpfCnpjUtils.validateCnpj(payerAdapter.cpfCnpj)) {
-            payer.errors.reject("cpfCnpj", null, "O CNPJ não é válido!")
+            payer.errors.reject("cpfCnpj", null, MessageUtils.getMessage('general.errors.invalid', ['O CNPJ do pagador']))
         }
 
         if (payerAdapter.personType == PersonType.NATURAL && !CpfCnpjUtils.validateCpf(payerAdapter.cpfCnpj)) {
-            payer.errors.reject("cpfCnpj", null, "O CPF não é válido!")
+            payer.errors.reject("cpfCnpj", null, MessageUtils.getMessage('general.errors.invalid', ['O CPF do pagador']))
         }
 
         if (!StateUtils.validateState(payerAdapter.state)) {
-            payer.errors.reject("state", null, "O estado não é válido!")
+            payer.errors.reject("state", null, MessageUtils.getMessage('general.errors.invalid', ['O estado do pagador']))
         }
 
         if (payerAdapter.cep != null && CepUtils.validateCep(payerAdapter.cep)) {
-            payer.errors.reject("cep", null, "O CEP não é válido!")
+            payer.errors.reject("cep", null, MessageUtils.getMessage('general.errors.invalid', ['O cep do pagador']))
         }
 
         return payer
