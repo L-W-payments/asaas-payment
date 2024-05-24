@@ -1,3 +1,5 @@
+<%@ page import="com.miniasaaslw.entity.enums.payment.PaymentStatus" %>
+
 <html>
 <head>
     <title>Pagamento - Asaas</title>
@@ -18,7 +20,11 @@
                                  height="100" style="margin-top: 16px; margin-bottom: 32px"></atlas-image>
                 </atlas-layout>
 
-                <atlas-summary-card header="Informações da cobrança">
+                <atlas-panel header="Informações da cobrança">
+                    <atlas-text slot="actions" muted>
+                        Rastreabilidade #${payment.getId()}
+                    </atlas-text>
+
                     <atlas-layout justify="space-between" inline>
                         <atlas-summary-item
                                 label="Data de vencimento"
@@ -37,18 +43,35 @@
                                 description="${payment.getCustomer().getName()}"></atlas-summary-item>
                     </atlas-layout>
 
-                    <atlas-divider spacing="32"></atlas-divider>
+                    <atlas-summary-item
+                            label="Descrição"
+                            description="${payment.getDescription() ?: 'Seu fornecedor não informou descrição para este serviço/produto.'}">
+                    </atlas-summary-item>
+
+                    <atlas-divider spacing="16"></atlas-divider>
 
                     <atlas-summary-item
                             label="Valor total"
-                            description="${formatNumber(number: payment.getValue(), type: 'currency', locale: 'pt_BR')}" horizontal></atlas-summary-item>
+                            description="${formatNumber(number: payment.getValue(), type: 'currency', locale: 'pt_BR')}"
+                            horizontal></atlas-summary-item>
 
-                    <atlas-divider spacing="32"></atlas-divider>
+                    <atlas-divider spacing="16"></atlas-divider>
 
-                    <atlas-form action="">
-                        <atlas-button description="Pagar" theme="success" block></atlas-button>
-                    </atlas-form>
-                </atlas-summary-card>
+
+                    <form action="${createLink(controller: 'payment', action: 'pay')}">
+                        <g:if test="${payment.getPaymentStatus() == PaymentStatus.PENDING}">
+                            <atlas-input hidden name="id" value="${payment.getId()}"></atlas-input>
+                            <atlas-button description="Pagar" theme="success" submit block></atlas-button>
+                        </g:if>
+                        <g:else>
+                            <atlas-button
+                                    disabled
+                                    description="${payment.getPaymentStatus() == PaymentStatus.APPROVED ? 'Fatura paga' : 'Fatura expirada'}"
+                                    theme="${payment.getPaymentStatus() == PaymentStatus.APPROVED ? 'highlight' : 'danger'}"
+                                    block></atlas-button>
+                        </g:else>
+                    </form>
+                </atlas-panel>
             </atlas-grid>
         </atlas-page-content>
     </atlas-page>
