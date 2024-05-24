@@ -6,6 +6,7 @@
 </head>
 <body page-title="Cadastro de Pagador">
 <atlas-panel class="js-person-form">
+    <my:alertTagLib alerts="${errors}" alertType="error">
     <atlas-form action="${createLink(controller: 'payer', action: 'save' )}">
         <atlas-section header="Cliente">
             <atlas-select name="customerId" label="Selecione um cliente" placeholder="Selecione uma opção" required>
