@@ -34,17 +34,18 @@ class PaymentController {
         redirect(uri: "/payment")
     }
 
-    def save(){
-        try{
+    def save() {
+        try {
             paymentService.save(new PaymentAdapter(params))
             redirect(uri: "/payment", params: [success: "Cobrança criada com sucesso"])
-        }catch (ValidationException validationException){
+        } catch (ValidationException validationException) {
             redirect(uri: "/payment")
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
-        }catch (Exception exception){
+        } catch (Exception exception) {
             redirect(uri: "/payment")
             flash.errors = ["Erro ao salvar a cobrança"]
         }
+    }
 
     def show() {
         Long id = params.long("id")
@@ -53,6 +54,22 @@ class PaymentController {
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
             flash.errors = ["Pagamento não encontrado!"]
+            redirect(uri: "/payment")
+        }
+    }
+
+    def pay() {
+        Long id = params.long("id")
+
+        try {
+            paymentService.pay(id)
+
+            redirect(uri: "/payment/show/${id}")
+        } catch (RuntimeException runtimeException) {
+            flash.errors = [runtimeException.getMessage()]
+            redirect(uri: "/payment")
+        } catch (Exception exception) {
+            flash.errors = ["Erro ao efetuar o pagamento"]
             redirect(uri: "/payment")
         }
     }

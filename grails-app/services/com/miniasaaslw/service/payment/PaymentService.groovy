@@ -46,7 +46,20 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter){
+    public void pay(Long paymentId) {
+        Payment payment = PaymentRepository.query([id: paymentId]).get()
+
+        if (!payment) throw new RuntimeException("Pagamento não encontrado!")
+
+        if (payment.paymentStatus == PaymentStatus.APPROVED) throw new RuntimeException("O pagamento já foi efetuado!")
+
+        if (new Date().after(payment.dueDate)) throw new RuntimeException("A data de vencimento já passou!")
+
+        payment.paymentStatus = PaymentStatus.APPROVED
+        payment.save(failOnError: true)
+    }
+
+    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
         payment.customer = paymentAdapter.customer
         payment.payer = paymentAdapter.payer
         payment.value = paymentAdapter.value
@@ -70,10 +83,6 @@ class PaymentService {
 
         if (!paymentAdapter.paymentType) {
             payment.errors.reject("O tipo da cobrança é obrigatório")
-        }
-
-        if (!paymentAdapter.paymentStatus) {
-            payment.errors.reject("O Status da cobrança é obrigatório")
         }
 
         if (!paymentAdapter.value) {
@@ -100,7 +109,7 @@ class PaymentService {
     }
 
     private Boolean validateDescription(String description) {
-        if(!description) return true
+        if (!description) return true
 
         if (description.length() > 500) return false
 
