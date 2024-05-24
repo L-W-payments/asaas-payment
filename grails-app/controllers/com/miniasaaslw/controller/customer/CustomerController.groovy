@@ -9,67 +9,67 @@ class CustomerController {
 
     def customerService
 
-    def index(){
+    def index() {
         def errors = flash.errors
-        if(errors){
+        if (errors) {
             return [errors: errors]
         }
     }
 
     def save() {
-        try{
+        try {
             Customer customer = customerService.save(new CustomerAdapter(params))
-            redirect(action: 'show', params : [id: customer.id])
-        } catch (ValidationException exception){
+            redirect(action: 'show', params: [id: customer.id])
+        } catch (ValidationException exception) {
             flash.errors = exception.errors.allErrors.collect { it.defaultMessage }
             redirect(uri: '/customer')
-        }catch (Exception exception){
-            flash.errors = ["Erro ao salvar sua conta"]
+        } catch (Exception exception) {
+            flash.errors = [message(code: 'customer.errors.save.unknown')]
             redirect(uri: '/customer')
         }
     }
 
-    def show(){
+    def show() {
         def errors = flash.errors
-        try{
+        try {
             Customer customer = customerService.find(params.long("id"))
-            if(customer){
-                if(errors){
+            if (customer) {
+                if (errors) {
                     return [customer: customer, errors: errors]
                 }
                 return [customer: customer]
             }
-        } catch (RuntimeException runtimeException){
+        } catch (RuntimeException runtimeException) {
             redirect(uri: "/customer")
-        } catch (Exception exception){
-            flash.errors = ["Erro ao buscar sua conta"]
+        } catch (Exception exception) {
+            flash.errors = [message(code: 'customer.errors.search.unknown')]
             redirect(uri: '/customer')
         }
     }
 
-    def update(){
+    def update() {
         long id = params.long("id")
 
-        try{
+        try {
             Customer customer = customerService.update(id, new CustomerAdapter(params))
-            redirect(action: 'show', params : [id: customer.id])
-        }catch (ValidationException validationException){
+            redirect(action: 'show', params: [id: customer.id])
+        } catch (ValidationException validationException) {
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
             redirect(uri: ('/customer/show/' + id))
         }
     }
 
-    def delete(){
+    def delete() {
         long id = params.long("id")
 
-        try{
+        try {
             customerService.delete(id)
             redirect(uri: "/customer")
-        }catch (RuntimeException runtimeException){
+        } catch (RuntimeException runtimeException) {
             runtimeException.printStackTrace()
             redirect(uri: "/customer")
-        }catch (Exception exception){
-            flash.errors = ["Erro ao deletar sua conta"]
+        } catch (Exception exception) {
+            flash.errors = [message(code: 'customer.errors.delete.unknown')]
             redirect(uri: "/customer")
         }
     }
