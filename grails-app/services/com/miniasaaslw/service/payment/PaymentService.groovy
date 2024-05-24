@@ -20,14 +20,7 @@ class PaymentService {
             throw new ValidationException("Erro ao validar os parâmetros da cobrança", paymentData.errors)
         }
 
-        Payment payment = new Payment(
-                payer: paymentAdapter.payer,
-                customer: paymentAdapter.customer,
-                value: paymentAdapter.value,
-                dueDate: paymentAdapter.dueDate,
-                paymentStatus: PaymentStatus.PENDING,
-                paymentType: paymentAdapter.paymentType
-        )
+        Payment payment = buildPaymentProperties(new Payment(), paymentAdapter)
 
         payment.save(failOnError: true)
 
@@ -45,6 +38,16 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
+    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter){
+        payment.customer = paymentAdapter.customer
+        payment.payer = paymentAdapter.payer
+        payment.value = paymentAdapter.value
+        payment.dueDate = paymentAdapter.dueDate
+        payment.paymentStatus = PaymentStatus.PENDING
+        payment.paymentType = paymentAdapter.paymentType
+
+        return payment
+    }
 
     private Payment validatePayment(PaymentAdapter paymentAdapter) {
         Payment payment = new Payment()
@@ -59,6 +62,10 @@ class PaymentService {
 
         if (!paymentAdapter.paymentType) {
             payment.errors.reject("O tipo da cobrança é obrigatório")
+        }
+
+        if (!paymentAdapter.paymentStatus) {
+            payment.errors.reject("O Status da cobrança é obrigatório")
         }
 
         if (!paymentAdapter.value) {
