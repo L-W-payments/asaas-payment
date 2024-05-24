@@ -7,9 +7,12 @@
 </head>
 <body page-title="Criar cobrança">
 <atlas-panel>
-      <g:if test="${params.success}">
-        <atlas-alert message="${params.success}" type="success"></atlas-alert>
-      </g:if>
+  <g:if test="${params.success}">
+    <alertTagLib:showAlerts alerts="${params.success}" alertType="success"/>
+  </g:if>
+  <g:if test="${errors}">
+    <alertTagLib:showAlerts alerts="${errors}" alertType="error"/>
+  </g:if>
       <atlas-section header="${payers ? 'Cadastro de Cobrança' : ''}">
         <g:if test="${payers}">
 
