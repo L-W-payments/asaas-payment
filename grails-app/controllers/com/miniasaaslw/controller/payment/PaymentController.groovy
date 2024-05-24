@@ -46,5 +46,14 @@ class PaymentController {
             flash.errors = ["Erro ao salvar a cobrança"]
         }
 
+    def show() {
+        Long id = params.long("id")
+
+        try {
+            return [payment: paymentService.find(id)]
+        } catch (Exception exception) {
+            flash.errors = ["Pagamento não encontrado!"]
+            redirect(uri: "/payment")
+        }
     }
 }

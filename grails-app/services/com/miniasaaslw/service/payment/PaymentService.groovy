@@ -27,6 +27,14 @@ class PaymentService {
         return payment
     }
 
+    public Payment find(Long id) {
+        Payment payment = PaymentRepository.query([id: id]).get()
+
+        if (!payment) throw new RuntimeException("Pagamento não encontrado!")
+
+        return payment
+    }
+
     public void delete(Customer customer, Long paymentId) {
         Payment payment = PaymentRepository.query([id: paymentId, customer: customer]).get()
 
