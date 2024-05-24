@@ -4,6 +4,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.repository.customer.CustomerRepository
+import grails.converters.JSON
 import grails.validation.ValidationException
 
 class PayerController {
@@ -83,6 +84,35 @@ class PayerController {
     }
 
     def list() {
-        return [payers: payerService.list()]
+        return [payerList: payerService.list(0, [:])]
     }
+
+    def loadTableContent(){
+
+        Map search = [:]
+        if(params.name) search.name = params.name
+
+        List<Payer> payerList = payerService.list((params.page as Integer) - 1, search)
+        Integer totalRecords = payerList.totalCount
+        String content = g.render(template: "/payer/templates/tableContent", model: [payerList: payerList])
+
+        render([totalRecords: totalRecords, content: content, success: true] as JSON)
+    }
+
+    def fetchDelete() {
+        try {
+            Long id = params.long("id")
+
+            payerService.delete(id)
+            render([success: true] as JSON)
+        } catch (RuntimeException runtimeException) {
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (Exception exception) {
+            render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
+        }
+
+
+    }
+
+
 }
