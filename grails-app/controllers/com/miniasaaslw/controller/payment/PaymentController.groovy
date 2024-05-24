@@ -20,7 +20,7 @@ class PaymentController {
         try {
             paymentService.delete(LoggedCustomer.CUSTOMER, id)
         } catch (Exception exception) {
-            flash.errors = ["Erro ao deletar pagamento!"]
+            flash.errors = [message(code: 'payment.errors.delete.unknown')]
         }
 
         redirect(uri: "/payment")
@@ -32,7 +32,7 @@ class PaymentController {
         try {
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
-            flash.errors = ["Pagamento não encontrado!"]
+            flash.errors = [message(code: 'general.errors.notFound', args: ['Pagador'])]
             redirect(uri: "/payment")
         }
     }

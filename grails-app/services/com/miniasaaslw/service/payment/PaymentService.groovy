@@ -5,6 +5,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.repository.payment.PaymentRepository
+import com.miniasaaslw.utils.MessageUtils
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -16,7 +17,7 @@ class PaymentService {
     public Payment find(Long id) {
         Payment payment = PaymentRepository.query([id: id]).get()
 
-        if (!payment) throw new RuntimeException("Pagamento não encontrado!")
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("general.errors.notFound", ["Pagamento"]))
 
         return payment
     }
@@ -24,7 +25,7 @@ class PaymentService {
     public void delete(Customer customer, Long paymentId) {
         Payment payment = PaymentRepository.query([id: paymentId, customer: customer]).get()
 
-        if (!payment) throw new RuntimeException("Pagamento não encontrado!")
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("general.errors.notFound", ["Pagamento"]))
 
         if (payment.deleted) return
 
