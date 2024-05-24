@@ -10,15 +10,18 @@
       <g:if test="${params.success}">
         <atlas-alert message="${params.success}" type="success"></atlas-alert>
       </g:if>
-      <atlas-section header="${payers ? 'Quem você vai cobrar?' : ''}">
+      <atlas-section header="${payers ? 'Cadastro de Cobrança' : ''}">
         <g:if test="${payers}">
+
           <atlas-form action="${createLink(controller: 'payment', action: 'save' )}">
           <atlas-layout gap="4">
+            <atlas-section header="Quem você vai cobrar?">
             <atlas-select name="payerId" label="Selecione um Pagador" placeholder="Selecione uma Opção" required>
               <g:each in="${payers}" var="payer">
                 <atlas-option label="${payer.name} — ${payer.email}" value="${payer.id}"></atlas-option>
               </g:each>
             </atlas-select>
+            </atlas-section>
             <atlas-section header="Dados da cobrança">
               <atlas-grid>
                 <atlas-row>
