@@ -18,8 +18,8 @@ import grails.validation.ValidationException
 @Transactional
 class PayerService {
 
-    public List<Payer> list() {
-        return PayerRepository.query([:]).list()
+    public List<Payer> list(Integer page, Map search) {
+        return PayerRepository.query(search).list(max: 10, offset: page * 10)
     }
 
     public Payer find(Long id) {
@@ -145,7 +145,7 @@ class PayerService {
             payer.errors.reject("state", null, "O estado não é válido!")
         }
 
-        if (payerAdapter.cep != null && CepUtils.validateCep(payerAdapter.cep)) {
+        if (payerAdapter.cep != null && !CepUtils.validateCep(payerAdapter.cep)) {
             payer.errors.reject("cep", null, "O CEP não é válido!")
         }
 
