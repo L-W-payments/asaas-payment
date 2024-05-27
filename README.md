@@ -11,11 +11,11 @@ delete para registros no banco de dados.
 - [ ] Deve ser possível um cliente se autenticar;
 - [x] Deve ser possível um cliente deletar sua conta;
 - [x] Deve ser possível um cliente atualizar seus dados;
-- [ ] Deve ser possível um cliente criar uma cobrança;
-- [ ] Deve ser possível um cliente listar todas as cobranças;
+- [x] Deve ser possível um cliente criar uma cobrança;
+- [x] Deve ser possível um cliente listar todas as cobranças;
 - [ ] Deve ser possível um cliente listar uma cobrança específica;
-- [ ] Deve ser possível um cliente deletar uma cobrança;
-- [ ] Deve ser possível um cliente selecionar um pagador para uma cobrança;
+- [x] Deve ser possível um cliente deletar uma cobrança;
+- [x] Deve ser possível um cliente selecionar um pagador para uma cobrança;
 - [x] Deve ser possível um cliente criar um pagador;
 - [ ] Deve ser possível um cliente listar todos os pagadores;
 - [x] Deve ser possível um cliente listar um pagador específico;
