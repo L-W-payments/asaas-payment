@@ -23,7 +23,7 @@
                 </atlas-col>
                 <atlas-col lg="6" md="6">
                   <atlas-datepicker name="dueDate" label="Vencimento da cobrança" prevent-past-date
-                                    required value="${payment.getDueDate()}"></atlas-datepicker>
+                                    required value="<g:formatDate date="${payment.getDueDate()}" format="dd/MM/yyyy"/>"></atlas-datepicker>
                 </atlas-col>
               </atlas-row>
             </atlas-grid>
