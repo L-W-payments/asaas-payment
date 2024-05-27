@@ -9,6 +9,14 @@ class PaymentRepository implements BaseEntityRepository {
     public static DetachedCriteria<Payment> query(Map search) {
         DetachedCriteria<Payment> query = Payment.where(defaultQuery(search))
 
+        query = query.where {
+            if (search.containsKey("payerName")) {
+                payer {
+                    like("name", search.payerName + "%")
+                }
+            }
+        }
+
         return query
     }
 }
