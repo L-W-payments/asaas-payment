@@ -27,8 +27,8 @@ class PaymentService {
         return payment
     }
 
-    public Payment find(Long id) {
-        Payment payment = PaymentRepository.query([id: id]).get()
+    public Payment findByPublicId(String publicId) {
+        Payment payment = PaymentRepository.query([publicId: publicId]).get()
 
         if (!payment) throw new RuntimeException("Pagamento não encontrado!")
 

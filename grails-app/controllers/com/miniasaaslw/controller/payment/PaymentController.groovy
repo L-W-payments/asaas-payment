@@ -48,10 +48,10 @@ class PaymentController {
     }
 
     def checkout() {
-        Long id = params.long("id")
+        String publicId = params.id
 
         try {
-            return [payment: paymentService.find(id)]
+            return [payment: paymentService.findByPublicId(publicId)]
         } catch (Exception exception) {
             flash.errors = ["Pagamento não encontrado!"]
             redirect(uri: "/payment")
