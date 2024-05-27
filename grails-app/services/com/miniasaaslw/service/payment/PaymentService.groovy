@@ -35,6 +35,14 @@ class PaymentService {
         return payment
     }
 
+    public Payment find(Customer customer, Long id) {
+        Payment payment = PaymentRepository.query([id: id, customer: customer]).get()
+
+        if (!payment) throw new RuntimeException("Pagamento não encontrado!")
+
+        return payment
+    }
+
     public void delete(Customer customer, Long paymentId) {
         Payment payment = PaymentRepository.query([id: paymentId, customer: customer]).get()
 
@@ -46,7 +54,7 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter){
+    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
         payment.customer = paymentAdapter.customer
         payment.payer = paymentAdapter.payer
         payment.value = paymentAdapter.value
@@ -100,7 +108,7 @@ class PaymentService {
     }
 
     private Boolean validateDescription(String description) {
-        if(!description) return true
+        if (!description) return true
 
         if (description.length() > 500) return false
 
