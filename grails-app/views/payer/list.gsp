@@ -10,20 +10,6 @@
         <atlas-toolbar>
             <atlas-search-input class="js-payer-search-input" placeholder="Pesquisar" icon="magnifier"
                                 slot="search"></atlas-search-input>
-            <atlas-filter description="Filtro" slot="filter">
-                <atlas-filter-form slot="simple-filter">
-                    <atlas-filter-group header="Category 1" name="category1" required-fields="1">
-                        <atlas-checkbox value="1">Label 1.1</atlas-checkbox>
-                        <atlas-checkbox value="2">Label 1.2</atlas-checkbox>
-                        <atlas-checkbox value="3">Label 1.3</atlas-checkbox>
-                    </atlas-filter-group>
-
-                    <atlas-filter-group header="Category 2" name="category2">
-                        <atlas-radio value="1">Label 2.1</atlas-radio>
-                        <atlas-radio value="2">Label 2.2</atlas-radio>
-                    </atlas-filter-group>
-                </atlas-filter-form>
-            </atlas-filter>
             <atlas-button description="Adicionar" icon="plus" slot="actions"></atlas-button>
         </atlas-toolbar>
 
