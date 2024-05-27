@@ -8,6 +8,8 @@ import com.miniasaaslw.entity.enums.payment.PaymentType
 
 class Payment extends BaseEntity {
 
+    String publicId = UUID.randomUUID().toString().toUpperCase()
+
     Customer customer
 
     Payer payer
@@ -23,6 +25,7 @@ class Payment extends BaseEntity {
     Date dueDate
 
     static constraints = {
+        publicId nullable: false, unique: true
         customer nullable: false
         payer nullable: false
         paymentType nullable: false
