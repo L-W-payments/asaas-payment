@@ -57,7 +57,33 @@ class PaymentController {
             redirect(uri: "/payment")
         }
     }
+
     def list() {
         return [paymentList: paymentService.list(0, [:])]
+    }
+
+    def loadTableContent() {
+
+        Map search = [:]
+        if (params.payerName) search.payerName = params.payerName
+
+        List<Payment> paymentList = paymentService.list((params.page as Integer) - 1, search)
+        Integer totalRecords = paymentList.totalCount
+        String content = g.render(template: "/payment/templates/tableContent", model: [paymentList: paymentList])
+
+        render([totalRecords: totalRecords, content: content, success: true] as JSON)
+    }
+
+    def fetchDelete() {
+        try {
+            Long id = params.long("id")
+
+            paymentService.delete(LoggedCustomer.CUSTOMER, id)
+            render([success: true] as JSON)
+        } catch (RuntimeException runtimeException) {
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (Exception exception) {
+            render([success: false, alert: "Erro ao deletar a cobrança"] as JSON)
+        }
     }
 }
