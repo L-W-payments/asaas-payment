@@ -12,6 +12,9 @@
             ${message(code: "paymentType.${payment.getPaymentType()}.label")}
         </atlas-table-col>
         <atlas-table-col>
+            ${message(code: "paymentStatus.${payment.getPaymentStatus()}.label")}
+        </atlas-table-col>
+        <atlas-table-col>
             <g:formatDate date="${payment.getDueDate()}" format="dd/MM/yyyy"/>
         </atlas-table-col>
         <atlas-button-group slot="actions" group-after="2">
