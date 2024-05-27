@@ -3,7 +3,7 @@
             ["name": "name", "label": "Nome", "size": "md", "ellipsis": "true"],
             ["name": "value", "label": "Valor", "size": "md", "ellipsis": "true"],
             ["name": "paymentType", "label": "Forma de Pagamento", "size": "md"],
-            ["name": "paymentStatus", "label": "Status do Pagamento", "size": "md"],
+            ["name": "paymentStatus", "label": "Situação do Pagamento", "size": "md"],
             ["name": "dueDate", "label": "Data de vencimento", "size": "md"]
     ])
 %>
