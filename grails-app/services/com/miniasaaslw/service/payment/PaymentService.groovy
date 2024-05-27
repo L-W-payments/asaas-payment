@@ -46,6 +46,10 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
+    public List<Payment> list(Integer page, Map search){
+        return PaymentRepository.query(search).list(max: 10, offset: page * 10)
+    }
+
     private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter){
         payment.customer = paymentAdapter.customer
         payment.payer = paymentAdapter.payer
@@ -70,10 +74,6 @@ class PaymentService {
 
         if (!paymentAdapter.paymentType) {
             payment.errors.reject("O tipo da cobrança é obrigatório")
-        }
-
-        if (!paymentAdapter.paymentStatus) {
-            payment.errors.reject("O Status da cobrança é obrigatório")
         }
 
         if (!paymentAdapter.value) {

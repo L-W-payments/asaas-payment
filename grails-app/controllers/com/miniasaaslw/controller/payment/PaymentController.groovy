@@ -57,4 +57,7 @@ class PaymentController {
             redirect(uri: "/payment")
         }
     }
+    def list() {
+        return [paymentList: paymentService.list(0, [:])]
+    }
 }
