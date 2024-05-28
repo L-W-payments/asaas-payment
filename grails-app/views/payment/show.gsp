@@ -66,8 +66,8 @@
                         <g:else>
                             <atlas-button
                                     disabled
-                                    description="${payment.getPaymentStatus() == PaymentStatus.APPROVED ? 'Fatura paga' : 'Fatura expirada'}"
-                                    theme="${payment.getPaymentStatus() == PaymentStatus.APPROVED ? 'highlight' : 'danger'}"
+                                    description="${payment.getPaymentStatus() == PaymentStatus.RECEIVED ? 'Fatura paga' : 'Fatura expirada'}"
+                                    theme="${payment.getPaymentStatus() == PaymentStatus.RECEIVED ? 'highlight' : 'danger'}"
                                     block></atlas-button>
                         </g:else>
                     </form>

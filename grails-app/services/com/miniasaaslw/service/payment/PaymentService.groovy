@@ -57,7 +57,7 @@ class PaymentService {
             throw new ValidationException("Erro ao validar parâmetros da cobrança", validatedPayment.errors)
         }
 
-        payment.paymentStatus = PaymentStatus.APPROVED
+        payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
     }
 
@@ -113,7 +113,7 @@ class PaymentService {
     private Payment validateUpdateToReceived(Payment payment) {
         Payment validationPayment = new Payment()
 
-        if (payment.paymentStatus == PaymentStatus.APPROVED) {
+        if (payment.paymentStatus == PaymentStatus.RECEIVED) {
             validationPayment.errors.reject("O pagamento já foi efetuado!")
         }
 
