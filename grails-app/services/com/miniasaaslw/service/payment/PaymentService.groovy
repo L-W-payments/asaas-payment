@@ -53,7 +53,7 @@ class PaymentService {
         if (!payment) throw new RuntimeException("Cobrança não encontrada!")
 
         Payment validatedPayment = validateUpdateToReceived(payment)
-        if (payment.hasErrors()) {
+        if (validatedPayment.hasErrors()) {
             throw new ValidationException("Erro ao validar parâmetros da cobrança", validatedPayment.errors)
         }
 
