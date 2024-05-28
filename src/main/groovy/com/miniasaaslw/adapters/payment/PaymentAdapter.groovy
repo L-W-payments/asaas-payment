@@ -1,17 +1,19 @@
 package com.miniasaaslw.adapters.payment
 
-import com.miniasaaslw.entity.enums.payment.PaymentStatus
+import com.miniasaaslw.domain.customer.Customer
+import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.entity.enums.payment.PaymentType
+import com.miniasaaslw.repository.payer.PayerRepository
+import com.miniasaaslw.utils.DateUtils
+import com.miniasaaslw.utils.LoggedCustomer
 
 class PaymentAdapter {
 
-    Long customerId
+    Customer customer
 
-    Long payerId
+    Payer payer
 
     PaymentType paymentType
-
-    PaymentStatus paymentStatus
 
     String description
 
@@ -20,12 +22,11 @@ class PaymentAdapter {
     Date dueDate
 
     public PaymentAdapter(Map params) {
-        this.customerId = params.customerId as Long
-        this.payerId = params.payerId as Long
+        this.customer = LoggedCustomer.CUSTOMER
+        this.payer = PayerRepository.query([id: params.payerId as Long]).get()
         this.paymentType = PaymentType.valueOf(params.paymentType.toString().toUpperCase())
-        this.paymentStatus = PaymentStatus.valueOf(params.paymentStatus.toString().toUpperCase())
         this.description = params.description?.toString()?.trim()
-        this.value = new BigDecimal(params.value as String)
-        this.dueDate = new Date(params.dueDate as String)
+        this.value = new BigDecimal((params.value as String).replace(",", "."))
+        this.dueDate = DateUtils.parseDate(params.dueDate as String)
     }
 }
