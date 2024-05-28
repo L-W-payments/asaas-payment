@@ -52,7 +52,7 @@ function PayerListController(reference) {
             if(response.success){
                 Atlas.notifications.showAlert("Pagador removido com sucesso!", "success");
                 tableReference.fetchRecords(true);
-                modal.closeModal()
+                modal.closeModal();
                 return;
             }
             Atlas.notifications.showAlert(response.alert, "error");
