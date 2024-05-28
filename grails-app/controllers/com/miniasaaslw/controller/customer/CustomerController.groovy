@@ -19,13 +19,13 @@ class CustomerController {
     def save() {
         try {
             Customer customer = customerService.save(new CustomerAdapter(params))
-            redirect(action: 'show', params: [id: customer.id])
+            redirect(action: "show", params: [id: customer.id])
         } catch (ValidationException exception) {
             flash.errors = exception.errors.allErrors.collect { it.defaultMessage }
-            redirect(uri: '/customer')
+            redirect(uri: "/customer")
         } catch (Exception exception) {
-            flash.errors = [message(code: 'customer.errors.save.unknown')]
-            redirect(uri: '/customer')
+            flash.errors = [message(code: "customer.errors.save.unknown")]
+            redirect(uri: "/customer")
         }
     }
 
@@ -42,8 +42,8 @@ class CustomerController {
         } catch (RuntimeException runtimeException) {
             redirect(uri: "/customer")
         } catch (Exception exception) {
-            flash.errors = [message(code: 'customer.errors.search.unknown')]
-            redirect(uri: '/customer')
+            flash.errors = [message(code: "customer.errors.search.unknown")]
+            redirect(uri: "/customer")
         }
     }
 
@@ -52,10 +52,10 @@ class CustomerController {
 
         try {
             Customer customer = customerService.update(id, new CustomerAdapter(params))
-            redirect(action: 'show', params: [id: customer.id])
+            redirect(action: "show", params: [id: customer.id])
         } catch (ValidationException validationException) {
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
-            redirect(uri: ('/customer/show/' + id))
+            redirect(uri: ("/customer/show/" + id))
         }
     }
 
@@ -69,7 +69,7 @@ class CustomerController {
             runtimeException.printStackTrace()
             redirect(uri: "/customer")
         } catch (Exception exception) {
-            flash.errors = [message(code: 'customer.errors.delete.unknown')]
+            flash.errors = [message(code: "customer.errors.delete.unknown")]
             redirect(uri: "/customer")
         }
     }

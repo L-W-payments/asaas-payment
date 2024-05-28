@@ -6,19 +6,20 @@ import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.repository.payment.PaymentRepository
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
+
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+
 import groovy.time.TimeCategory
 
 @Transactional
 class PaymentService {
 
     public Payment save(PaymentAdapter paymentAdapter) {
-
         Payment paymentData = validatePayment(paymentAdapter)
 
         if (paymentData.hasErrors()) {
-            throw new ValidationException("Erro ao validar os parâmetros da cobrança", paymentData.errors)
+            throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), paymentData.errors)
         }
 
         Payment payment = buildPaymentProperties(new Payment(), paymentAdapter)
@@ -31,7 +32,7 @@ class PaymentService {
     public Payment find(Long id) {
         Payment payment = PaymentRepository.query([id: id]).get()
 
-        if (!payment) throw new RuntimeException(MessageUtils.getMessage("general.errors.notFound", ["Pagamento"]))
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
         return payment
     }
@@ -39,7 +40,7 @@ class PaymentService {
     public void delete(Customer customer, Long paymentId) {
         Payment payment = PaymentRepository.query([id: paymentId, customer: customer]).get()
 
-        if (!payment) throw new RuntimeException(MessageUtils.getMessage("general.errors.notFound", ["Pagamento"]))
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
         if (payment.deleted) return
 
@@ -62,39 +63,39 @@ class PaymentService {
         Payment payment = new Payment()
 
         if (!paymentAdapter.customer) {
-            payment.errors.reject("Cliente não encontrado")
+            payment.errors.reject(MessageUtils.getMessage("payment.errors.customer.notFound"))
         }
 
         if (!paymentAdapter.payer) {
-            payment.errors.reject("Pagador não encontrado")
+            payment.errors.reject(MessageUtils.getMessage("payment.errors.payer.notFound"))
         }
 
         if (!paymentAdapter.paymentType) {
-            payment.errors.reject("O tipo da cobrança é obrigatório")
+            payment.errors.reject(MessageUtils.getMessage("payment.errors.paymentType.invalid"))
         }
 
         if (!paymentAdapter.paymentStatus) {
-            payment.errors.reject("O Status da cobrança é obrigatório")
+            payment.errors.reject(MessageUtils.getMessage("payment.errors.paymentStatus.invalid"))
         }
 
         if (!paymentAdapter.value) {
-            payment.errors.reject("O Valor da cobrança é obrigatório")
+            payment.errors.reject(MessageUtils.getMessage("payment.errors.value.invalid"))
         }
 
         if (!paymentAdapter.dueDate) {
-            payment.errors.reject("A Data de vencimento é obrigatória")
+            payment.errors.reject(MessageUtils.getMessage("payment.errors.dueDate.invalid"))
         }
 
         if (!validateDescription(paymentAdapter.description)) {
-            payment.errors.reject("A descrição da cobrança deve ter no máximo 500 caracteres")
+            payment.errors.reject(MessageUtils.getMessage("payment.errors.description.length"))
         }
 
         if (!validateValue(paymentAdapter.value)) {
-            payment.errors.reject("O Valor da cobrança deve ser entre 10 e 10.000")
+            payment.errors.reject(MessageUtils.getMessage("payment.errors.value.range"))
         }
 
         if (!validateDueDate(paymentAdapter.dueDate)) {
-            payment.errors.reject("A Data de vencimento deve ser no futuro e no máximo 6 meses")
+            payment.errors.reject(MessageUtils.getMessage("payment.errors.dueDate.range"))
         }
 
         return payment

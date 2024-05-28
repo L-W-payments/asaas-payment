@@ -12,6 +12,7 @@ import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.utils.NameUtils
 import com.miniasaaslw.utils.PhoneUtils
 import com.miniasaaslw.utils.StateUtils
+
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -25,7 +26,7 @@ class PayerService {
     public Payer find(Long id) {
         Payer payer = PayerRepository.query([id: id]).get()
 
-        if (!payer) throw new RuntimeException(MessageUtils.getMessage("general.errors.notFound", ["Pagador"]))
+        if (!payer) throw new RuntimeException(MessageUtils.getMessage("payer.errors.notFound"))
 
         return payer
     }
@@ -74,79 +75,79 @@ class PayerService {
         Payer payer = new Payer()
 
         if (!payerAdapter.name) {
-            payer.errors.reject("name", null, MessageUtils.getMessage('general.errors.required', ['O nome do pagador']))
+            payer.errors.reject("name", null, MessageUtils.getMessage("general.errors.name.required"))
         }
 
         if (!payerAdapter.email) {
-            payer.errors.reject("email", null, MessageUtils.getMessage('general.errors.required', ['O e-mail do pagador']))
+            payer.errors.reject("email", null, MessageUtils.getMessage("general.errors.email.required"))
         }
 
         if (!payerAdapter.phone) {
-            payer.errors.reject("phone", null, MessageUtils.getMessage('general.errors.required', ['O número de celular do pagador']))
+            payer.errors.reject("phone", null, MessageUtils.getMessage("general.errors.phone.required"))
         }
 
         if (!payerAdapter.cpfCnpj) {
-            payer.errors.reject("cpfCnpj", null, MessageUtils.getMessage('general.errors.required', ['O CPF/CNPJ do pagador']))
+            payer.errors.reject("cpfCnpj", null, MessageUtils.getMessage("general.errors.cpfCnpj.required"))
         }
 
         if (!payerAdapter.personType) {
-            payer.errors.reject("personType", null, MessageUtils.getMessage('general.errors.required', ['O CPF/CNPJ do pagador']))
+            payer.errors.reject("personType", null, MessageUtils.getMessage("general.errors.personType.required"))
         }
 
         if (!payerAdapter.number) {
-            payer.errors.reject("number", null, MessageUtils.getMessage('general.errors.required', ['O número da residência do pagador']))
+            payer.errors.reject("number", null, MessageUtils.getMessage("general.errors.number.required"))
         }
 
         if (!payerAdapter.country) {
-            payer.errors.reject("country", null, MessageUtils.getMessage('general.errors.required', ['O país do pagador']))
+            payer.errors.reject("country", null, MessageUtils.getMessage("general.errors.country.required"))
         }
 
         if (!payerAdapter.city) {
-            payer.errors.reject("city", null, MessageUtils.getMessage('general.errors.required', ['A cidade do pagador']))
+            payer.errors.reject("city", null, MessageUtils.getMessage("general.errors.city.required"))
         }
 
         if (!payerAdapter.state) {
-            payer.errors.reject("state", null, MessageUtils.getMessage('general.errors.required', ['O estado']))
+            payer.errors.reject("state", null, MessageUtils.getMessage("general.errors.state.required"))
         }
 
         if (!payerAdapter.district) {
-            payer.errors.reject("district", null, MessageUtils.getMessage('general.errors.required', ['O bairro do pagador']))
+            payer.errors.reject("district", null, MessageUtils.getMessage("general.errors.district.required"))
         }
 
         if (!payerAdapter.street) {
-            payer.errors.reject("street", null, MessageUtils.getMessage('general.errors.required', ['A rua do pagador']))
+            payer.errors.reject("street", null, MessageUtils.getMessage("general.errors.street.required"))
         }
 
         if (!payerAdapter.customer) {
-            payer.errors.reject("customer", null, MessageUtils.getMessage('general.errors.invalid', ['O cliente responsável pelo pagador']))
+            payer.errors.reject("customer", null, MessageUtils.getMessage("general.errors.customer.invalid"))
         }
 
         if (!NameUtils.validateName(payerAdapter.name)) {
-            payer.errors.reject("name", null, MessageUtils.getMessage('general.errors.invalid', ['O nome do pagador']))
+            payer.errors.reject("name", null, MessageUtils.getMessage("general.errors.name.invalid"))
         }
 
         if (!EmailUtils.validateEmail(payerAdapter.email)) {
-            payer.errors.reject("email", null, MessageUtils.getMessage('general.errors.invalid', ['O e-mail do pagador']))
+            payer.errors.reject("email", null, MessageUtils.getMessage("general.errors.email.invalid"))
         }
 
         if (!PhoneUtils.validatePhone(payerAdapter.phone)) {
-            payer.errors.reject("phone", null, MessageUtils.getMessage('general.errors.invalid', ['O número de celular do pagador']))
+            payer.errors.reject("phone", null, MessageUtils.getMessage("general.errors.phone.invalid"))
         }
 
         if (payerAdapter.personType == PersonType.LEGAL && !CpfCnpjUtils.validateCnpj(payerAdapter.cpfCnpj)) {
-            payer.errors.reject("cpfCnpj", null, MessageUtils.getMessage('general.errors.invalid', ['O CNPJ do pagador']))
+            payer.errors.reject("cpfCnpj", null, MessageUtils.getMessage("general.errors.cpfCnpj.invalid"))
         }
 
         if (payerAdapter.personType == PersonType.NATURAL && !CpfCnpjUtils.validateCpf(payerAdapter.cpfCnpj)) {
-            payer.errors.reject("cpfCnpj", null, MessageUtils.getMessage('general.errors.invalid', ['O CPF do pagador']))
+            payer.errors.reject("cpfCnpj", null, MessageUtils.getMessage("general.errors.cpfCnpj.invalid"))
         }
 
         if (!StateUtils.validateState(payerAdapter.state)) {
-            payer.errors.reject("state", null, MessageUtils.getMessage('general.errors.invalid', ['O estado do pagador']))
+            payer.errors.reject("state", null, MessageUtils.getMessage("general.errors.state.invalid"))
         }
 
         if (payerAdapter.cep != null && CepUtils.validateCep(payerAdapter.cep)) {
-            payer.errors.reject("cep", null, MessageUtils.getMessage('general.errors.invalid', ['O cep do pagador']))
+            payer.errors.reject("cep", null, MessageUtils.getMessage("general.errors.zipCode.invalid"))
         }
 
         return payer
