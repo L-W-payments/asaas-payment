@@ -2,9 +2,9 @@ package com.miniasaaslw.controller.payment
 
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.payer.Payer
-import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.utils.LoggedCustomer
+
 import grails.validation.ValidationException
 
 class PaymentController {
@@ -31,18 +31,18 @@ class PaymentController {
             flash.errors = ["Erro ao deletar pagamento!"]
         }
 
-        redirect(uri: "/payment")
+        redirect(action: "index")
     }
 
     def save() {
         try {
             paymentService.save(new PaymentAdapter(params))
-            redirect(uri: "/payment", params: [success: "Cobrança criada com sucesso"])
+            redirect(action: "index", params: [success: "Cobrança criada com sucesso"])
         } catch (ValidationException validationException) {
-            redirect(uri: "/payment")
+            redirect(action: "index")
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
         } catch (Exception exception) {
-            redirect(uri: "/payment")
+            redirect(action: "index")
             flash.errors = ["Erro ao salvar a cobrança"]
         }
     }
@@ -54,7 +54,7 @@ class PaymentController {
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
             flash.errors = ["Pagamento não encontrado!"]
-            redirect(uri: "/payment")
+            redirect(action: "index")
         }
     }
 
@@ -62,15 +62,15 @@ class PaymentController {
         Long id = params.long("id")
 
         try {
-            paymentService.pay(id)
+            paymentService.updateToReceived(id)
 
             redirect(action: 'show', id: id)
         } catch (RuntimeException runtimeException) {
             flash.errors = [runtimeException.getMessage()]
-            redirect(uri: "/payment")
+            redirect(action: "index")
         } catch (Exception exception) {
             flash.errors = ["Erro ao efetuar o pagamento"]
-            redirect(uri: "/payment")
+            redirect(action: "index")
         }
     }
 }

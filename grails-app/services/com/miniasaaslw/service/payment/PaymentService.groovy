@@ -4,16 +4,17 @@ import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
-import grails.gorm.transactions.Transactional
 import com.miniasaaslw.repository.payment.PaymentRepository
+
+import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+
 import groovy.time.TimeCategory
 
 @Transactional
 class PaymentService {
 
     public Payment save(PaymentAdapter paymentAdapter) {
-
         Payment paymentData = validatePayment(paymentAdapter)
 
         if (paymentData.hasErrors()) {
@@ -46,14 +47,15 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    public void pay(Long paymentId) {
-        Payment payment = PaymentRepository.query([id: paymentId]).get()
+    public void updateToReceived(Long id) {
+        Payment payment = PaymentRepository.query([id: id]).get()
 
-        if (!payment) throw new RuntimeException("Pagamento não encontrado!")
+        if (!payment) throw new RuntimeException("Cobrança não encontrada!")
 
-        if (payment.paymentStatus == PaymentStatus.APPROVED) throw new RuntimeException("O pagamento já foi efetuado!")
-
-        if (new Date().after(payment.dueDate)) throw new RuntimeException("A data de vencimento já passou!")
+        Payment validatedPayment = validateUpdateToReceived(payment)
+        if (payment.hasErrors()) {
+            throw new ValidationException("Erro ao validar parâmetros da cobrança", validatedPayment.errors)
+        }
 
         payment.paymentStatus = PaymentStatus.APPROVED
         payment.save(failOnError: true)
@@ -108,6 +110,20 @@ class PaymentService {
         return payment
     }
 
+    private Payment validateUpdateToReceived(Payment payment) {
+        Payment validationPayment = new Payment()
+
+        if (payment.paymentStatus == PaymentStatus.APPROVED) {
+            validationPayment.errors.reject("O pagamento já foi efetuado!")
+        }
+
+        if (new Date().after(payment.dueDate)) {
+            validationPayment.errors.reject("A data de vencimento já passou!")
+        }
+
+        return validationPayment
+    }
+
     private Boolean validateDescription(String description) {
         if (!description) return true
 
@@ -123,7 +139,6 @@ class PaymentService {
 
         return true
     }
-
 
     private Boolean validateDueDate(Date dueDate) {
         if (dueDate.before(new Date())) return false
