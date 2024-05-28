@@ -64,7 +64,7 @@ class PaymentController {
         try {
             paymentService.pay(id)
 
-            redirect(uri: "/payment/show/${id}")
+            redirect(action: 'show', id: id)
         } catch (RuntimeException runtimeException) {
             flash.errors = [runtimeException.getMessage()]
             redirect(uri: "/payment")
