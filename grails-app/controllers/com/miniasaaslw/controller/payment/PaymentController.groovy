@@ -47,7 +47,7 @@ class PaymentController {
         }
     }
 
-    def show() {
+    def checkout() {
         Long id = params.long("id")
 
         try {
