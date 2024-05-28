@@ -8,7 +8,7 @@ import com.miniasaaslw.entity.enums.payment.PaymentType
 
 class Payment extends BaseEntity {
 
-    String publicId = UUID.randomUUID().toString().toUpperCase()
+    String publicId
 
     Customer customer
 

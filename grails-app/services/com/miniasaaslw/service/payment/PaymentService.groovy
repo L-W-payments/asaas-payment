@@ -4,9 +4,11 @@ import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
-import grails.gorm.transactions.Transactional
 import com.miniasaaslw.repository.payment.PaymentRepository
+
+import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+
 import groovy.time.TimeCategory
 
 @Transactional
@@ -46,7 +48,8 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter){
+    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
+        payment.publicId = payment.publicId ?: UUID.randomUUID().toString().toUpperCase()
         payment.customer = paymentAdapter.customer
         payment.payer = paymentAdapter.payer
         payment.value = paymentAdapter.value
@@ -100,7 +103,7 @@ class PaymentService {
     }
 
     private Boolean validateDescription(String description) {
-        if(!description) return true
+        if (!description) return true
 
         if (description.length() > 500) return false
 
