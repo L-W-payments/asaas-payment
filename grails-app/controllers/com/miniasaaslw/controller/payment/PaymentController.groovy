@@ -34,17 +34,18 @@ class PaymentController {
         redirect(uri: "/payment")
     }
 
-    def save(){
-        try{
+    def save() {
+        try {
             paymentService.save(new PaymentAdapter(params))
             redirect(uri: "/payment", params: [success: "Cobrança criada com sucesso"])
-        }catch (ValidationException validationException){
+        } catch (ValidationException validationException) {
             redirect(uri: "/payment")
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
-        }catch (Exception exception){
+        } catch (Exception exception) {
             redirect(uri: "/payment")
             flash.errors = ["Erro ao salvar a cobrança"]
         }
+    }
 
     def show() {
         Long id = params.long("id")
