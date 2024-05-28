@@ -1,4 +1,4 @@
-package notification
+package com.miniasaaslw.domain.notification
 
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.entity.BaseEntity
