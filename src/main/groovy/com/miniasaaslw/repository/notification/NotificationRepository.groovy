@@ -1,8 +1,8 @@
 package com.miniasaaslw.repository.notification
 
+import com.miniasaaslw.domain.notification.Notification
 import com.miniasaaslw.repository.base.BaseEntityRepository
 import grails.gorm.DetachedCriteria
-import notification.Notification
 
 class NotificationRepository implements BaseEntityRepository {
 
