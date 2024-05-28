@@ -16,12 +16,15 @@
           <atlas-section header="Dados da cobrança">
             <atlas-grid>
               <atlas-row>
-                <atlas-col lg="6" md="6">
+                <atlas-col lg="4" md="4">
+                  <atlas-input required label="Status da cobrança" value="${message(code: "paymentStatus.${payment.getPaymentStatus()}.label")}" ></atlas-input>
+                </atlas-col>
+                <atlas-col lg="4" md="4">
                   <atlas-money label="Valor da cobrança" name="value" min-value="10" max-value="10000"
                                min-value-error-message="O valor mínimo é de R$ 10,00"
                                max-value-error-message="O valor máximo é de R$ 10.000,00" required maxlength="9" value="${payment.getValue()}"></atlas-money>
                 </atlas-col>
-                <atlas-col lg="6" md="6">
+                <atlas-col lg="4" md="4">
                   <atlas-datepicker name="dueDate" label="Vencimento da cobrança" prevent-past-date
                                     required value="<g:formatDate date="${payment.getDueDate()}" format="dd/MM/yyyy"/>"></atlas-datepicker>
                 </atlas-col>
