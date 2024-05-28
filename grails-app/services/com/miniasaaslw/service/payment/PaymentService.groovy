@@ -46,7 +46,7 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter){
+    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
         payment.customer = paymentAdapter.customer
         payment.payer = paymentAdapter.payer
         payment.value = paymentAdapter.value
@@ -100,7 +100,7 @@ class PaymentService {
     }
 
     private Boolean validateDescription(String description) {
-        if(!description) return true
+        if (!description) return true
 
         if (description.length() > 500) return false
 
@@ -108,9 +108,9 @@ class PaymentService {
     }
 
     private Boolean validateValue(BigDecimal value) {
-        if (value < new BigDecimal("10.00")) return false
+        if (value < Payment.MIN_VALUE) return false
 
-        if (value > new BigDecimal("10000.00")) return false
+        if (value > Payment.MAX_VALUE) return false
 
         return true
     }
