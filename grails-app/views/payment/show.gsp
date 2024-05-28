@@ -7,7 +7,11 @@
 </head>
 <body page-title="Visualizar cobrança">
       <atlas-form-panel>
-        <atlas-button slot="actions" href="${createLink(controller: 'payment', action: 'delete', id: payment.getId())}"
+        <atlas-button slot="actions"
+                      href="${createLink(
+                              controller: 'payment',
+                              action: 'delete',
+                              id: payment.getId())}"
                       description="Apagar"></atlas-button>
         <atlas-layout gap="4">
           <atlas-section header="Pagador">
