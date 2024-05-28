@@ -52,7 +52,7 @@ function PaymentListController(reference) {
             if(response.success){
                 Atlas.notifications.showAlert("Cobrança removida com sucesso!", "success");
                 tableReference.fetchRecords(true);
-                modal.closeModal()
+                modal.closeModal();
                 return;
             }
             Atlas.notifications.showAlert(response.alert, "error");
