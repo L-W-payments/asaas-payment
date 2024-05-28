@@ -48,9 +48,9 @@ class PaymentController {
     }
 
     def checkout() {
-        String publicId = params.id
-
         try {
+            String publicId = params.id
+
             return [payment: paymentService.findByPublicId(publicId)]
         } catch (Exception exception) {
             flash.errors = ["Pagamento não encontrado!"]
