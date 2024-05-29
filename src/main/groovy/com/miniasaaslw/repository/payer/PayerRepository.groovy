@@ -14,8 +14,8 @@ class PayerRepository implements BaseEntityRepository {
                 eq('customer.id', Long.valueOf(search.customerId))
             }
 
-            if (search.containsKey("name")){
-                like('name', search.name + "%")
+            if (search.containsKey("name[like]")){
+                like('name', search."name[like]" + "%")
             }
         }
 
