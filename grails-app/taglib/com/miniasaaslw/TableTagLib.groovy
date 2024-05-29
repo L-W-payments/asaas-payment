@@ -5,7 +5,7 @@ import groovy.json.JsonOutput
 class TableTagLib {
     static namespace = "tableTagLib"
 
-    def buildAtlasComplexAttribute = { attrs ->
+    def buildAtlasTable = { attrs ->
         out << attrs.attribute + "='" + JsonOutput.prettyPrint(JsonOutput.toJson(attrs.value)) + "'"
     }
 }

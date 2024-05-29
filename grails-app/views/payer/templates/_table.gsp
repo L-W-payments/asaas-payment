@@ -1,5 +1,5 @@
 <%
-    String columnsAttribute = tableTagLib.buildAtlasComplexAttribute(attribute: "columns", value: [
+    String columnsAttribute = tableTagLib.buildAtlasTable(attribute: "columns", value: [
             ["name": "name", "label": "Pagador", "size": "md", "ellipsis": "true"],
             ["name": "email", "label": "E-mail", "size": "md", "ellipsis": "true"],
             ["name": "dateCreated", "label": "Data de criação", "size": "md"]
