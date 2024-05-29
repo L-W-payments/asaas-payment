@@ -4,12 +4,11 @@ class AlertTagLib {
     static namespace = "alertTagLib"
 
     def showAlerts = { attrs, body ->
-        String alertType = attrs.alertType
-        def alerts = attrs.alerts
+        def alertInfo = attrs.alertInfo
 
         out << render(
                 template: "/utils/alerts",
-                model: [alerts: alerts, alertType: alertType]
+                model: [alertInfo: alertInfo]
         )
     }
 }
