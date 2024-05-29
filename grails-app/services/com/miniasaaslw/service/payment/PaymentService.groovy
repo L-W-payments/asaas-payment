@@ -46,11 +46,11 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    public List<Payment> list(Map search, Integer max, Integer offset){
+    public List<Payment> list(Map search, Integer max, Integer offset) {
         return PaymentRepository.query(search).list(max: max, offset: offset)
     }
 
-    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter){
+    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
         payment.customer = paymentAdapter.customer
         payment.payer = paymentAdapter.payer
         payment.value = paymentAdapter.value
@@ -100,7 +100,7 @@ class PaymentService {
     }
 
     private Boolean validateDescription(String description) {
-        if(!description) return true
+        if (!description) return true
 
         if (description.length() > 500) return false
 
