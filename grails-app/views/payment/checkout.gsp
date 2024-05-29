@@ -29,7 +29,7 @@
                                     description="${message(code: "paymentStatus.${payment.getPaymentStatus()}.label")}"></atlas-summary-item>
 
                             <atlas-summary-item
-                                    label="Método de pagamento"
+                                    label="Forma de pagamento"
                                     description="${message(code: "paymentType.${payment.getPaymentType()}.label")}"></atlas-summary-item>
 
                             <atlas-summary-item
