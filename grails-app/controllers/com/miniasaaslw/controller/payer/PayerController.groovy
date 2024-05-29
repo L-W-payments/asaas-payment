@@ -1,13 +1,15 @@
 package com.miniasaaslw.controller.payer
 
+import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.repository.customer.CustomerRepository
+
 import grails.converters.JSON
 import grails.validation.ValidationException
 
-class PayerController {
+class PayerController extends BaseController {
 
     def payerService
 
@@ -47,9 +49,11 @@ class PayerController {
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
+            validationException.printStackTrace()
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
             redirect(uri: "/payer")
         } catch (Exception exception) {
+            exception.printStackTrace()
             flash.errors = ["Erro ao salvar o pagador"]
             redirect(uri: "/payer")
         }
@@ -84,15 +88,14 @@ class PayerController {
     }
 
     def list() {
-        return [payerList: payerService.list(0, [:])]
+        return [payerList: payerService.list(getOffset(), getLimitPerPage() , [:])]
     }
 
     def loadTableContent(){
-
         Map search = [:]
-        if(params.name) search.name = params.name
+        if(params.name) search."name[like]" = params.name
 
-        List<Payer> payerList = payerService.list((params.page as Integer) - 1, search)
+        List<Payer> payerList = payerService.list(getOffset(), getLimitPerPage(), search)
         Integer totalRecords = payerList.totalCount
         String content = g.render(template: "/payer/templates/tableContent", model: [payerList: payerList])
 
@@ -110,7 +113,6 @@ class PayerController {
         } catch (Exception exception) {
             render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
         }
-
 
     }
 
