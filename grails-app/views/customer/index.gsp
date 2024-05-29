@@ -7,8 +7,8 @@
 
 <body page-title="Cadastro de Cliente">
 <atlas-panel class="js-person-form">
-    <g:if test="${errors}">
-        <alertTagLib:showAlerts alerts="${errors}" alertType="error"/>
+    <g:if test="${alertInfo}">
+        <alertTagLib:showAlerts alertInfo="${alertInfo}"/>
     </g:if>
     <atlas-form action="${createLink(controller: 'customer', action: 'save')}">
         <atlas-input hidden name="country" value="Brasil"></atlas-input>
