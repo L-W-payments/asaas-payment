@@ -4,6 +4,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.repository.customer.CustomerRepository
+import com.miniasaaslw.utils.LoggedCustomer
 import grails.validation.ValidationException
 
 class PayerController {
@@ -11,12 +12,12 @@ class PayerController {
     def payerService
 
     def index() {
-        def errors = flash.errors
+        def alertInfo = flash.alertInfo
 
         List<Customer> customers = CustomerRepository.query([:]).list()
 
-        if (errors) {
-            return [errors: errors, customers : customers]
+        if (alertInfo) {
+            return [customers : customers, alertInfo: alertInfo]
         }
 
         return [customers: customers]
@@ -30,26 +31,24 @@ class PayerController {
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
+            flash.alertInfo = [alerts: validationException.errors.allErrors.collect { it.defaultMessage } , alertType: "error"]
             redirect(action: 'show', params: [id: id])
         } catch (Exception exception) {
-            flash.errors = ["Erro ao atualizar o pagador"]
+            flash.alertInfo = [alerts: ["Erro ao atualizar o pagador"], alertType: "error"]
             redirect(action: 'show', params: [id: id])
         }
     }
 
     def save() {
-        Long customerId = params.long("customerId")
-
         try {
             Payer payer = payerService.save(new PayerAdapter(params))
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
+            flash.alertInfo = [alerts: validationException.errors.allErrors.collect { it.defaultMessage } , alertType: "error"]
             redirect(uri: "/payer")
         } catch (Exception exception) {
-            flash.errors = ["Erro ao salvar o pagador"]
+            flash.alertInfo = [alerts: ["Erro ao salvar o pagador"], alertType: "error"]
             redirect(uri: "/payer")
         }
     }

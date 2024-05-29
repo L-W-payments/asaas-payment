@@ -12,11 +12,12 @@ class PaymentController {
     def paymentService
 
     def index() {
-        def errors = flash.errors
+        def alertInfo = flash.alertInfo
+
         List<Payer> payers = PayerRepository.query([:]).list()
 
-        if (errors) {
-            return [payers: payers, errors: errors]
+        if (alertInfo) {
+            return [payers: payers, alertInfo: alertInfo]
         }
 
         return [payers: payers]
@@ -34,17 +35,19 @@ class PaymentController {
         redirect(uri: "/payment")
     }
 
-    def save(){
-        try{
+    def save() {
+        try {
             paymentService.save(new PaymentAdapter(params))
-            redirect(uri: "/payment", params: [success: "Cobrança criada com sucesso"])
-        }catch (ValidationException validationException){
+            flash.alertInfo = [alerts: ["Cobrança criada com sucesso"], alertType: "success"]
+            redirect(action: "index")
+        } catch (ValidationException validationException) {
+            flash.alertInfo = [alerts: validationException.errors.allErrors.collect { it.defaultMessage } , alertType: "error"]
             redirect(uri: "/payment")
-            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
-        }catch (Exception exception){
+        } catch (Exception exception) {
+            flash.alertInfo = [alerts: ["Erro ao salvar a cobrança"], alertType: "error"]
             redirect(uri: "/payment")
-            flash.errors = ["Erro ao salvar a cobrança"]
         }
+    }
 
     def show() {
         Long id = params.long("id")

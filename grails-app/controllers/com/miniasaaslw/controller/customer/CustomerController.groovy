@@ -10,9 +10,9 @@ class CustomerController {
     def customerService
 
     def index(){
-        def errors = flash.errors
-        if(errors){
-            return [errors: errors]
+        def alertInfo = flash.alertInfo
+        if(alertInfo){
+            return [alertInfo: alertInfo]
         }
     }
 
@@ -20,11 +20,11 @@ class CustomerController {
         try{
             Customer customer = customerService.save(new CustomerAdapter(params))
             redirect(action: 'show', params : [id: customer.id])
-        } catch (ValidationException exception){
-            flash.errors = exception.errors.allErrors.collect { it.defaultMessage }
+        } catch (ValidationException validationException){
+            flash.alertInfo = [alerts: validationException.errors.allErrors.collect { it.defaultMessage } , alertType: "error"]
             redirect(uri: '/customer')
         }catch (Exception exception){
-            flash.errors = ["Erro ao salvar sua conta"]
+            flash.alertInfo = [alerts: ["Erro ao criar sua conta"], alertType: "error"]
             redirect(uri: '/customer')
         }
     }
@@ -42,7 +42,7 @@ class CustomerController {
         } catch (RuntimeException runtimeException){
             redirect(uri: "/customer")
         } catch (Exception exception){
-            flash.errors = ["Erro ao buscar sua conta"]
+            flash.alertInfo = [alerts: ["Erro ao buscar sua conta"], alertType: "error"]
             redirect(uri: '/customer')
         }
     }
@@ -54,8 +54,11 @@ class CustomerController {
             Customer customer = customerService.update(id, new CustomerAdapter(params))
             redirect(action: 'show', params : [id: customer.id])
         }catch (ValidationException validationException){
-            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
+            flash.alertInfo = [alerts: validationException.errors.allErrors.collect { it.defaultMessage } , alertType: "error"]
             redirect(uri: ('/customer/show/' + id))
+        }catch (Exception exception){
+            flash.alertInfo = [alerts: ["Erro ao atualizar sua conta"], alertType: "error"]
+            redirect(uri: '/customer')
         }
     }
 
