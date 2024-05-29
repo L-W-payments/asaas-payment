@@ -49,11 +49,9 @@ class PayerController extends BaseController {
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            validationException.printStackTrace()
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
             redirect(uri: "/payer")
         } catch (Exception exception) {
-            exception.printStackTrace()
             flash.errors = ["Erro ao salvar o pagador"]
             redirect(uri: "/payer")
         }
