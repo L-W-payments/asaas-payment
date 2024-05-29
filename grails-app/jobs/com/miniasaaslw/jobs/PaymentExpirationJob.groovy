@@ -9,7 +9,9 @@ class PaymentExpirationJob {
     def paymentService
 
     static triggers = {
-        cron name: "paymentExpirationJobTrigger", cronExpression: "0 0 0 ? * *" // Todos os dias a meia noite
+        String everyDayAtMidnightExpression = "0 0 0 ? * *"
+
+        cron name: "paymentExpirationJobTrigger", cronExpression: everyDayAtMidnightExpression
     }
 
     def execute() {
