@@ -48,7 +48,7 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter){
+    private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
         payment.customer = paymentAdapter.customer
         payment.payer = paymentAdapter.payer
         payment.value = paymentAdapter.value
@@ -63,46 +63,42 @@ class PaymentService {
         Payment payment = new Payment()
 
         if (!paymentAdapter.customer) {
-            payment.errors.reject(MessageUtils.getMessage("payment.errors.customer.notFound"))
+            payment.errors.reject("customer", null, MessageUtils.getMessage("payment.errors.customer.notFound"))
         }
 
         if (!paymentAdapter.payer) {
-            payment.errors.reject(MessageUtils.getMessage("payment.errors.payer.notFound"))
+            payment.errors.reject("payer", null, MessageUtils.getMessage("payment.errors.payer.notFound"))
         }
 
         if (!paymentAdapter.paymentType) {
-            payment.errors.reject(MessageUtils.getMessage("payment.errors.paymentType.invalid"))
-        }
-
-        if (!paymentAdapter.paymentStatus) {
-            payment.errors.reject(MessageUtils.getMessage("payment.errors.paymentStatus.invalid"))
+            payment.errors.reject("paymentType", null, MessageUtils.getMessage("payment.errors.paymentType.invalid"))
         }
 
         if (!paymentAdapter.value) {
-            payment.errors.reject(MessageUtils.getMessage("payment.errors.value.invalid"))
+            payment.errors.reject("value", null, MessageUtils.getMessage("payment.errors.value.invalid"))
         }
 
         if (!paymentAdapter.dueDate) {
-            payment.errors.reject(MessageUtils.getMessage("payment.errors.dueDate.invalid"))
+            payment.errors.reject("dueDate", null, MessageUtils.getMessage("payment.errors.dueDate.invalid"))
         }
 
         if (!validateDescription(paymentAdapter.description)) {
-            payment.errors.reject(MessageUtils.getMessage("payment.errors.description.length"))
+            payment.errors.reject("description", null, MessageUtils.getMessage("payment.errors.description.length"))
         }
 
         if (!validateValue(paymentAdapter.value)) {
-            payment.errors.reject(MessageUtils.getMessage("payment.errors.value.range"))
+            payment.errors.reject("value", null, MessageUtils.getMessage("payment.errors.value.range"))
         }
 
         if (!validateDueDate(paymentAdapter.dueDate)) {
-            payment.errors.reject(MessageUtils.getMessage("payment.errors.dueDate.range"))
+            payment.errors.reject("dueDate", null, MessageUtils.getMessage("payment.errors.dueDate.range"))
         }
 
         return payment
     }
 
     private Boolean validateDescription(String description) {
-        if(!description) return true
+        if (!description) return true
 
         if (description.length() > 500) return false
 
