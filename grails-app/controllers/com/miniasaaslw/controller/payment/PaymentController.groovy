@@ -1,6 +1,7 @@
 package com.miniasaaslw.controller.payment
 
 import com.miniasaaslw.adapters.payment.PaymentAdapter
+import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.repository.payer.PayerRepository
@@ -8,7 +9,7 @@ import com.miniasaaslw.utils.LoggedCustomer
 import grails.converters.JSON
 import grails.validation.ValidationException
 
-class PaymentController {
+class PaymentController extends BaseController{
 
     def paymentService
 
@@ -60,15 +61,15 @@ class PaymentController {
     }
 
     def list() {
-        return [paymentList: paymentService.list(0, [:])]
+        return [paymentList: paymentService.list([:], getLimitPerPage(), getOffset())]
     }
 
     def loadTableContent() {
 
         Map search = [:]
-        if (params.payerName) search.payerName = params.payerName
+        if (params.payerName) search."payerName[like]" = params.payerName
 
-        List<Payment> paymentList = paymentService.list((params.page as Integer) - 1, search)
+        List<Payment> paymentList = paymentService.list(search, getLimitPerPage(), getOffset())
         Integer totalRecords = paymentList.totalCount
         String content = g.render(template: "/payment/templates/tableContent", model: [paymentList: paymentList])
 

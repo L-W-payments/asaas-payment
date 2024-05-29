@@ -46,8 +46,8 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    public List<Payment> list(Integer page, Map search){
-        return PaymentRepository.query(search).list(max: 10, offset: page * 10)
+    public List<Payment> list(Map search, Integer max, Integer offset){
+        return PaymentRepository.query(search).list(max: max, offset: offset)
     }
 
     private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter){

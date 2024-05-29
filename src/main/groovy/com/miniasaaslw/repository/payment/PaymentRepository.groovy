@@ -10,9 +10,9 @@ class PaymentRepository implements BaseEntityRepository {
         DetachedCriteria<Payment> query = Payment.where(defaultQuery(search))
 
         query = query.where {
-            if (search.containsKey("payerName")) {
+            if (search.containsKey("payerName[like]")) {
                 payer {
-                    like("name", search.payerName + "%")
+                    like("name", search."payerName[like]" + "%")
                 }
             }
         }
