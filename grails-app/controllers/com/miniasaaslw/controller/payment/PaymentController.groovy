@@ -10,7 +10,7 @@ import com.miniasaaslw.utils.LoggedCustomer
 import grails.converters.JSON
 import grails.validation.ValidationException
 
-class PaymentController extends BaseController{
+class PaymentController extends BaseController {
 
     def paymentService
 
