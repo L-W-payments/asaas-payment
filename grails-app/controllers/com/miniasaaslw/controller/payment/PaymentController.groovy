@@ -37,7 +37,7 @@ class PaymentController {
     def save() {
         try {
             paymentService.save(new PaymentAdapter(params))
-            redirect(uri: "/payment", params: [success: "Cobrança criada com sucesso"])
+            redirect(uri: "/payment", params: [success: message(code: "payment.save.success")])
         } catch (ValidationException validationException) {
             redirect(uri: "/payment")
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
