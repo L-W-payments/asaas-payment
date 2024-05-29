@@ -48,8 +48,8 @@ function PaymentListController(reference) {
     }
 
     function confirmDelete(modal) {
-        Atlas.request.post(deleteRow.dataset.deleteUrl).then(function (response){
-            if(response.success){
+        Atlas.request.post(deleteRow.dataset.deleteUrl).then(function (response) {
+            if (response.success) {
                 Atlas.notifications.showAlert("Cobrança removida com sucesso!", "success");
                 tableReference.fetchRecords(true);
                 modal.closeModal();
@@ -71,7 +71,6 @@ function PaymentListController(reference) {
             disableAutoClose: false
         })
     }
-
 
     init();
 }
