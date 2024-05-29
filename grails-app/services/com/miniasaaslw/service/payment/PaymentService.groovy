@@ -4,9 +4,11 @@ import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
-import grails.gorm.transactions.Transactional
 import com.miniasaaslw.repository.payment.PaymentRepository
+
+import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+
 import groovy.time.TimeCategory
 
 @Transactional
