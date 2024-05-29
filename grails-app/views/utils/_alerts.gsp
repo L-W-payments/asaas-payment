@@ -1,3 +1,3 @@
-<g:if test="${alerts && alertType}">
-    <atlas-alert message="${alerts.join(" ")}" type="${alertType}"></atlas-alert>
+<g:if test="${alertInfo}">
+    <atlas-alert message="${alertInfo.alerts?.join(" ")}" type="${alertInfo.alertType}"></atlas-alert>
 </g:if>
