@@ -4,9 +4,11 @@ import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
-import grails.gorm.transactions.Transactional
 import com.miniasaaslw.repository.payment.PaymentRepository
+
+import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+
 import groovy.time.TimeCategory
 
 @Transactional
@@ -43,6 +45,19 @@ class PaymentService {
         if (payment.deleted) return
 
         payment.deleted = true
+        payment.save(failOnError: true)
+    }
+
+    public void updateToExpired(Long id) {
+        Payment payment = PaymentRepository.query([id: id]).get()
+
+        if (!payment) throw new RuntimeException("Cobrança não encontrada.")
+
+        if (payment.paymentStatus != PaymentStatus.PENDING) throw new RuntimeException("A cobrança precisa estar pendente.")
+
+        if (payment.dueDate.after(new Date())) throw new RuntimeException("A data da cobrança não está vencido.")
+
+        payment.paymentStatus = PaymentStatus.EXPIRED
         payment.save(failOnError: true)
     }
 
