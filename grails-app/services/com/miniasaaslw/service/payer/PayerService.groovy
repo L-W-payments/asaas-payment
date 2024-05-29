@@ -18,8 +18,8 @@ import grails.validation.ValidationException
 @Transactional
 class PayerService {
 
-    public List<Payer> list(Integer page, Map search) {
-        return PayerRepository.query(search).list(max: 10, offset: page * 10)
+    public List<Payer> list(Integer max, Integer offset, Map search) {
+        return PayerRepository.query(search).list(max: max, offset: offset)
     }
 
     public Payer find(Long id) {

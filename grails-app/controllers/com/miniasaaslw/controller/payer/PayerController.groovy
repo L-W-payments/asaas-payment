@@ -88,14 +88,14 @@ class PayerController extends BaseController {
     }
 
     def list() {
-        return [payerList: payerService.list(getOffset(), getLimitPerPage() , [:])]
+        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [:])]
     }
 
     def loadTableContent(){
         Map search = [:]
         if(params.name) search."name[like]" = params.name
 
-        List<Payer> payerList = payerService.list(getOffset(), getLimitPerPage(), search)
+        List<Payer> payerList = payerService.list(getLimitPerPage(), getOffset(), search)
         Integer totalRecords = payerList.totalCount
         String content = g.render(template: "/payer/templates/tableContent", model: [payerList: payerList])
 
