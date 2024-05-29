@@ -47,7 +47,7 @@ class PaymentController {
         }
     }
 
-    def show() {
+    def checkout() {
         Long id = params.long("id")
 
         try {
@@ -64,7 +64,7 @@ class PaymentController {
         try {
             paymentService.updateToReceived(id)
 
-            redirect(action: 'show', id: id)
+            redirect(action: "show", id: id)
         } catch (RuntimeException runtimeException) {
             flash.errors = [runtimeException.getMessage()]
             redirect(action: "index")
