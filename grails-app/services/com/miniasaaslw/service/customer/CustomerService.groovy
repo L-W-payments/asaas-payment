@@ -7,9 +7,11 @@ import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.utils.CepUtils
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.EmailUtils
+import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.utils.NameUtils
 import com.miniasaaslw.utils.PhoneUtils
 import com.miniasaaslw.utils.StateUtils
+
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -19,7 +21,7 @@ class CustomerService {
     public Customer save(CustomerAdapter customerAdapter) {
         Customer customer = validateCustomer(customerAdapter)
         if (customer.hasErrors()) {
-            throw new ValidationException("Erro ao salvar sua conta", customer.errors)
+            throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), customer.errors)
         }
 
         customer = buildCustomerProperties(customerAdapter, new Customer())
@@ -30,7 +32,7 @@ class CustomerService {
     public Customer update(long id, CustomerAdapter customerAdapter) {
         Customer customer = validateCustomer(customerAdapter)
         if (customer.hasErrors()) {
-            throw new ValidationException("Erro ao salvar sua conta", customer.errors)
+            throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), customer.errors)
         }
 
         customer = buildCustomerProperties(customerAdapter, this.find(id))
@@ -38,7 +40,7 @@ class CustomerService {
         customer.save(failOnError: true)
         return customer
     }
-
+    
     public void delete(Long id) {
         Customer customer = find(id)
 
@@ -50,94 +52,93 @@ class CustomerService {
         Customer customer = CustomerRepository.query([id: id]).get()
 
         if (!customer) {
-            throw new RuntimeException("Cliente não encontrado")
+            throw new RuntimeException(MessageUtils.getMessage("customer.errors.notFound"))
         }
 
         return customer
     }
 
-
     private Customer validateCustomer(CustomerAdapter customerAdapter) {
         Customer customer = new Customer()
 
         if (!customerAdapter.name) {
-            customer.errors.reject("name", null, "Nome é obrigatório!")
+            customer.errors.reject("name", null, MessageUtils.getMessage("general.errors.name.required"))
         }
 
         if (!customerAdapter.email) {
-            customer.errors.reject("email", null, "Email é obrigatório!")
+            customer.errors.reject("email", null, MessageUtils.getMessage("general.errors.email.required"))
         }
 
         if (!customerAdapter.phone) {
-            customer.errors.reject("phone", null, "Telefone é obrigatório!")
+            customer.errors.reject("phone", null, MessageUtils.getMessage("general.errors.phone.required"))
         }
 
         if (!customerAdapter.cpfCnpj) {
-            customer.errors.reject("cpfCnpj", null, "CPF/CNPJ é obrigatório!")
+            customer.errors.reject("cpfCnpj", null, MessageUtils.getMessage("general.errors.cpfCnpj.required"))
         }
 
         if (!customerAdapter.personType) {
-            customer.errors.reject("personType", null, "Tipo de pessoa é obrigatório!")
+            customer.errors.reject("personType", null, MessageUtils.getMessage("general.errors.personType.required"))
         }
 
         if (!customerAdapter.number) {
-            customer.errors.reject("number", null, "Número é obrigatório!")
+            customer.errors.reject("number", null, MessageUtils.getMessage("general.errors.number.required"))
         }
 
         if (!customerAdapter.country) {
-            customer.errors.reject("country", null, "País é obrigatório!")
+            customer.errors.reject("country", null, MessageUtils.getMessage("general.errors.country.required"))
         }
 
         if (!customerAdapter.city) {
-            customer.errors.reject("city", null, "Cidade é obrigatória!")
+            customer.errors.reject("city", null, MessageUtils.getMessage("general.errors.city.required"))
         }
 
         if (!customerAdapter.state) {
-            customer.errors.reject("state", null, "Estado é obrigatório!")
+            customer.errors.reject("state", null, MessageUtils.getMessage("general.errors.state.required"))
         }
 
         if (!customerAdapter.district) {
-            customer.errors.reject("district", null, "Bairro é obrigatório!")
+            customer.errors.reject("district", null, MessageUtils.getMessage("general.errors.district.required"))
         }
 
         if (!customerAdapter.street) {
-            customer.errors.reject("street", null, "Rua é obrigatória!")
+            customer.errors.reject("street", null, MessageUtils.getMessage("general.errors.street.required"))
         }
 
         if (!NameUtils.validateName(customerAdapter.name)) {
-            customer.errors.reject("name", null, "Nome inválido!")
+            customer.errors.reject("name", null, MessageUtils.getMessage("general.errors.name.invalid"))
         }
 
         if (!EmailUtils.validateEmail(customerAdapter.email)) {
-            customer.errors.reject("email", null, "Email inválido!")
+            customer.errors.reject("email", null, MessageUtils.getMessage("general.errors.email.invalid"))
         }
 
         if (!PhoneUtils.validatePhone(customerAdapter.phone)) {
-            customer.errors.reject("phone", null, "Telefone inválido!")
+            customer.errors.reject("phone", null, MessageUtils.getMessage("general.errors.phone.invalid"))
         }
 
         if ((customerAdapter.personType == PersonType.LEGAL) && (!CpfCnpjUtils.validateCnpj(customerAdapter.cpfCnpj))) {
-            customer.errors.reject("cpfCnpj", null, "CNPJ inválido!")
+            customer.errors.reject("cpfCnpj", null, MessageUtils.getMessage("general.errors.cnpj.invalid"))
         }
 
         if ((customerAdapter.personType == PersonType.NATURAL) && (!CpfCnpjUtils.validateCpf(customerAdapter.cpfCnpj))) {
-            customer.errors.reject("cpfCnpj", null, "CPF inválido!")
+            customer.errors.reject("cpfCnpj", null, MessageUtils.getMessage("general.errors.cnpj.invalid"))
         }
 
         if (!StateUtils.validateState(customerAdapter.state)) {
-            customer.errors.reject("state", null, "Estado inválido!")
+            customer.errors.reject("state", null, MessageUtils.getMessage("general.errors.state.invalid"))
         }
 
         if (!CepUtils.validateCep(customerAdapter.cep)) {
-            customer.errors.reject("cep", null, "CEP inválido!")
+            customer.errors.reject("cep", null, MessageUtils.getMessage("general.errors.zipCode.invalid"))
         }
 
         if (CustomerRepository.exists([cpfCnpj: customerAdapter.cpfCnpj])) {
-            customer.errors.reject("cpfCnpj", null, "CPF/CNPJ já cadastrado!")
+            customer.errors.reject("cpfCnpj", null, MessageUtils.getMessage("general.errors.cpfCnpj.duplicated"))
         }
 
         if (CustomerRepository.exists([email: customerAdapter.email])) {
-            customer.errors.reject("email", null, "Email já cadastrado!")
+            customer.errors.reject("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
         }
 
         return customer
