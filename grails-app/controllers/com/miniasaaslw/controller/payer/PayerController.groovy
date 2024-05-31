@@ -111,7 +111,6 @@ class PayerController extends BaseController {
         } catch (Exception exception) {
             render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
         }
-
     }
 
 
