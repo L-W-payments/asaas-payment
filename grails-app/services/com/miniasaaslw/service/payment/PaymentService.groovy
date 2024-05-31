@@ -55,10 +55,24 @@ class PaymentService {
 
         if (payment.paymentStatus != PaymentStatus.PENDING) throw new RuntimeException("A cobrança precisa estar pendente.")
 
-        if (payment.dueDate.after(new Date())) throw new RuntimeException("A data da cobrança não está vencido.")
-
         payment.paymentStatus = PaymentStatus.EXPIRED
         payment.save(failOnError: true)
+    }
+
+    public void processOverduePayment() {
+        List<Long> paymentIdList = PaymentRepository.query([
+                paymentStatus: PaymentStatus.PENDING,
+                "dueDate[lt]": new Date(),
+                "column"     : "id"
+        ]).list() as List<Long>
+
+        paymentIdList.each { Long id ->
+            try {
+                updateToExpired(id)
+            } catch (Exception exception) {
+                log.error("Erro ao atualizar a cobrança para expirado", exception)
+            }
+        }
     }
 
     private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter){
