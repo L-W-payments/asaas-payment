@@ -29,7 +29,7 @@ class PaymentController {
         try {
             paymentService.delete(LoggedCustomer.CUSTOMER, id)
         } catch (Exception exception) {
-            flash.errors = [message(code: "payment.errors.delete.unknown")]
+            flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
         }
 
         redirect(uri: "/payment")
@@ -56,7 +56,7 @@ class PaymentController {
         try {
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
-            flash.errors = [message(code: "payment.errors.notFound")]
+            flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
             redirect(uri: "/payment")
         }
     }

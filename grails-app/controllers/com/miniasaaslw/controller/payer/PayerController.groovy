@@ -74,7 +74,7 @@ class PayerController {
         } catch (RuntimeException runtimeException) {
             flash.errors = [runtimeException.getMessage()]
         } catch (Exception exception) {
-            flash.errors = [message(code: "payer.errors.delete.unknown")]
+            flash.messageInfo = [messages: [message(code: "payer.errors.delete.unknown")], messageType: "error"]
         }
 
         redirect(uri: "/payer")

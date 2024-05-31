@@ -72,7 +72,7 @@ class CustomerController {
             runtimeException.printStackTrace()
             redirect(uri: "/customer")
         } catch (Exception exception) {
-            flash.errors = [message(code: "customer.errors.delete.unknown")]
+            flash.messageInfo = [messages: [message(code: "customer.errors.delete.unknown")], messageType: "error"]
             redirect(uri: "/customer")
         }
     }
