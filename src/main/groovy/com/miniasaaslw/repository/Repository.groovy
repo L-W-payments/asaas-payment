@@ -13,7 +13,7 @@ import org.hibernate.criterion.CriteriaSpecification
 @SuppressWarnings(["UnusedMethodParameter"])
 trait Repository<DomainClass, RepositoryClass extends Repository> {
 
-    Closure criteria = { }
+    Closure criteria = {}
 
     List<String> columnList = []
 
@@ -49,17 +49,7 @@ trait Repository<DomainClass, RepositoryClass extends Repository> {
         return (DomainClass) query([id: id]).lock().disableSort().get()
     }
 
-    public  <T> T get() {
-        return (T) addCriteria { setMaxResults(1) }
-                .getBuildableCriteria()
-                .get(criteria)
-    }
-
-    /**
-     * @deprecated Use o método `get` sem o parâmetro `responseType`
-     */
-    @Deprecated
-    public <T> T get(Class<T> responseType) {
+    public <T> T get() {
         return (T) addCriteria { setMaxResults(1) }
                 .getBuildableCriteria()
                 .get(criteria)
@@ -67,14 +57,6 @@ trait Repository<DomainClass, RepositoryClass extends Repository> {
 
     public <T> PagedResultList<T> list(Map params = [:]) {
         if (params.containsKey("readOnly")) throw new RuntimeException("Para utilizar readOnly, utilize o método `readOnly()` ao invés do parâmetro")
-        return (PagedResultList<T>) getBuildableCriteria().list(params, criteria)
-    }
-
-    /**
-     * @deprecated Use o método `list` sem o parâmetro `responseType`
-     */
-    @Deprecated
-    public <T> PagedResultList<T> list(Class<T> responseType, Map params = [:]) {
         return (PagedResultList<T>) getBuildableCriteria().list(params, criteria)
     }
 
