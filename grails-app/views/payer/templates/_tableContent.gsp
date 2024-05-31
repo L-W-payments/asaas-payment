@@ -1,16 +1,16 @@
 <g:each var="payer" in="${payerList}">
     <atlas-table-row
-            href="${createLink(controller: "payer", action: "show", id: payer.getId())}"
-            data-delete-url="${createLink(controller: "payer", action: "fetchDelete", id: payer.getId())}"
+            href="${createLink(controller: "payer", action: "show", id: payer.id)}"
+            data-delete-url="${createLink(controller: "payer", action: "fetchDelete", id: payer.id)}"
     >
         <atlas-table-col>
-            ${payer.getName()}
+            ${payer.name}
         </atlas-table-col>
         <atlas-table-col>
-            ${payer.getEmail()}
+            ${payer.email}
         </atlas-table-col>
         <atlas-table-col>
-            <g:formatDate date="${payer.getDateCreated()}" format="dd/MM/yyyy"/>
+            <g:formatDate date="${payer.dateCreated}" format="dd/MM/yyyy"/>
         </atlas-table-col>
         <atlas-button-group slot="actions" group-after="2">
             <atlas-icon-button
