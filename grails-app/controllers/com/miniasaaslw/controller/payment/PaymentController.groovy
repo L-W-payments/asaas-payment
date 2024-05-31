@@ -23,9 +23,8 @@ class PaymentController {
     }
 
     def delete() {
-        Long id = params.long("id")
-
         try {
+            Long id = params.long("id")
             paymentService.delete(LoggedCustomer.CUSTOMER, id)
         } catch (Exception exception) {
             flash.errors = [message(code: "payment.errors.delete.unknown")]
@@ -48,9 +47,8 @@ class PaymentController {
     }
 
     def checkout() {
-        Long id = params.long("id")
-
         try {
+            Long id = params.long("id")
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
             flash.errors = [message(code: "payment.errors.notFound")]
@@ -59,9 +57,8 @@ class PaymentController {
     }
 
     def show() {
-        Long id = params.long("id")
-
         try {
+            Long id = params.long("id")
             return [payment: paymentService.find(LoggedCustomer.CUSTOMER, id)]
         } catch (Exception exception) {
             flash.errors = ["Pagamento não encontrado!"]
