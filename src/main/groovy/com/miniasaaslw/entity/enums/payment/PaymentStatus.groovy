@@ -4,5 +4,17 @@ enum PaymentStatus {
 
     PENDING,
     RECEIVED,
-    EXPIRED
+    OVERDUE
+
+    public boolean isReceived() {
+        return this == RECEIVED
+    }
+
+    public boolean isPending() {
+        return this == PENDING
+    }
+
+    public boolean isOverdue() {
+        return this == OVERDUE
+    }
 }

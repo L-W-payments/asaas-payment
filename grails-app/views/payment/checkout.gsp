@@ -22,52 +22,51 @@
 
                 <atlas-panel header="Informações da cobrança">
                     <atlas-text slot="actions" muted>
-                        Rastreabilidade #${payment.getId()}
+                        Rastreabilidade #${payment.id}
                     </atlas-text>
 
                     <atlas-layout justify="space-between" inline>
                         <atlas-summary-item
                                 label="Data de vencimento"
-                                description="${formatDate(date: payment.getDueDate(), format: 'dd/MM/yyyy')}"></atlas-summary-item>
+                                description="${formatDate(date: payment.dueDate, format: 'dd/MM/yyyy')}"></atlas-summary-item>
 
                         <atlas-summary-item
                                 label="Situação"
-                                description="${message(code: "paymentStatus.${payment.getPaymentStatus()}.label")}"></atlas-summary-item>
+                                description="${message(code: "paymentStatus.${payment.paymentStatus}.label")}"></atlas-summary-item>
 
                         <atlas-summary-item
                                 label="Método de pagamento"
-                                description="${message(code: "paymentType.${payment.getPaymentType()}.label")}"></atlas-summary-item>
+                                description="${message(code: "paymentType.${payment.paymentType}.label")}"></atlas-summary-item>
 
                         <atlas-summary-item
                                 label="Destinatário"
-                                description="${payment.getCustomer().getName()}"></atlas-summary-item>
+                                description="${payment.customer.name}"></atlas-summary-item>
                     </atlas-layout>
 
                     <atlas-summary-item
                             label="Descrição"
-                            description="${payment.getDescription() ?: 'Seu fornecedor não informou descrição para este serviço/produto.'}">
-                    </atlas-summary-item>
+                            description="${payment.description ?: 'Seu fornecedor não informou descrição para este serviço/produto.'}"></atlas-summary-item>
 
                     <atlas-divider spacing="16"></atlas-divider>
 
                     <atlas-summary-item
                             label="Valor total"
-                            description="${formatNumber(number: payment.getValue(), type: 'currency', locale: 'pt_BR')}"
+                            description="${formatNumber(number: payment.value, type: 'currency', locale: 'pt_BR')}"
                             horizontal></atlas-summary-item>
 
                     <atlas-divider spacing="16"></atlas-divider>
 
 
                     <form action="${createLink(controller: 'payment', action: 'pay')}">
-                        <g:if test="${payment.getPaymentStatus() == PaymentStatus.PENDING}">
-                            <atlas-input hidden name="id" value="${payment.getId()}"></atlas-input>
+                        <g:if test="${payment.paymentStatus.isPending()}">
+                            <atlas-input hidden name="id" value="${payment.id}"></atlas-input>
                             <atlas-button description="Pagar" theme="success" submit block></atlas-button>
                         </g:if>
                         <g:else>
                             <atlas-button
                                     disabled
-                                    description="${payment.getPaymentStatus() == PaymentStatus.RECEIVED ? 'Fatura paga' : 'Fatura expirada'}"
-                                    theme="${payment.getPaymentStatus() == PaymentStatus.RECEIVED ? 'highlight' : 'danger'}"
+                                    description="${payment.paymentStatus.isReceived() ? 'Fatura paga' : 'Fatura expirada'}"
+                                    theme="${payment.paymentStatus.isReceived() ? 'highlight' : 'danger'}"
                                     block></atlas-button>
                         </g:else>
                     </form>

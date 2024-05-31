@@ -53,9 +53,7 @@ class PaymentService {
         if (!payment) throw new RuntimeException("Cobrança não encontrada!")
 
         Payment validatedPayment = validateUpdateToReceived(payment)
-        if (validatedPayment.hasErrors()) {
-            throw new ValidationException("Erro ao validar parâmetros da cobrança", validatedPayment.errors)
-        }
+        if (validatedPayment.hasErrors()) throw new ValidationException("Erro ao validar parâmetros da cobrança", validatedPayment.errors)
 
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
@@ -113,7 +111,7 @@ class PaymentService {
     private Payment validateUpdateToReceived(Payment payment) {
         Payment validationPayment = new Payment()
 
-        if (payment.paymentStatus == PaymentStatus.RECEIVED) {
+        if (payment.paymentStatus.isReceived()) {
             validationPayment.errors.reject("O pagamento já foi efetuado!")
         }
 
