@@ -66,7 +66,6 @@ class PaymentController extends BaseController {
     }
 
     def loadTableContent() {
-
         Map search = [:]
         if (params.payerName) search."payerName[like]" = params.payerName
 
