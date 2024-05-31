@@ -4,7 +4,6 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.repository.customer.CustomerRepository
-import com.miniasaaslw.utils.LoggedCustomer
 import grails.validation.ValidationException
 
 class PayerController {
@@ -34,7 +33,7 @@ class PayerController {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage } , messageType: "error"]
             redirect(action: 'show', params: [id: id])
         } catch (Exception exception) {
-            flash.messageInfo = [messages: ["Erro ao atualizar o pagador"], messageType: "error"]
+            flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]
             redirect(action: 'show', params: [id: id])
         }
     }
@@ -48,7 +47,7 @@ class PayerController {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage } , messageType: "error"]
             redirect(uri: "/payer")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: ["Erro ao salvar o pagador"], messageType: "error"]
+            flash.messageInfo = [messages: [messages: ["Erro ao salvar o pagador"]], messageType: "error"]
             redirect(uri: "/payer")
         }
     }
@@ -61,7 +60,7 @@ class PayerController {
         } catch (RuntimeException runtimeException) {
             flash.errors = [runtimeException.getMessage()]
         } catch (Exception exception) {
-            flash.errors = ["Erro ao buscar o pagador"]
+            flash.errors = [message(code: "payer.errors.search.unknown")]
         }
 
         redirect(uri: "/payer")
@@ -75,7 +74,7 @@ class PayerController {
         } catch (RuntimeException runtimeException) {
             flash.errors = [runtimeException.getMessage()]
         } catch (Exception exception) {
-            flash.errors = ["Erro ao deletar o pagador"]
+            flash.errors = [message(code: "payer.errors.delete.unknown")]
         }
 
         redirect(uri: "/payer")

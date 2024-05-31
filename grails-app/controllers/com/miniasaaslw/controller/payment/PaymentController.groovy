@@ -2,9 +2,9 @@ package com.miniasaaslw.controller.payment
 
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.payer.Payer
-import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.utils.LoggedCustomer
+
 import grails.validation.ValidationException
 
 class PaymentController {
@@ -29,7 +29,7 @@ class PaymentController {
         try {
             paymentService.delete(LoggedCustomer.CUSTOMER, id)
         } catch (Exception exception) {
-            flash.errors = ["Erro ao deletar pagamento!"]
+            flash.errors = [message(code: "payment.errors.delete.unknown")]
         }
 
         redirect(uri: "/payment")
@@ -43,19 +43,20 @@ class PaymentController {
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage } , messageType: "error"]
             redirect(uri: "/payment")
+            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
         } catch (Exception exception) {
-            flash.messageInfo = [messages: ["Erro ao salvar a cobrança"], messageType: "error"]
+            flash.messageInfo = [messages: [message(code: "payment.errors.save.unknown")], messageType: "error"]
             redirect(uri: "/payment")
         }
     }
 
-    def show() {
+    def checkout() {
         Long id = params.long("id")
 
         try {
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
-            flash.errors = ["Pagamento não encontrado!"]
+            flash.errors = [message(code: "payment.errors.notFound")]
             redirect(uri: "/payment")
         }
     }

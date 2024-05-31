@@ -24,25 +24,25 @@ class CustomerController {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(uri: '/customer')
         } catch (Exception exception) {
-            flash.messageInfo = [messages: ["Erro ao criar sua conta"], messageType: "error"]
+            flash.messageInfo = [messages: [message(code: "customer.errors.save.unknown")], messageType: "error"]
             redirect(uri: '/customer')
         }
     }
 
-    def show() {
+    def show(){
         def errors = flash.errors
-        try {
+        try{
             Customer customer = customerService.find(params.long("id"))
-            if (customer) {
-                if (errors) {
+            if(customer){
+                if(errors){
                     return [customer: customer, errors: errors]
                 }
                 return [customer: customer]
             }
-        } catch (RuntimeException runtimeException) {
+        } catch (RuntimeException runtimeException){
             redirect(uri: "/customer")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: ["Erro ao buscar sua conta"], messageType: "error"]
+            flash.messageInfo = [messages: [message(code: "customer.errors.search.unknown")], messageType: "error"]
             redirect(uri: '/customer')
         }
     }
@@ -72,7 +72,7 @@ class CustomerController {
             runtimeException.printStackTrace()
             redirect(uri: "/customer")
         } catch (Exception exception) {
-            flash.errors = ["Erro ao deletar sua conta"]
+            flash.errors = [message(code: "customer.errors.delete.unknown")]
             redirect(uri: "/customer")
         }
     }
