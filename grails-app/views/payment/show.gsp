@@ -41,18 +41,18 @@
             <atlas-grid>
               <atlas-row>
                 <atlas-col lg="6" md="6">
-                  <atlas-selection-card name="paymentType" label="Pix" value="${PaymentType.PIX}" type="radio" ${payment.paymentType==PaymentType.PIX ? 'checked' : '' } ></atlas-selection-card>
+                  <atlas-selection-card name="paymentType" label="Pix" value="${PaymentType.PIX}" type="radio" ${payment.paymentType.isPix() ? 'checked' : '' } ></atlas-selection-card>
                 </atlas-col>
                 <atlas-col lg="6" md="6">
-                  <atlas-selection-card name="paymentType" label="Boleto" value="${PaymentType.BANK_SLIP}" type="radio" ${payment.paymentType==PaymentType.BANK_SLIP ? 'checked' : '' } ></atlas-selection-card>
+                  <atlas-selection-card name="paymentType" label="Boleto" value="${PaymentType.BANK_SLIP}" type="radio" ${payment.paymentType.isBankSlip() ? 'checked' : '' } ></atlas-selection-card>
                 </atlas-col>
               </atlas-row>
               <atlas-row>
                   <atlas-col lg="6" md="6">
-                    <atlas-selection-card name="paymentType" label="Cartão de Crédito" value="${PaymentType.CREDIT_CARD}" type="radio" ${payment.paymentType==PaymentType.CREDIT_CARD ? 'checked' : '' }></atlas-selection-card>
+                    <atlas-selection-card name="paymentType" label="Cartão de Crédito" value="${PaymentType.CREDIT_CARD}" type="radio" ${payment.paymentType.isCreditCard() ? 'checked' : '' }></atlas-selection-card>
                   </atlas-col>
                 <atlas-col lg="6" md="6">
-                  <atlas-selection-card name="paymentType" label="Cartão de Débito" value="${PaymentType.DEBIT_CARD}" type="radio" ${payment.paymentType==PaymentType.DEBIT_CARD ? 'checked' : '' }></atlas-selection-card>
+                  <atlas-selection-card name="paymentType" label="Cartão de Débito" value="${PaymentType.DEBIT_CARD}" type="radio" ${payment.paymentType.isDebitCard() ? 'checked' : '' }></atlas-selection-card>
                 </atlas-col>
               </atlas-row>
             </atlas-grid>
