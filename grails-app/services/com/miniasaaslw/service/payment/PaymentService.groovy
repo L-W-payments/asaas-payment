@@ -29,7 +29,7 @@ class PaymentService {
         return payment
     }
 
-    public Payment findByPublicId(String publicId) {
+    public Payment find(String publicId) {
         Payment payment = PaymentRepository.query([publicId: publicId]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))

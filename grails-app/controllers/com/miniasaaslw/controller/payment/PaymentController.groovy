@@ -51,7 +51,7 @@ class PaymentController {
         try {
             String publicId = params.id
 
-            return [payment: paymentService.findByPublicId(publicId)]
+            return [payment: paymentService.find(publicId)]
         } catch (Exception exception) {
             flash.errors = [message(code: "payment.errors.notFound")]
             redirect(uri: "/payment")
