@@ -31,13 +31,13 @@ class PayerController extends BaseController {
         try {
             Payer payer = payerService.update(id, new PayerAdapter(params))
 
-            redirect(action: 'show', params: [id: payer.id])
+            redirect(action: "show", params: [id: payer.id])
         } catch (ValidationException validationException) {
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
-            redirect(action: 'show', params: [id: id])
+            redirect(action: "show", params: [id: id])
         } catch (Exception exception) {
-            flash.errors = ["Erro ao atualizar o pagador"]
-            redirect(action: 'show', params: [id: id])
+            flash.errors = [message(code: "payer.errors.save.unknown")]
+            redirect(action: "show", params: [id: id])
         }
     }
 
@@ -47,14 +47,12 @@ class PayerController extends BaseController {
         try {
             Payer payer = payerService.save(new PayerAdapter(params))
 
-            redirect(action: 'show', params: [id: payer.id])
+            redirect(action: "show", params: [id: payer.id])
         } catch (ValidationException validationException) {
-            validationException.printStackTrace()
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
             redirect(uri: "/payer")
         } catch (Exception exception) {
-            exception.printStackTrace()
-            flash.errors = ["Erro ao salvar o pagador"]
+            flash.errors = [message(code: "payer.errors.save.unknown")]
             redirect(uri: "/payer")
         }
     }
@@ -67,7 +65,7 @@ class PayerController extends BaseController {
         } catch (RuntimeException runtimeException) {
             flash.errors = [runtimeException.getMessage()]
         } catch (Exception exception) {
-            flash.errors = ["Erro ao buscar o pagador"]
+            flash.errors = [message(code: "payer.errors.search.unknown")]
         }
 
         redirect(uri: "/payer")
@@ -81,7 +79,7 @@ class PayerController extends BaseController {
         } catch (RuntimeException runtimeException) {
             flash.errors = [runtimeException.getMessage()]
         } catch (Exception exception) {
-            flash.errors = ["Erro ao deletar o pagador"]
+            flash.errors = [message(code: "payer.errors.delete.unknown")]
         }
 
         redirect(uri: "/payer")
@@ -101,20 +99,4 @@ class PayerController extends BaseController {
 
         render([totalRecords: totalRecords, content: content, success: true] as JSON)
     }
-
-    def fetchDelete() {
-        try {
-            Long id = params.long("id")
-
-            payerService.delete(id)
-            render([success: true] as JSON)
-        } catch (RuntimeException runtimeException) {
-            render([success: false, alert: runtimeException.getMessage()] as JSON)
-        } catch (Exception exception) {
-            render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
-        }
-
-    }
-
-
 }
