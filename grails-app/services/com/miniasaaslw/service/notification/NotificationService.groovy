@@ -9,16 +9,15 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class NotificationService {
 
-    public void save(Customer customer, Map params) {
+    public void save(Customer customer, Map notificationInfo) {
         Notification notification = new Notification()
 
         notification.customer = customer
-        notification.title = params.title
-        notification.message = params.message
-        notification.url = params.url
-        notification.priority = NotificationPriority.valueOf(params.priority.toString().toUpperCase())
+        notification.title = notificationInfo.title
+        notification.message = notificationInfo.message
+        notification.url = notificationInfo.url
+        notification.priority = notificationInfo.priority as NotificationPriority
 
         notification.save(failOnError: true)
     }
-
 }
