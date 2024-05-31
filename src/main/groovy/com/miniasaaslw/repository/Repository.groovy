@@ -1,5 +1,7 @@
 package com.miniasaaslw.repository
 
+import com.miniasaaslw.utils.StringUtils
+
 import grails.gorm.PagedResultList
 import grails.orm.HibernateCriteriaBuilder
 
