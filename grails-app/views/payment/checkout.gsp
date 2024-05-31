@@ -26,22 +26,26 @@
 
                             <atlas-summary-item
                                     label="Situação"
-                                    description="${message(code: "paymentStatus.${payment.paymentStatus}.label")}"></atlas-summary-item>
+                                    description="${message(code: "paymentStatus.${payment.paymentStatus}.label")}">
+                            </atlas-summary-item>
 
                             <atlas-summary-item
                                     label="Forma de pagamento"
-                                    description="${message(code: "paymentType.${payment.paymentType}.label")}"></atlas-summary-item>
+                                    description="${message(code: "paymentType.${payment.paymentType}.label")}">
+                            </atlas-summary-item>
 
                             <atlas-summary-item
                                     label="Destinatário"
-                                    description="${payment.customer.name}"></atlas-summary-item>
+                                    description="${payment.customer.name}">
+                            </atlas-summary-item>
                         </atlas-layout>
 
                         <atlas-divider spacing="32"></atlas-divider>
 
                         <atlas-summary-item
                                 label="Valor total"
-                                description="${formatNumber(number: payment.value, type: 'currency', locale: 'pt_BR')}" horizontal></atlas-summary-item>
+                                description="${formatNumber(number: payment.value, type: 'currency', locale: 'pt_BR')}" horizontal>
+                        </atlas-summary-item>
 
                         <atlas-divider spacing="32"></atlas-divider>
 
