@@ -9,69 +9,69 @@ class CustomerController {
 
     def customerService
 
-    def index(){
-        def alertInfo = flash.alertInfo
-        if(alertInfo){
-            return [alertInfo: alertInfo]
+    def index() {
+        def messageInfo = flash.messageInfo
+        if (messageInfo) {
+            return [messageInfo: messageInfo]
         }
     }
 
     def save() {
-        try{
+        try {
             Customer customer = customerService.save(new CustomerAdapter(params))
-            redirect(action: 'show', params : [id: customer.id])
-        } catch (ValidationException validationException){
-            flash.alertInfo = [alerts: validationException.errors.allErrors.collect { it.defaultMessage } , alertType: "error"]
+            redirect(action: 'show', params: [id: customer.id])
+        } catch (ValidationException validationException) {
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(uri: '/customer')
-        }catch (Exception exception){
-            flash.alertInfo = [alerts: ["Erro ao criar sua conta"], alertType: "error"]
+        } catch (Exception exception) {
+            flash.messageInfo = [messages: ["Erro ao criar sua conta"], messageType: "error"]
             redirect(uri: '/customer')
         }
     }
 
-    def show(){
+    def show() {
         def errors = flash.errors
-        try{
+        try {
             Customer customer = customerService.find(params.long("id"))
-            if(customer){
-                if(errors){
+            if (customer) {
+                if (errors) {
                     return [customer: customer, errors: errors]
                 }
                 return [customer: customer]
             }
-        } catch (RuntimeException runtimeException){
+        } catch (RuntimeException runtimeException) {
             redirect(uri: "/customer")
-        } catch (Exception exception){
-            flash.alertInfo = [alerts: ["Erro ao buscar sua conta"], alertType: "error"]
+        } catch (Exception exception) {
+            flash.messageInfo = [messages: ["Erro ao buscar sua conta"], messageType: "error"]
             redirect(uri: '/customer')
         }
     }
 
-    def update(){
+    def update() {
         long id = params.long("id")
 
-        try{
+        try {
             Customer customer = customerService.update(id, new CustomerAdapter(params))
-            redirect(action: 'show', params : [id: customer.id])
-        }catch (ValidationException validationException){
-            flash.alertInfo = [alerts: validationException.errors.allErrors.collect { it.defaultMessage } , alertType: "error"]
+            redirect(action: 'show', params: [id: customer.id])
+        } catch (ValidationException validationException) {
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(uri: ('/customer/show/' + id))
-        }catch (Exception exception){
-            flash.alertInfo = [alerts: ["Erro ao atualizar sua conta"], alertType: "error"]
+        } catch (Exception exception) {
+            flash.messageInfo = [messages: ["Erro ao atualizar sua conta"], messageType: "error"]
             redirect(uri: '/customer')
         }
     }
 
-    def delete(){
+    def delete() {
         long id = params.long("id")
 
-        try{
+        try {
             customerService.delete(id)
             redirect(uri: "/customer")
-        }catch (RuntimeException runtimeException){
+        } catch (RuntimeException runtimeException) {
             runtimeException.printStackTrace()
             redirect(uri: "/customer")
-        }catch (Exception exception){
+        } catch (Exception exception) {
             flash.errors = ["Erro ao deletar sua conta"]
             redirect(uri: "/customer")
         }

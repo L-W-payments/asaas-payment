@@ -12,12 +12,12 @@ class PayerController {
     def payerService
 
     def index() {
-        def alertInfo = flash.alertInfo
+        def messageInfo = flash.messageInfo
 
         List<Customer> customers = CustomerRepository.query([:]).list()
 
-        if (alertInfo) {
-            return [customers : customers, alertInfo: alertInfo]
+        if (messageInfo) {
+            return [customers : customers, messageInfo: messageInfo]
         }
 
         return [customers: customers]
@@ -31,10 +31,10 @@ class PayerController {
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            flash.alertInfo = [alerts: validationException.errors.allErrors.collect { it.defaultMessage } , alertType: "error"]
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage } , messageType: "error"]
             redirect(action: 'show', params: [id: id])
         } catch (Exception exception) {
-            flash.alertInfo = [alerts: ["Erro ao atualizar o pagador"], alertType: "error"]
+            flash.messageInfo = [messages: ["Erro ao atualizar o pagador"], messageType: "error"]
             redirect(action: 'show', params: [id: id])
         }
     }
@@ -45,10 +45,10 @@ class PayerController {
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            flash.alertInfo = [alerts: validationException.errors.allErrors.collect { it.defaultMessage } , alertType: "error"]
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage } , messageType: "error"]
             redirect(uri: "/payer")
         } catch (Exception exception) {
-            flash.alertInfo = [alerts: ["Erro ao salvar o pagador"], alertType: "error"]
+            flash.messageInfo = [messages: ["Erro ao salvar o pagador"], messageType: "error"]
             redirect(uri: "/payer")
         }
     }

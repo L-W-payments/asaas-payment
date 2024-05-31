@@ -12,12 +12,12 @@ class PaymentController {
     def paymentService
 
     def index() {
-        def alertInfo = flash.alertInfo
+        def messageInfo = flash.messageInfo
 
         List<Payer> payers = PayerRepository.query([:]).list()
 
-        if (alertInfo) {
-            return [payers: payers, alertInfo: alertInfo]
+        if (messageInfo) {
+            return [payers: payers, messageInfo: messageInfo]
         }
 
         return [payers: payers]
@@ -38,13 +38,13 @@ class PaymentController {
     def save() {
         try {
             paymentService.save(new PaymentAdapter(params))
-            flash.alertInfo = [alerts: ["Cobrança criada com sucesso"], alertType: "success"]
+            flash.messageInfo = [messages: ["Cobrança criada com sucesso"], messageType: "success"]
             redirect(action: "index")
         } catch (ValidationException validationException) {
-            flash.alertInfo = [alerts: validationException.errors.allErrors.collect { it.defaultMessage } , alertType: "error"]
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage } , messageType: "error"]
             redirect(uri: "/payment")
         } catch (Exception exception) {
-            flash.alertInfo = [alerts: ["Erro ao salvar a cobrança"], alertType: "error"]
+            flash.messageInfo = [messages: ["Erro ao salvar a cobrança"], messageType: "error"]
             redirect(uri: "/payment")
         }
     }
