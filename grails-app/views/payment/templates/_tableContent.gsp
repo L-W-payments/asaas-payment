@@ -1,21 +1,21 @@
 <g:each var="payment" in="${paymentList}">
     <atlas-table-row
-            data-delete-url="${createLink(controller: 'payment', action: 'fetchDelete', id: payment.getId())}"
+            data-delete-url="${createLink(controller: 'payment', action: 'fetchDelete', id: payment.id)}"
     >
         <atlas-table-col>
-            ${payment.getPayer().getName()}
+            ${payment.payer.name}
         </atlas-table-col>
         <atlas-table-col>
-            ${formatNumber(number: payment.getValue(), type: "currency", locale: "pt_BR")}
+            ${formatNumber(number: payment.value, type: "currency", locale: "pt_BR")}
         </atlas-table-col>
         <atlas-table-col>
-            ${message(code: "paymentType.${payment.getPaymentType()}.label")}
+            ${message(code: "paymentType.${payment.paymentType}.label")}
         </atlas-table-col>
         <atlas-table-col>
-            ${message(code: "paymentStatus.${payment.getPaymentStatus()}.label")}
+            ${message(code: "paymentStatus.${payment.paymentStatus}.label")}
         </atlas-table-col>
         <atlas-table-col>
-            <g:formatDate date="${payment.getDueDate()}" format="dd/MM/yyyy"/>
+            <g:formatDate date="${payment.dueDate}" format="dd/MM/yyyy"/>
         </atlas-table-col>
         <atlas-button-group slot="actions" group-after="2">
             <atlas-icon-button
