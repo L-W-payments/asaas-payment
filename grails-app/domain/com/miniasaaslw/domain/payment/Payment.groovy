@@ -24,6 +24,10 @@ class Payment extends BaseEntity {
 
     Date dueDate
 
+    public static final BigDecimal MIN_VALUE = new BigDecimal("10.00")
+
+    public static final BigDecimal MAX_VALUE = new BigDecimal("10000.00")
+
     static constraints = {
         publicId nullable: false, unique: true
         customer nullable: false
