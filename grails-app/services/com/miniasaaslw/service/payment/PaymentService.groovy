@@ -60,17 +60,20 @@ class PaymentService {
     }
 
     public void processOverduePayment() {
-        List<Long> paymentIdList = PaymentRepository.query([
+        List<Long> overduePendingPaymentsIdList = PaymentRepository.query([
                 paymentStatus: PaymentStatus.PENDING,
                 "dueDate[lt]": new Date(),
                 "column"     : "id"
         ]).list() as List<Long>
 
-        paymentIdList.each { Long id ->
-            try {
-                updateToExpired(id)
-            } catch (Exception exception) {
-                log.error("Erro ao atualizar a cobrança para expirado", exception)
+        for (Long paymentId : overduePendingPaymentsIdList) {
+            Payment.withNewTransaction { status ->
+                try {
+                    updateToExpired(paymentId)
+                } catch (Exception exception) {
+                    log.info("updatePendingPaymentStatus >> Erro ao atualizar status da cobrança de id: [${paymentId}] [Mensagem de erro]: ${exception.message}")
+                    status.setRollbackOnly()
+                }
             }
         }
     }
