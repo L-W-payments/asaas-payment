@@ -40,7 +40,6 @@ class CustomerService {
         customer.save(failOnError: true)
         return customer
     }
-{0}
     public void delete(Long id) {
         Customer customer = find(id)
 
