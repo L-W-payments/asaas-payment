@@ -53,7 +53,7 @@ class PaymentService {
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
-        if (payment.paymentStatus != PaymentStatus.PENDING) throw new RuntimeException("A cobrança precisa estar pendente.")
+        if (payment.paymentStatus != PaymentStatus.PENDING) throw new RuntimeException(MessageUtils.getMessage("payment.errors.status.update.pending"))
 
         payment.paymentStatus = PaymentStatus.EXPIRED
         payment.save(failOnError: true)
