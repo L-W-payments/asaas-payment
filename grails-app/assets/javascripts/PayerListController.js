@@ -48,8 +48,8 @@ function PayerListController(reference) {
     }
 
     function confirmDelete(modal) {
-        Atlas.request.post(deleteRow.dataset.deleteUrl).then(function (response){
-            if(response.success){
+        Atlas.request.post(deleteRow.dataset.deleteUrl).then(function (response) {
+            if (response.success) {
                 Atlas.notifications.showAlert("Pagador removido com sucesso!", "success");
                 tableReference.fetchRecords(true);
                 modal.closeModal();

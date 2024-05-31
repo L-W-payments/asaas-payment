@@ -99,4 +99,19 @@ class PayerController extends BaseController {
 
         render([totalRecords: totalRecords, content: content, success: true] as JSON)
     }
+
+    def fetchDelete() {
+        try {
+            Long id = params.long("id")
+
+            payerService.delete(id)
+            render([success: true] as JSON)
+        } catch (RuntimeException runtimeException) {
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (Exception exception) {
+            render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
+        }
+    }
+
+
 }
