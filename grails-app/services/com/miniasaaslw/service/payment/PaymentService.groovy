@@ -48,6 +48,18 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
+    public void updateToReceived(Long id) {
+        Payment payment = PaymentRepository.query([id: id]).get()
+
+        if (!payment) throw new RuntimeException("Cobrança não encontrada!")
+
+        Payment validatedPayment = validateUpdateToReceived(payment)
+        if (validatedPayment.hasErrors()) throw new ValidationException("Erro ao validar parâmetros da cobrança", validatedPayment.errors)
+
+        payment.paymentStatus = PaymentStatus.RECEIVED
+        payment.save(failOnError: true)
+    }
+
     private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
         payment.publicId = payment.publicId ?: UUID.randomUUID().toString().toUpperCase()
         payment.customer = paymentAdapter.customer
@@ -98,6 +110,20 @@ class PaymentService {
         return payment
     }
 
+    private Payment validateUpdateToReceived(Payment payment) {
+        Payment validationPayment = new Payment()
+
+        if (payment.paymentStatus.isReceived()) {
+            validationPayment.errors.reject("O pagamento já foi efetuado!")
+        }
+
+        if (new Date().after(payment.dueDate)) {
+            validationPayment.errors.reject("A data de vencimento já passou!")
+        }
+
+        return validationPayment
+    }
+
     private Boolean validateDescription(String description) {
         if (!description) return true
 
@@ -113,7 +139,6 @@ class PaymentService {
 
         return true
     }
-
 
     private Boolean validateDueDate(Date dueDate) {
         if (dueDate.before(new Date())) return false
