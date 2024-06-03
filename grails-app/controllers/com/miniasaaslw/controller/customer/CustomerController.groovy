@@ -30,12 +30,12 @@ class CustomerController {
     }
 
     def show(){
-        def errors = flash.errors
+        def messageInfo = flash.messageInfo
         try{
             Customer customer = customerService.find(params.long("id"))
             if(customer){
-                if(errors){
-                    return [customer: customer, errors: errors]
+                if(messageInfo){
+                    return [customer: customer, messageInfo: messageInfo]
                 }
                 return [customer: customer]
             }
@@ -48,9 +48,8 @@ class CustomerController {
     }
 
     def update() {
-        long id = params.long("id")
-
         try {
+            long id = params.long("id")
             Customer customer = customerService.update(id, new CustomerAdapter(params))
             redirect(action: 'show', params: [id: customer.id])
         } catch (ValidationException validationException) {
@@ -63,9 +62,8 @@ class CustomerController {
     }
 
     def delete() {
-        long id = params.long("id")
-
         try {
+            long id = params.long("id")
             customerService.delete(id)
             redirect(uri: "/customer")
         } catch (RuntimeException runtimeException) {
