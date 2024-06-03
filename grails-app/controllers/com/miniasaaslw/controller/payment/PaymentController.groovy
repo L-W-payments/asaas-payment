@@ -67,6 +67,12 @@ class PaymentController extends BaseController {
 
     def loadTableContent() {
         Map search = [:]
+        def filters = params.filters
+
+        if (filters) {
+            if (filters.contains("includeDeleted")) search.includeDeleted = true
+        }
+
         if (params.payerName) search."payerName[like]" = params.payerName
 
         List<Payment> paymentList = paymentService.list(search, getLimitPerPage(), getOffset())
