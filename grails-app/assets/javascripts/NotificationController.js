@@ -36,22 +36,3 @@ document.addEventListener("AtlasContentLoaded", () => {
  * @property {boolean} success
  * @property {string} template
  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
