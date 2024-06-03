@@ -14,22 +14,9 @@ class NotificationController {
     def list() {
         try {
             List<Notification> notifications = notificationService.list(LoggedCustomer.CUSTOMER.id, 50, 0)
-            List<String> templates = new ArrayList<>()
+            String template = g.render(template: "/templates/notifications", model: [notifications: notifications])
 
-            for (Notification notification : notifications) {
-                String template = g.render(template: "/templates/notificationCard", model: [
-                        notification: [
-                                title   : notification.title,
-                                message : notification.message,
-                                url     : notification.url,
-                                priority: notification.priority
-                        ]
-                ])
-
-                templates.add(template)
-            }
-
-            render([success: true, templates: templates] as JSON)
+            render([success: true, template: template] as JSON)
         } catch (Exception exception) {
             render([sucess: false] as JSON)
         }
