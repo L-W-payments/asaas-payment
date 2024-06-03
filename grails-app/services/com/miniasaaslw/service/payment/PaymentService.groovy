@@ -38,7 +38,7 @@ class PaymentService {
     }
 
     public Payment find(Customer customer, Long id) {
-        Payment payment = PaymentRepository.query([id: id, customer: customer]).get()
+        Payment payment = PaymentRepository.query([id: id, customerId: customer.id]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
@@ -64,6 +64,20 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
+    }
+
+    public void updateToReceivedInCash(Customer customer, Long paymentId) {
+
+        Payment payment = find(customer, paymentId)
+
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
+
+        Payment validatedPayment = validateUpdateToReceivedInCash(payment)
+        if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("payment.errors.update.unknown"), validatedPayment.errors)
+
+        payment.paymentStatus = PaymentStatus.RECEIVED_IN_CASH
+        payment.save(failOnError: true)
+
     }
 
     private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
@@ -124,6 +138,20 @@ class PaymentService {
 
         if (new Date().after(payment.dueDate)) {
             validationPayment.errors.reject("A data de vencimento já passou!")
+        }
+
+        return validationPayment
+    }
+
+    private Payment validateUpdateToReceivedInCash(Payment payment) {
+        Payment validationPayment = new Payment()
+
+        if (payment.paymentStatus.isReceived()) {
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.received"))
+        }
+
+        if (payment.paymentStatus.isReceivedInCash()) {
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.receivedInCash"))
         }
 
         return validationPayment
