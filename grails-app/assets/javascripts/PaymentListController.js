@@ -2,12 +2,24 @@ function PaymentListController(reference) {
 
     var tableReference = reference.querySelector(".js-payment-list-table");
     var inputReference = reference.querySelector(".js-payment-search-input");
+    var filterReference = reference.querySelector(".js-payment-filter-input")
     var deleteRow = null;
 
     function init() {
         bindInputReference();
         bindTableSearch();
         bindTableActions();
+        bindFilterReference()
+    }
+
+    function bindFilterReference() {
+        filterReference.addEventListener("atlas-apply-filter", function () {
+            tableReference.fetchRecords(true);
+        });
+
+        filterReference.addEventListener("atlas-clean-filter", function () {
+            tableReference.fetchRecords(true);
+        });
     }
 
     function bindInputReference() {
@@ -18,9 +30,14 @@ function PaymentListController(reference) {
 
     function bindTableSearch() {
         tableReference.addEventListener("atlas-table-before-search", function () {
+            filterReference.enableButtons();
             inputReference.readonly = true;
+
+            var filterData = filterReference.getFilterData();
+
             tableReference.params = {
-                payerName: inputReference.value
+                payerName: inputReference.value,
+                filters: filterData.list
             }
         });
 
