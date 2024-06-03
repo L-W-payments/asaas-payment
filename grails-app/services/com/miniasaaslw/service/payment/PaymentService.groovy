@@ -154,6 +154,10 @@ class PaymentService {
             validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.receivedInCash"))
         }
 
+        if (payment.paymentStatus.isOverdue()) {
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.overdue"))
+        }
+
         return validationPayment
     }
 

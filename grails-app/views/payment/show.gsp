@@ -8,7 +8,7 @@
 </head>
 <body page-title="Visualizar cobrança">
       <atlas-form-panel>
-        <g:if test="${payment.paymentStatus.isPending() || payment.paymentStatus.isOverdue()}">
+        <g:if test="${payment.paymentStatus.isPending()}">
           <atlas-button slot="actions"
                         href="${createLink(
                                 controller: 'payment',
@@ -17,14 +17,6 @@
                         description="Confirmar recebimento em dinheiro">
           </atlas-button>
         </g:if>
-        <g:else>
-          <atlas-button slot="actions"
-                        type="filled"
-                        theme="success"
-                        description="Cobrança Paga"
-                        disabled>
-          </atlas-button>
-        </g:else>
 
         <atlas-button slot="actions"
                       type="outlined"
