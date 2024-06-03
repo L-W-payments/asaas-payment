@@ -25,23 +25,24 @@ class PaymentController {
     def delete() {
         try {
             Long id = params.long("id")
+
             paymentService.delete(LoggedCustomer.CUSTOMER, id)
         } catch (Exception exception) {
             flash.errors = [message(code: "payment.errors.delete.unknown")]
         }
 
-        redirect(uri: "/payment")
+        redirect(action: "index")
     }
 
     def save() {
         try {
             paymentService.save(new PaymentAdapter(params))
-            redirect(uri: "/payment", params: [success: message(code: "payment.save.success")])
+            redirect(action: "index", params: [success: message(code: "payment.save.success")])
         } catch (ValidationException validationException) {
-            redirect(uri: "/payment")
+            redirect(action: "index")
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
         } catch (Exception exception) {
-            redirect(uri: "/payment")
+            redirect(action: "index")
             flash.errors = [message(code: "payment.errors.save.unknown")]
         }
     }
@@ -52,7 +53,23 @@ class PaymentController {
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
             flash.errors = [message(code: "payment.errors.notFound")]
-            redirect(uri: "/payment")
+            redirect(action: "index")
+        }
+    }
+
+    def updateToReceived() {
+        try {
+            Long publicId = params.long("id")
+
+            paymentService.updateToReceived(publicId)
+
+            redirect(action: "show", id: publicId)
+        } catch (RuntimeException runtimeException) {
+            flash.errors = [runtimeException.getMessage()]
+            redirect(action: "index")
+        } catch (Exception exception) {
+            flash.errors = [message(code: "payment.errors.pay")]
+            redirect(action: "index")
         }
     }
 
