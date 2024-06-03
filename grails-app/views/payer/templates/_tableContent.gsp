@@ -20,13 +20,24 @@
                     theme="primary"
                     description="Editar pagador">
             </atlas-icon-button>
-            <atlas-icon-button
-                    data-action="delete"
-                    tooltip="Remover pagador"
-                    icon="trash"
-                    theme="danger"
-                    description="Remover pagador">
-            </atlas-icon-button>
+            <g:if test="${payer.deleted}">
+                <atlas-icon-button
+                        data-action=""
+                        tooltip="Restaurar pagador"
+                        icon="refresh"
+                        theme="warning"
+                        description="Restaurar pagador">
+                </atlas-icon-button>
+            </g:if>
+            <g:else>
+                <atlas-icon-button
+                        data-action="delete"
+                        tooltip="Remover pagador"
+                        icon="trash"
+                        theme="danger"
+                        description="Remover pagador">
+                </atlas-icon-button>
+            </g:else>
         </atlas-button-group>
     </atlas-table-row>
 </g:each>
