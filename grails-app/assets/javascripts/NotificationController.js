@@ -15,11 +15,11 @@ function NotificationController(reference) {
             const data = await fetchNotifications();
 
             if (data.success) {
-                return reference.innerHTML = data.templates.join("");
+                return reference.innerHTML = data.template;
             }
 
             Atlas.notifications.showAlert("Erro ao carregar notificações", "error");
-        })
+        });
     }
 
     init();
@@ -34,7 +34,7 @@ document.addEventListener("AtlasContentLoaded", () => {
 /**
  * @typedef {Object} Notification
  * @property {boolean} success
- * @property {string[]} templates
+ * @property {string} template
  */
 
 
