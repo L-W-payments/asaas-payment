@@ -67,7 +67,6 @@ class PaymentService {
     }
 
     public void updateToReceivedInCash(Customer customer, Long paymentId) {
-
         Payment payment = find(customer, paymentId)
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
@@ -77,7 +76,6 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.RECEIVED_IN_CASH
         payment.save(failOnError: true)
-
     }
 
     private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
