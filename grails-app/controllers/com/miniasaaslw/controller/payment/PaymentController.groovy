@@ -24,15 +24,15 @@ class PaymentController {
     }
 
     def delete() {
-        Long id = params.long("id")
-
         try {
+            Long id = params.long("id")
+
             paymentService.delete(LoggedCustomer.CUSTOMER, id)
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
         }
 
-        redirect(uri: "/payment")
+        redirect(action: "index")
     }
 
     def save() {
@@ -51,13 +51,30 @@ class PaymentController {
     }
 
     def checkout() {
-        Long id = params.long("id")
-
         try {
+            Long id = params.long("id")
+
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
-            redirect(uri: "/payment")
+            redirect(action: "index")
         }
     }
+
+    def updateToReceived() {
+        try {
+            Long publicId = params.long("id")
+
+            paymentService.updateToReceived(publicId)
+
+            redirect(action: "show", id: publicId)
+        } catch (RuntimeException runtimeException) {
+            flash.errors = [runtimeException.getMessage()]
+            redirect(action: "index")
+        } catch (Exception exception) {
+            flash.errors = [message(code: "payment.errors.pay")]
+            redirect(action: "index")
+        }
+    }
+
 }

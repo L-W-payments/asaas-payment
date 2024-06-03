@@ -49,7 +49,7 @@
     <atlas-grid>
         <atlas-row>
             <atlas-col lg="4" md="4">
-                <atlas-postal-code name="cep" label="CEP" disable-search value="${person?.cep}"></atlas-postal-code>
+                <atlas-postal-code required="true" name="cep" label="CEP" disable-search value="${person?.cep}"></atlas-postal-code>
             </atlas-col>
             <atlas-col lg="4" md="4">
                 <atlas-input label="Estado" id="state" name="state" required="true" placeholder="SC"
