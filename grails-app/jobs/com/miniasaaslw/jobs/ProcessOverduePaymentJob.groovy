@@ -9,6 +9,10 @@ class ProcessOverduePaymentJob {
     }
 
     def execute() {
-        paymentService.processOverduePayment()
+        try {
+            paymentService.processOverduePayment()
+        } catch (Exception exception) {
+            log.error("Erro ao tentar atualizar status do pagamento", exception)
+        }
     }
 }

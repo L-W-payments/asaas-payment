@@ -2,7 +2,9 @@ package com.miniasaaslw.controller.payment
 
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.payer.Payer
+import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.payer.PayerRepository
+import com.miniasaaslw.repository.payment.PaymentRepository
 import com.miniasaaslw.utils.LoggedCustomer
 
 import grails.validation.ValidationException
@@ -13,6 +15,15 @@ class PaymentController {
 
     def index() {
         def errors = flash.errors
+
+        List<Long> overduePendingPaymentsIdList = PaymentRepository.query([
+                paymentStatus: PaymentStatus.PENDING,
+                "dueDate[lt]": new Date(),
+                "column"     : "id"
+        ]).list() as List<Long>
+
+        println("overduePendingPaymentsIdList: " + overduePendingPaymentsIdList)
+
         List<Payer> payers = PayerRepository.query([:]).list()
 
         if (errors) {
@@ -23,38 +34,54 @@ class PaymentController {
     }
 
     def delete() {
-        Long id = params.long("id")
-
         try {
+            Long id = params.long("id")
+
             paymentService.delete(LoggedCustomer.CUSTOMER, id)
         } catch (Exception exception) {
             flash.errors = [message(code: "payment.errors.delete.unknown")]
         }
 
-        redirect(uri: "/payment")
+        redirect(action: "index")
     }
 
     def save() {
         try {
             paymentService.save(new PaymentAdapter(params))
-            redirect(uri: "/payment", params: [success: message(code: "payment.save.success")])
+            redirect(action: "index", params: [success: message(code: "payment.save.success")])
         } catch (ValidationException validationException) {
-            redirect(uri: "/payment")
+            redirect(action: "index")
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
         } catch (Exception exception) {
-            redirect(uri: "/payment")
+            redirect(action: "index")
             flash.errors = [message(code: "payment.errors.save.unknown")]
         }
     }
 
     def checkout() {
-        Long id = params.long("id")
-
         try {
+            Long id = params.long("id")
+
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
             flash.errors = [message(code: "payment.errors.notFound")]
-            redirect(uri: "/payment")
+            redirect(action: "index")
+        }
+    }
+
+    def updateToReceived() {
+        try {
+            Long publicId = params.long("id")
+
+            paymentService.updateToReceived(publicId)
+
+            redirect(action: "show", id: publicId)
+        } catch (RuntimeException runtimeException) {
+            flash.errors = [runtimeException.getMessage()]
+            redirect(action: "index")
+        } catch (Exception exception) {
+            flash.errors = [message(code: "payment.errors.pay")]
+            redirect(action: "index")
         }
     }
 }

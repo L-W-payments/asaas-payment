@@ -1,6 +1,7 @@
 package com.miniasaaslw.repository.payment
 
 import com.miniasaaslw.domain.payment.Payment
+import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.base.BaseEntityRepository
 import grails.gorm.DetachedCriteria
 
@@ -11,7 +12,9 @@ class PaymentRepository implements BaseEntityRepository {
 
         query = query.where {
             if (search.containsKey("paymentStatus")) {
-                eq("paymentStatus", search.paymentStatus)
+                eq("paymentStatus", search.paymentStatus instanceof PaymentStatus
+                        ? search.paymentStatus
+                        : PaymentStatus.valueOf(search.paymentStatus as String))
             }
 
             if (search.containsKey("dueDate[lt]")) {
