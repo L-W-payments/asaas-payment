@@ -41,7 +41,7 @@ class PaymentController {
             flash.messageInfo = [messages: ["Cobrança criada com sucesso"], messageType: "success"]
             redirect(action: "index")
         } catch (ValidationException validationException) {
-            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage } , messageType: "error"]
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(uri: "/payment")
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
         } catch (Exception exception) {
