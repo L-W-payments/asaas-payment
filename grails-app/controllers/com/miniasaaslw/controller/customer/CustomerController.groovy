@@ -19,7 +19,7 @@ class CustomerController {
     def save() {
         try {
             Customer customer = customerService.save(new CustomerAdapter(params))
-            redirect(action: 'show', params: [id: customer.id])
+            redirect(action: "show", id: customer.id)
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(uri: '/customer')
@@ -69,7 +69,6 @@ class CustomerController {
             customerService.delete(id)
             redirect(uri: "/customer")
         } catch (RuntimeException runtimeException) {
-            runtimeException.printStackTrace()
             redirect(uri: "/customer")
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "customer.errors.delete.unknown")], messageType: "error"]
