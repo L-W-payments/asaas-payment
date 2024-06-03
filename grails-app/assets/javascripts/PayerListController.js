@@ -37,7 +37,7 @@ function PayerListController(reference) {
 
             tableReference.params = {
                 name: inputReference.value,
-                filter: filterData.list
+                filters: filterData.list
             }
         });
 

@@ -91,7 +91,7 @@ class PayerController extends BaseController {
 
     def loadTableContent() {
         Map search = [:]
-        def filters = params.filter
+        def filters = params.filters
 
         if (filters) {
             if (filters.contains("includeDeleted")) search.includeDeleted = true
