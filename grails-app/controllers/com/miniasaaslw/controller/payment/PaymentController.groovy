@@ -73,6 +73,22 @@ class PaymentController {
         }
     }
 
+    def updateToReceivedInCash() {
+        try {
+            Long id = params.long("id")
+
+            paymentService.updateToReceivedInCash(LoggedCustomer.CUSTOMER, id)
+
+            redirect(action: "show", id: id)
+        } catch (RuntimeException runtimeException) {
+            flash.errors = [runtimeException.getMessage()]
+            redirect(action: "index")
+        } catch (Exception exception) {
+            flash.errors = [message(code: "payment.errors.pay")]
+            redirect(action: "index")
+        }
+    }
+
     def show() {
         try {
             Long id = params.long("id")
