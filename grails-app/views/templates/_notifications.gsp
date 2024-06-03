@@ -14,7 +14,8 @@
 <g:else>
     <atlas-empty-state
             illustration="airplane-error"
-            header="Sem notificações no momento">
+            header="Nenhuma notificação"
+    >
         Aqui você pode visualizar todas as notificações importantes do seu negócio.
     </atlas-empty-state>
 </g:else>
