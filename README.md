@@ -15,12 +15,14 @@ delete para registros no banco de dados.
 - [x] Deve ser possível um cliente listar todas as cobranças;
 - [x] Deve ser possível um cliente listar uma cobrança específica;
 - [x] Deve ser possível um cliente deletar uma cobrança;
+- [ ] Deve ser possível um cliente restaurar uma cobrança;
 - [x] Deve ser possível um cliente selecionar um pagador para uma cobrança;
 - [x] Deve ser possível um cliente criar um pagador;
 - [x] Deve ser possível um cliente listar todos os pagadores;
 - [x] Deve ser possível um cliente listar um pagador específico;
 - [x] Deve ser possível um cliente atualizar um pagador;
 - [x] Deve ser possível um cliente deletar um pagador;
+- [ ] Deve ser possível um cliente restaurar um pagador;
 - [x] Deve ser possível um cliente listar todas as notificações;
 - [x] Deve ser possível que o pagador pague uma cobrança;
 - [ ] Deve ser possível receber um email após uma cobrança ser criada;
