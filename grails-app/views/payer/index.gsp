@@ -17,6 +17,7 @@
         <atlas-input hidden name="country" value="Brasil"></atlas-input>
         <g:render template="/templates/basePersonForm"
                   model="${[title: "Cadastro de Pagador"]}" ></g:render>
+
         <atlas-button submit description="Salvar"></atlas-button>
     </atlas-form>
 </atlas-panel>
