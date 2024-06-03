@@ -9,6 +9,20 @@ class PaymentRepository implements BaseEntityRepository {
     public static DetachedCriteria<Payment> query(Map search) {
         DetachedCriteria<Payment> query = Payment.where(defaultQuery(search))
 
+        if (joinWithCustomer(search)) {
+            query.createAlias("customer", "customer")
+        }
+
+        query = query.where {
+            if (search.containsKey("customerId")) {
+                eq("customer.id", search.customerId)
+            }
+        }
+
         return query
+    }
+
+    private static Boolean joinWithCustomer(Map search) {
+        return search.containsKey("customerId")
     }
 }
