@@ -146,10 +146,6 @@ class PaymentService {
             validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.received"))
         }
 
-        if (new Date().after(payment.dueDate)) {
-            validationPayment.errors.reject("dueDate", null, MessageUtils.getMessage("payment.errors.overdue"))
-        }
-
         return validationPayment
     }
 
