@@ -30,17 +30,17 @@ class CustomerController {
         }
     }
 
-    def show(){
+    def show() {
         def messageInfo = flash.messageInfo
-        try{
+        try {
             Customer customer = customerService.find(params.long("id"))
-            if(customer){
-                if(messageInfo){
+            if (customer) {
+                if (messageInfo) {
                     return [customer: customer, messageInfo: messageInfo]
                 }
                 return [customer: customer]
             }
-        } catch (RuntimeException runtimeException){
+        } catch (RuntimeException runtimeException) {
             redirect(uri: "/customer")
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "customer.errors.search.unknown")], messageType: "error"]
