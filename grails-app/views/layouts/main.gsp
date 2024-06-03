@@ -36,20 +36,12 @@
                     width="300"
                     auto-close
                     auto-close-trigger="outside">
-                <atlas-notification-card
-                        icon="hand-holding-money"
-                        overlay-icon="money-notes"
-                        overlay-theme="success"
-                        header="Pagamento efetuado"
-                        description="Seu pagador Wollace Buarque efetuou um pagamento no valor de R$ 100,00.">
-                </atlas-notification-card>
-                <atlas-notification-card
-                        icon="hand-holding-money"
-                        overlay-icon="alert-triangle"
-                        overlay-theme="warning"
-                        header="Cobrança expirada"
-                        description="Sua cobrança para o pagador Wollace Buarque expirou às 12:00 do dia 12/12/2020.">
-                </atlas-notification-card>
+                <atlas-empty-state
+                        illustration="airplane-error"
+                        header="Nenhuma notificação"
+                >
+                    Aqui você pode visualizar todas as notificações importantes do seu negócio.
+                </atlas-empty-state>
             </atlas-dropdown>
         </div>
 
