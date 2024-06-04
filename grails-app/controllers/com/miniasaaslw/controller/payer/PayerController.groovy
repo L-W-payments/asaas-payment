@@ -91,12 +91,8 @@ class PayerController extends BaseController {
 
     def loadTableContent() {
         Map search = [:]
-        def filters = params.filters
 
-        if (filters) {
-            if (filters.contains("includeDeleted")) search.includeDeleted = true
-        }
-
+        if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.name) search."name[like]" = params.name
 
         List<Payer> payerList = payerService.list(getLimitPerPage(), getOffset(), search)

@@ -34,11 +34,9 @@ function PayerListController(reference) {
             inputReference.readonly = true;
 
             var filterData = filterReference.getFilterData();
+            filterData.name = inputReference.value;
 
-            tableReference.params = {
-                name: inputReference.value,
-                filters: filterData.list
-            }
+            tableReference.params = filterData
         });
 
         tableReference.addEventListener("atlas-table-after-search", function () {
