@@ -11,6 +11,13 @@
             <atlas-search-input class="js-payer-search-input" placeholder="Pesquisar" icon="magnifier"
                                 slot="search"></atlas-search-input>
             <atlas-button description="Adicionar" icon="plus" slot="actions"></atlas-button>
+            <atlas-filter class="js-payer-filter-input" slot="filter">
+                <atlas-filter-form slot="simple-filter">
+                    <atlas-filter-group header="Listagem" name="includeDeleted" slot="col-1">
+                        <atlas-checkbox value="true">Exibir deletados</atlas-checkbox>
+                    </atlas-filter-group>
+                </atlas-filter-form>
+            </atlas-filter>
         </atlas-toolbar>
 
         <g:render template="/payer/templates/table"/>

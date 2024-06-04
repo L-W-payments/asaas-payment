@@ -45,6 +45,17 @@ class PaymentService {
         return payment
     }
 
+    public void restore(Long id) {
+        Payment payment = PaymentRepository.query([id: id, includeDeleted: true]).get()
+
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
+
+        if (!payment.deleted) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notDeleted"))
+
+        payment.deleted = false
+        payment.save(failOnError: true)
+    }
+
     public void delete(Customer customer, Long paymentId) {
         Payment payment = find(customer, paymentId)
 

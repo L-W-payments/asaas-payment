@@ -26,6 +26,21 @@ class PaymentController extends BaseController {
         return [payers: payers]
     }
 
+    def restore() {
+        try {
+            Long id = params.long("id")
+
+            paymentService.restore(id)
+            render([success: true] as JSON)
+        } catch (RuntimeException runtimeException) {
+            flash.messageInfo = [runtimeException.getMessage(), messageType="error"]
+            render([success: false] as JSON)
+        } catch (Exception exception) {
+            flash.messageInfo = [message(code: "payment.errors.restore.unknown"), messageType="error"]
+            render([success: false] as JSON)
+        }
+    }
+
     def delete() {
         try {
             Long id = params.long("id")
@@ -69,6 +84,8 @@ class PaymentController extends BaseController {
 
     def loadTableContent() {
         Map search = [:]
+
+        if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.payerName) search."payerName[like]" = params.payerName
 
         List<Payment> paymentList = paymentService.list(search, getLimitPerPage(), getOffset())
@@ -99,10 +116,10 @@ class PaymentController extends BaseController {
 
             redirect(action: "show", id: publicId)
         } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [runtimeException.getMessage()]
+            flash.messageInfo = [runtimeException.getMessage(), messageType="error"]
             redirect(action: "index")
         } catch (Exception exception) {
-            flash.messageInfo = [message(code: "payment.errors.pay")]
+            flash.messageInfo = [message(code: "payment.errors.pay"), messageType="error"]
             redirect(action: "index")
         }
     }

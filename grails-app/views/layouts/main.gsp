@@ -1,3 +1,4 @@
+<%@ page import="com.miniasaaslw.utils.LoggedCustomer; com.miniasaaslw.utils.LoggedCustomer" %>
 <!doctype html>
 <html lang="pt-BR" class="no-js">
 
@@ -36,20 +37,12 @@
                     width="300"
                     auto-close
                     auto-close-trigger="outside">
-                <atlas-notification-card
-                        icon="hand-holding-money"
-                        overlay-icon="money-notes"
-                        overlay-theme="success"
-                        header="Pagamento efetuado"
-                        description="Seu pagador Wollace Buarque efetuou um pagamento no valor de R$ 100,00.">
-                </atlas-notification-card>
-                <atlas-notification-card
-                        icon="hand-holding-money"
-                        overlay-icon="alert-triangle"
-                        overlay-theme="warning"
-                        header="Cobrança expirada"
-                        description="Sua cobrança para o pagador Wollace Buarque expirou às 12:00 do dia 12/12/2020.">
-                </atlas-notification-card>
+                <atlas-empty-state
+                        illustration="airplane-error"
+                        header="Nenhuma notificação"
+                >
+                    Aqui você pode visualizar todas as notificações importantes do seu negócio.
+                </atlas-empty-state>
             </atlas-dropdown>
         </div>
 
@@ -65,8 +58,7 @@
                 <atlas-dropdown-item
                         icon="cog"
                         theme="secondary"
-                        href="${createLink(controller: 'customer', action: 'show', id: 1)}"
-                >
+                        href="${createLink(controller: 'customer', action: 'show', id: LoggedCustomer.CUSTOMER.id)}">
                     Meu perfil
                 </atlas-dropdown-item>
                 <atlas-dropdown-item icon="power" theme="danger">Sair</atlas-dropdown-item>
@@ -90,6 +82,7 @@
 
 
 <asset:javascript src="application.js"/>
+<asset:javascript src="NotificationController.js"/>
 
 </body>
 

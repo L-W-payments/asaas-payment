@@ -2,7 +2,7 @@ package com.miniasaaslw.domain.notification
 
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.entity.BaseEntity
-import com.miniasaaslw.entity.enums.NotificationPriority
+import com.miniasaaslw.entity.enums.notification.NotificationType
 
 class Notification extends BaseEntity {
 
@@ -14,5 +14,6 @@ class Notification extends BaseEntity {
 
     String url
 
-    NotificationPriority priority
+    NotificationType type
+
 }
