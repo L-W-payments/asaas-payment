@@ -83,7 +83,7 @@ class PaymentService {
                 try {
                     updateToOverdue(paymentId)
                 } catch (Exception exception) {
-                    log.info("updatePendingPaymentStatus >> Erro ao atualizar status da cobrança de id: [${paymentId}] [Mensagem de erro]: ${exception.message}")
+                    log.error("updatePendingPaymentStatus >> Erro ao atualizar status da cobrança de id: [${paymentId}] [Mensagem de erro]: ${exception.message}")
                     status.setRollbackOnly()
                 }
             }
