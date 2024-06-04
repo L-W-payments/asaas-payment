@@ -62,13 +62,43 @@ class PaymentService {
     public void updateToReceived(Long id) {
         Payment payment = PaymentRepository.query([id: id]).get()
 
-        if (!payment) throw new RuntimeException("Cobrança não encontrada!")
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
         Payment validatedPayment = validateUpdateToReceived(payment)
-        if (validatedPayment.hasErrors()) throw new ValidationException("Erro ao validar parâmetros da cobrança", validatedPayment.errors)
+        if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), validatedPayment.errors)
 
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
+    }
+
+    public void updateToOverdue(Long id) {
+        Payment payment = PaymentRepository.query([id: id]).get()
+
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
+
+        if (!payment.paymentStatus.isPending()) throw new RuntimeException(MessageUtils.getMessage("payment.errors.status.update.pending"))
+
+        payment.paymentStatus = PaymentStatus.OVERDUE
+        payment.save(failOnError: true)
+    }
+
+    public void processOverduePayment() {
+        List<Long> overduePendingPaymentsIdList = PaymentRepository.query([
+                paymentStatus: PaymentStatus.PENDING,
+                "dueDate[lt]": new Date(),
+                "column"     : "id"
+        ]).list(max: 500) as List<Long>
+
+        for (Long paymentId : overduePendingPaymentsIdList) {
+            Payment.withNewTransaction { status ->
+                try {
+                    updateToOverdue(paymentId)
+                } catch (Exception exception) {
+                    log.error("updatePendingPaymentStatus >> Erro ao atualizar status da cobrança de id: [${paymentId}] [Mensagem de erro]: ${exception.message}")
+                    status.setRollbackOnly()
+                }
+            }
+        }
     }
 
     private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
@@ -125,11 +155,7 @@ class PaymentService {
         Payment validationPayment = new Payment()
 
         if (payment.paymentStatus.isReceived()) {
-            validationPayment.errors.reject("O pagamento já foi efetuado!")
-        }
-
-        if (new Date().after(payment.dueDate)) {
-            validationPayment.errors.reject("A data de vencimento já passou!")
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.received"))
         }
 
         return validationPayment
