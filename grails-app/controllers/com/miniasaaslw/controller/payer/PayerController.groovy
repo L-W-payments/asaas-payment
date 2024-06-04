@@ -4,6 +4,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.repository.customer.CustomerRepository
+
 import grails.validation.ValidationException
 
 class PayerController {
@@ -16,7 +17,7 @@ class PayerController {
         List<Customer> customers = CustomerRepository.query([:]).list()
 
         if (errors) {
-            return [errors: errors, customers : customers]
+            return [errors: errors, customers: customers]
         }
 
         return [customers: customers]
@@ -39,8 +40,6 @@ class PayerController {
     }
 
     def save() {
-        Long customerId = params.long("customerId")
-
         try {
             Payer payer = payerService.save(new PayerAdapter(params))
 
@@ -52,6 +51,20 @@ class PayerController {
             flash.errors = [message(code: "payer.errors.save.unknown")]
             redirect(uri: "/payer")
         }
+    }
+
+    def restore() {
+        try {
+            Long id = params.long("id")
+
+            payerService.restore(id)
+        } catch (RuntimeException runtimeException) {
+            flash.errors = [runtimeException.getMessage()]
+        } catch (Exception exception) {
+            flash.errors = [message(code: "payer.errors.restore.unknown")]
+        }
+
+        redirect(action: "index")
     }
 
     def show() {
