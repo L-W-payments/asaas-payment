@@ -34,9 +34,7 @@ class PayerService {
     public void restore(Long id) {
         Payer payer = find(id)
 
-        if (!payer.deleted) {
-            throw new RuntimeException(MessageUtils.getMessage("payer.errors.restore.unknown"))
-        }
+        if (!payer.deleted) throw new RuntimeException(MessageUtils.getMessage("payer.errors.restore.notDeleted"))
 
         payer.deleted = false
 

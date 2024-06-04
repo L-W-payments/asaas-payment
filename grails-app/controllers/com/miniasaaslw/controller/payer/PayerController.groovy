@@ -4,7 +4,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.repository.customer.CustomerRepository
-
+import grails.converters.JSON
 import grails.validation.ValidationException
 
 class PayerController {
@@ -58,10 +58,13 @@ class PayerController {
             Long id = params.long("id")
 
             payerService.restore(id)
+            render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             flash.errors = [runtimeException.getMessage()]
+            render([success: false] as JSON)
         } catch (Exception exception) {
             flash.errors = [message(code: "payer.errors.restore.unknown")]
+            render([success: false] as JSON)
         }
 
         redirect(action: "index")
