@@ -76,7 +76,7 @@ class PaymentService {
                 paymentStatus: PaymentStatus.PENDING,
                 "dueDate[lt]": new Date(),
                 "column"     : "id"
-        ]).list() as List<Long>
+        ]).list(max: 500) as List<Long>
 
         for (Long paymentId : overduePendingPaymentsIdList) {
             Payment.withNewTransaction { status ->
