@@ -57,6 +57,10 @@ dependencies {
     implementation "org.hibernate:hibernate-core:5.5.7.Final"
     implementation "org.grails.plugins:events"
     implementation "org.grails.plugins:gsp"
+    implementation "org.grails.plugins:quartz:2.0.13"
+    implementation ("org.quartz-scheduler:quartz:2.3.2") {
+        exclude group: 'slf4j-api', module: 'c3p0'
+    }
     profile "org.grails.profiles:web"
     runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
     runtimeOnly "com.h2database:h2"

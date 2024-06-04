@@ -1,3 +1,4 @@
+<%@ page import="com.miniasaaslw.utils.LoggedCustomer; com.miniasaaslw.utils.LoggedCustomer" %>
 <!doctype html>
 <html lang="pt-BR" class="no-js">
 
@@ -57,8 +58,7 @@
                 <atlas-dropdown-item
                         icon="cog"
                         theme="secondary"
-                        href="${createLink(controller: 'customer', action: 'show', id: 1)}"
-                >
+                        href="${createLink(controller: 'customer', action: 'show', id: LoggedCustomer.CUSTOMER.id)}">
                     Meu perfil
                 </atlas-dropdown-item>
                 <atlas-dropdown-item icon="power" theme="danger">Sair</atlas-dropdown-item>
@@ -82,6 +82,7 @@
 
 
 <asset:javascript src="application.js"/>
+<asset:javascript src="NotificationController.js"/>
 
 </body>
 
