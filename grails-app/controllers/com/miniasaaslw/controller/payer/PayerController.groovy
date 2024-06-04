@@ -19,7 +19,7 @@ class PayerController extends BaseController {
         List<Customer> customers = CustomerRepository.query([:]).list()
 
         if (errors) {
-            return [errors: errors, customers : customers]
+            return [errors: errors, customers: customers]
         }
 
         return [customers: customers]
@@ -89,9 +89,9 @@ class PayerController extends BaseController {
         return [payerList: payerService.list(getLimitPerPage(), getOffset(), [:])]
     }
 
-    def loadTableContent(){
+    def loadTableContent() {
         Map search = [:]
-        if(params.name) search."name[like]" = params.name
+        if (params.name) search."name[like]" = params.name
 
         List<Payer> payerList = payerService.list(getLimitPerPage(), getOffset(), search)
         Integer totalRecords = payerList.totalCount
