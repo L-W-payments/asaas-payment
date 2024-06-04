@@ -17,6 +17,10 @@ class PaymentRepository implements BaseEntityRepository {
             if (search.containsKey("customerId")) {
                 eq("customer.id", search.customerId)
             }
+
+            if (search.containsKey("publicId")) {
+                eq("publicId", search.publicId)
+            }
         }
 
         return query
