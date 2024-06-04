@@ -5,6 +5,7 @@ import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.utils.LoggedCustomer
 
+import grails.converters.JSON
 import grails.validation.ValidationException
 
 class PaymentController {
@@ -27,15 +28,14 @@ class PaymentController {
             Long id = params.long("id")
 
             paymentService.restore(id)
+            render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
-            redirect(action: "index")
             flash.errors = [runtimeException.getMessage()]
+            render([success: false] as JSON)
         } catch (Exception exception) {
-            redirect(action: "index")
             flash.errors = [message(code: "payment.errors.restore.unknown")]
+            render([success: false] as JSON)
         }
-
-        redirect(action: "index")
     }
 
     def delete() {

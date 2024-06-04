@@ -42,7 +42,7 @@ class PaymentService {
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
-        if (!payment.deleted) return
+        if (!payment.deleted) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notDeleted"))
 
         payment.deleted = false
         payment.save(failOnError: true)
