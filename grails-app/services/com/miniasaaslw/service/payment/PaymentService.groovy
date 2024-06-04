@@ -38,7 +38,7 @@ class PaymentService {
     }
 
     public void restore(Long id) {
-        Payment payment = PaymentRepository.query([id: id]).get()
+        Payment payment = PaymentRepository.query([id: id, includeDeleted: true]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
