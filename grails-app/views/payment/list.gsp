@@ -12,6 +12,13 @@
                           slot="search"></atlas-search-input>
       <atlas-button href="/payment" description="Adicionar" icon="plus" slot="actions"></atlas-button>
     </atlas-toolbar>
+    <atlas-filter class="js-payment-filter-input">
+      <atlas-filter-form slot="simple-filter">
+        <atlas-filter-group header="Listagem" name="includeDeleted" slot="col-1">
+          <atlas-checkbox value="true">Exibir deletados</atlas-checkbox>
+        </atlas-filter-group>
+      </atlas-filter-form>
+    </atlas-filter>
 
     <g:render template="/payment/templates/table"/>
     <asset:javascript src="PaymentListController.js"/>

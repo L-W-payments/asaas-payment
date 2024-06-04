@@ -18,6 +18,16 @@
             <g:formatDate date="${payment.dueDate}" format="dd/MM/yyyy"/>
         </atlas-table-col>
         <atlas-button-group slot="actions" group-after="2">
+            <g:if test="${payment.deleted}">
+                <atlas-icon-button
+                        data-action=""
+                        tooltip="Restaurar cobrança"
+                        icon="refresh"
+                        theme="warning"
+                        description="Restaurar cobrança">
+                </atlas-icon-button>
+            </g:if>
+            <g:else>
             <atlas-icon-button
                     data-action="delete"
                     tooltip="Remover cobrança"
@@ -25,6 +35,7 @@
                     theme="danger"
                     description="Remover cobrança">
             </atlas-icon-button>
+            </g:else>
         </atlas-button-group>
     </atlas-table-row>
 </g:each>
