@@ -4,6 +4,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.repository.customer.CustomerRepository
+
 import grails.converters.JSON
 import grails.validation.ValidationException
 
@@ -66,8 +67,6 @@ class PayerController {
             flash.errors = [message(code: "payer.errors.restore.unknown")]
             render([success: false] as JSON)
         }
-
-        redirect(action: "index")
     }
 
     def show() {
