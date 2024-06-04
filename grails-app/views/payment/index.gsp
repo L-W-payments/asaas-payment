@@ -8,7 +8,7 @@
 <body page-title="Criar cobrança">
 <atlas-panel>
   <g:if test="${messageInfo}">
-    <messageTagLib:showAlerts alertInfo="${messageInfo}"/>
+    <g:render template="/utils/messages" model="${messageInfo}"/>
   </g:if>
       <atlas-section header="${payers ? 'Cadastro de Cobrança' : ''}">
         <g:if test="${payers}">
