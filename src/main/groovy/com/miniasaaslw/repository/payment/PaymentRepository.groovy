@@ -12,12 +12,18 @@ class PaymentRepository implements BaseEntityRepository {
         DetachedCriteria<Payment> query = Payment.where(defaultQuery(search))
 
         query = query.where {
+
             if (search.containsKey("paymentStatus")) {
                 eq("paymentStatus", PaymentStatus.valueOf(search.paymentStatus.toString()))
             }
 
             if (search.containsKey("dueDate[lt]")) {
                 lt("dueDate", search."dueDate[lt]")
+            }
+
+            if (search.containsKey("publicId")) {
+                eq("publicId", search.publicId)
+
             }
         }
 
