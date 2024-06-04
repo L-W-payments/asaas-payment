@@ -69,8 +69,6 @@ class PaymentService {
     public void updateToReceivedInCash(Customer customer, Long paymentId) {
         Payment payment = find(customer, paymentId)
 
-        if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
-
         Payment validatedPayment = validateUpdateToReceivedInCash(payment)
         if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("payment.errors.update.unknown"), validatedPayment.errors)
 
