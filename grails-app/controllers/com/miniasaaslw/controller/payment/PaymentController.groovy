@@ -33,10 +33,10 @@ class PaymentController extends BaseController {
             paymentService.restore(id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [runtimeException.getMessage(), messageType="error"]
+            flash.messageInfo = [messages: runtimeException.getMessage(), messageType: "error"]
             render([success: false] as JSON)
         } catch (Exception exception) {
-            flash.messageInfo = [message(code: "payment.errors.restore.unknown"), messageType="error"]
+            flash.messageInfo = [messages: message(code: "payment.errors.restore.unknown"), messageType: "error"]
             render([success: false] as JSON)
         }
     }
@@ -116,10 +116,10 @@ class PaymentController extends BaseController {
 
             redirect(action: "show", id: publicId)
         } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [runtimeException.getMessage(), messageType="error"]
+            flash.messageInfo = [messages: runtimeException.getMessage(), messageType: "error"]
             redirect(action: "index")
         } catch (Exception exception) {
-            flash.messageInfo = [message(code: "payment.errors.pay"), messageType="error"]
+            flash.messageInfo = [messages: message(code: "payment.errors.pay"), messageType: "error"]
             redirect(action: "index")
         }
     }

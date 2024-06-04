@@ -49,8 +49,9 @@ class CustomerController {
     }
 
     def update() {
+        long id = params.long("id")
+
         try {
-            long id = params.long("id")
             Customer customer = customerService.update(id, new CustomerAdapter(params))
             redirect(action: 'show', params: [id: customer.id])
         } catch (ValidationException validationException) {
@@ -65,6 +66,7 @@ class CustomerController {
     def delete() {
         try {
             long id = params.long("id")
+
             customerService.delete(id)
             redirect(uri: "/customer")
         } catch (RuntimeException runtimeException) {
