@@ -9,7 +9,7 @@ function PaymentListController(reference) {
         bindInputReference();
         bindTableSearch();
         bindTableActions();
-        bindFilterReference()
+        bindFilterReference();
     }
 
     function bindFilterReference() {
