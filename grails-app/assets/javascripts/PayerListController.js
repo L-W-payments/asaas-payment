@@ -2,12 +2,24 @@ function PayerListController(reference) {
 
     var tableReference = reference.querySelector(".js-payer-list-table");
     var inputReference = reference.querySelector(".js-payer-search-input");
+    var filterReference = reference.querySelector(".js-payer-filter-input");
     var deleteRow = null;
 
     function init() {
         bindInputReference();
         bindTableSearch();
         bindTableActions();
+        bindFilterReference();
+    }
+
+    function bindFilterReference() {
+        filterReference.addEventListener("atlas-apply-filter", function () {
+            tableReference.fetchRecords(true);
+        });
+
+        filterReference.addEventListener("atlas-clean-filter", function () {
+            tableReference.fetchRecords(true);
+        });
     }
 
     function bindInputReference() {
@@ -18,10 +30,13 @@ function PayerListController(reference) {
 
     function bindTableSearch() {
         tableReference.addEventListener("atlas-table-before-search", function () {
+            filterReference.enableButtons();
             inputReference.readonly = true;
-            tableReference.params = {
-                name: inputReference.value
-            }
+
+            var filterData = filterReference.getFilterData();
+            filterData.name = inputReference.value;
+
+            tableReference.params = filterData;
         });
 
         tableReference.addEventListener("atlas-table-after-search", function () {
