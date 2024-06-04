@@ -34,11 +34,9 @@ function PaymentListController(reference) {
             inputReference.readonly = true;
 
             var filterData = filterReference.getFilterData();
+            filterData.payerName = inputReference.value;
 
-            tableReference.params = {
-                payerName: inputReference.value,
-                filters: filterData.list
-            }
+            tableReference.params = filterData;
         });
 
         tableReference.addEventListener("atlas-table-after-search", function () {

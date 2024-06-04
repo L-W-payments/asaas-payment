@@ -14,8 +14,8 @@
     </atlas-toolbar>
     <atlas-filter class="js-payment-filter-input">
       <atlas-filter-form slot="simple-filter">
-        <atlas-filter-group header="Listagem" name="list" slot="col-1">
-          <atlas-checkbox value="includeDeleted">Exibir deletados</atlas-checkbox>
+        <atlas-filter-group header="Listagem" name="includeDeleted" slot="col-1">
+          <atlas-checkbox value="true">Exibir deletados</atlas-checkbox>
         </atlas-filter-group>
       </atlas-filter-form>
     </atlas-filter>
