@@ -12,11 +12,12 @@ class PaymentController {
     def paymentService
 
     def index() {
-        def errors = flash.errors
+        def messageInfo = flash.messageInfo
+
         List<Payer> payers = PayerRepository.query([:]).list()
 
-        if (errors) {
-            return [payers: payers, errors: errors]
+        if (messageInfo) {
+            return [payers: payers, messageInfo: messageInfo]
         }
 
         return [payers: payers]
@@ -28,7 +29,7 @@ class PaymentController {
 
             paymentService.delete(LoggedCustomer.CUSTOMER, id)
         } catch (Exception exception) {
-            flash.errors = [message(code: "payment.errors.delete.unknown")]
+            flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
         }
 
         redirect(action: "index")
@@ -37,13 +38,15 @@ class PaymentController {
     def save() {
         try {
             paymentService.save(new PaymentAdapter(params))
-            redirect(action: "index", params: [success: message(code: "payment.save.success")])
-        } catch (ValidationException validationException) {
+            flash.messageInfo = [messages: ["Cobrança criada com sucesso"], messageType: "success"]
             redirect(action: "index")
+        } catch (ValidationException validationException) {
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
+            redirect(uri: "/payment")
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
         } catch (Exception exception) {
-            redirect(action: "index")
-            flash.errors = [message(code: "payment.errors.save.unknown")]
+            flash.messageInfo = [messages: [message(code: "payment.errors.save.unknown")], messageType: "error"]
+            redirect(uri: "/payment")
         }
     }
 
@@ -53,7 +56,7 @@ class PaymentController {
 
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
-            flash.errors = [message(code: "payment.errors.notFound")]
+            flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
             redirect(action: "index")
         }
     }
@@ -73,4 +76,5 @@ class PaymentController {
             redirect(action: "index")
         }
     }
+
 }
