@@ -6,6 +6,7 @@ import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.repository.payment.PaymentRepository
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
+import com.miniasaaslw.repository.payment.PaymentRepository
 
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -29,8 +30,8 @@ class PaymentService {
         return payment
     }
 
-    public Payment find(String publicId) {
-        Payment payment = PaymentRepository.query([publicId: publicId]).get()
+    public Payment find(Long id) {
+        Payment payment = PaymentRepository.query([id: id]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
@@ -46,6 +47,10 @@ class PaymentService {
 
         payment.deleted = true
         payment.save(failOnError: true)
+    }
+
+    public List<Payment> list(Map search, Integer max, Integer offset) {
+        return PaymentRepository.query(search).list(max: max, offset: offset)
     }
 
     public void updateToReceived(Long id) {
@@ -165,6 +170,7 @@ class PaymentService {
 
         return true
     }
+
 
     private Boolean validateDueDate(Date dueDate) {
         if (dueDate.before(new Date())) return false
