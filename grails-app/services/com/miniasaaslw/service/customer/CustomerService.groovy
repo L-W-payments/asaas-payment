@@ -40,6 +40,7 @@ class CustomerService {
         customer.save(failOnError: true)
         return customer
     }
+    
     public void delete(Long id) {
         Customer customer = find(id)
 
@@ -128,7 +129,7 @@ class CustomerService {
             customer.errors.reject("state", null, MessageUtils.getMessage("general.errors.state.invalid"))
         }
 
-        if (customerAdapter.cep != null && !CepUtils.validateCep(customerAdapter.cep)) {
+        if (!CepUtils.validateCep(customerAdapter.cep)) {
             customer.errors.reject("cep", null, MessageUtils.getMessage("general.errors.zipCode.invalid"))
         }
 
@@ -159,4 +160,5 @@ class CustomerService {
         customer.street = customerAdapter.street
         return customer
     }
+
 }

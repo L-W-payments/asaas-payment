@@ -47,7 +47,7 @@ class PayerService {
         Payer payerValues = validatePayerParams(payerAdapter)
 
         if (payerValues.hasErrors()) {
-            throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), payerValues.errors)
+            throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
         Payer payer = find(id)
@@ -62,7 +62,7 @@ class PayerService {
         Payer payerValues = validatePayerParams(payerAdapter)
 
         if (payerValues.hasErrors()) {
-            throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), payerValues.errors)
+            throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
         Payer payer = buildPayerProperties(new Payer(), payerAdapter, payerAdapter.customer)
@@ -146,7 +146,7 @@ class PayerService {
             payer.errors.reject("state", null, MessageUtils.getMessage("general.errors.state.invalid"))
         }
 
-        if (payerAdapter.cep != null && CepUtils.validateCep(payerAdapter.cep)) {
+        if (!CepUtils.validateCep(payerAdapter.cep)) {
             payer.errors.reject("cep", null, MessageUtils.getMessage("general.errors.zipCode.invalid"))
         }
 

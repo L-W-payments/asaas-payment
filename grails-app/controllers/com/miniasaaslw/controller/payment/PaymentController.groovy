@@ -15,49 +15,53 @@ class PaymentController extends BaseController {
     def paymentService
 
     def index() {
-        def errors = flash.errors
+        def messageInfo = flash.messageInfo
+
         List<Payer> payers = PayerRepository.query([:]).list()
 
-        if (errors) {
-            return [payers: payers, errors: errors]
+        if (messageInfo) {
+            return [payers: payers, messageInfo: messageInfo]
         }
 
         return [payers: payers]
     }
 
     def delete() {
-        Long id = params.long("id")
-
         try {
+            Long id = params.long("id")
+
             paymentService.delete(LoggedCustomer.CUSTOMER, id)
         } catch (Exception exception) {
-            flash.errors = [message(code: "payment.errors.delete.unknown")]
+            flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
         }
 
-        redirect(uri: "/payment")
+        redirect(action: "index")
     }
 
     def save() {
         try {
             paymentService.save(new PaymentAdapter(params))
-            redirect(uri: "/payment", params: [success: message(code: "payment.save.success")])
+            flash.messageInfo = [messages: ["Cobrança criada com sucesso"], messageType: "success"]
+            redirect(action: "index")
         } catch (ValidationException validationException) {
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(uri: "/payment")
             flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
         } catch (Exception exception) {
+            flash.messageInfo = [messages: [message(code: "payment.errors.save.unknown")], messageType: "error"]
             redirect(uri: "/payment")
             flash.errors = [message(code: "payment.errors.save.unknown")]
         }
     }
 
     def checkout() {
-        Long id = params.long("id")
-
         try {
+            Long id = params.long("id")
+
             return [payment: paymentService.find(id)]
         } catch (Exception exception) {
-            flash.errors = [message(code: "payment.errors.notFound")]
-            redirect(uri: "/payment")
+            flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
+            redirect(action: "index")
         }
     }
 
@@ -88,4 +92,21 @@ class PaymentController extends BaseController {
             render([success: false, alert: "Erro ao deletar a cobrança"] as JSON)
         }
     }
+
+    def updateToReceived() {
+        try {
+            Long publicId = params.long("id")
+
+            paymentService.updateToReceived(publicId)
+
+            redirect(action: "show", id: publicId)
+        } catch (RuntimeException runtimeException) {
+            flash.errors = [runtimeException.getMessage()]
+            redirect(action: "index")
+        } catch (Exception exception) {
+            flash.errors = [message(code: "payment.errors.pay")]
+            redirect(action: "index")
+        }
+    }
+
 }

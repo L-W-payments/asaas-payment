@@ -14,6 +14,10 @@ class PaymentRepository implements BaseEntityRepository {
         }
 
         query = query.where {
+            if (search.containsKey("publicId")) {
+                eq("publicId", search.publicId)
+            }
+
             if (search.containsKey("payerName[like]")) {
                 like("payer.name", search."payerName[like]" + "%")
             }

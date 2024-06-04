@@ -64,7 +64,7 @@ function PayerListController(reference) {
             illustration: "triangle-exclamation-mark-siren",
             title: "Deseja remover este pagador?",
             confirmButton: {
-                description: "Confrimar Remoção",
+                description: "Confirmar Remoção",
                 theme: "danger"
             },
             onConfirm: confirmDelete,

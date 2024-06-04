@@ -8,6 +8,8 @@ import com.miniasaaslw.entity.enums.payment.PaymentType
 
 class Payment extends BaseEntity {
 
+    String publicId
+
     Customer customer
 
     Payer payer
@@ -27,6 +29,7 @@ class Payment extends BaseEntity {
     public static final BigDecimal MAX_VALUE = new BigDecimal("10000.00")
 
     static constraints = {
+        publicId nullable: false, unique: true
         customer nullable: false
         payer nullable: false
         paymentType nullable: false
