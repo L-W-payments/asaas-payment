@@ -44,10 +44,10 @@ class PayerController {
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage } , messageType: "error"]
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(uri: "/payer")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [messages: ["Erro ao salvar o pagador"]], messageType: "error"]
+            flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]
             redirect(uri: "/payer")
         }
     }
