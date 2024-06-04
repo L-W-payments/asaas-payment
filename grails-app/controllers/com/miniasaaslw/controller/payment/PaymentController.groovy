@@ -22,6 +22,22 @@ class PaymentController {
         return [payers: payers]
     }
 
+    def restore() {
+        try {
+            Long id = params.long("id")
+
+            paymentService.restore(id)
+        } catch (RuntimeException runtimeException) {
+            redirect(action: "index")
+            flash.errors = [runtimeException.getMessage()]
+        } catch (Exception exception) {
+            redirect(action: "index")
+            flash.errors = [message(code: "payment.errors.restore.unknown")]
+        }
+
+        redirect(action: "index")
+    }
+
     def delete() {
         try {
             Long id = params.long("id")
