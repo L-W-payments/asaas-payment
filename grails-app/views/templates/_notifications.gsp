@@ -1,11 +1,9 @@
-<%@ page import="com.miniasaaslw.entity.enums.notification.NotificationPriority" %>
-
 <g:if test="${notifications}">
     <g:each in="${notifications}" var="notification">
         <atlas-notification-card
                 icon="hand-holding-money"
-                overlay-icon="${notification.priority.isHigh() ? 'alert-circle' : notification.priority.isMedium() ? 'alert-triangle' : 'money-notes'}"
-                overlay-theme="${notification.priority.isHigh() ? 'danger' : notification.priority.isMedium() ? 'warning' : 'success'}"
+                overlay-icon="${notification.type.isError() ? 'alert-circle' : notification.type.isWarning() ? 'alert-triangle' : 'money-notes'}"
+                overlay-theme="${notification.type.isError() ? 'danger' : notification.type.isWarning() ? 'warning' : 'success'}"
                 header="${notification.title}"
                 description="${notification.message}">
         </atlas-notification-card>

@@ -2,7 +2,7 @@ package com.miniasaaslw.service.notification
 
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.notification.Notification
-import com.miniasaaslw.entity.enums.notification.NotificationPriority
+import com.miniasaaslw.entity.enums.notification.NotificationType
 import com.miniasaaslw.repository.notification.NotificationRepository
 
 import grails.gorm.transactions.Transactional
@@ -21,7 +21,7 @@ class NotificationService {
         notification.title = notificationInfo.title
         notification.message = notificationInfo.message
         notification.url = notificationInfo.url
-        notification.priority = notificationInfo.priority as NotificationPriority
+        notification.type = notificationInfo.type as NotificationType
 
         notification.save(failOnError: true)
     }
