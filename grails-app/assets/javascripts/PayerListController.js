@@ -2,7 +2,7 @@ function PayerListController(reference) {
 
     var tableReference = reference.querySelector(".js-payer-list-table");
     var inputReference = reference.querySelector(".js-payer-search-input");
-    var filterReference = reference.querySelector(".js-payer-filter-input")
+    var filterReference = reference.querySelector(".js-payer-filter-input");
     var deleteRow = null;
 
     function init() {
@@ -36,7 +36,7 @@ function PayerListController(reference) {
             var filterData = filterReference.getFilterData();
             filterData.name = inputReference.value;
 
-            tableReference.params = filterData
+            tableReference.params = filterData;
         });
 
         tableReference.addEventListener("atlas-table-after-search", function () {
