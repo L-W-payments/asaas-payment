@@ -11,12 +11,12 @@ class PayerController {
     def payerService
 
     def index() {
-        def errors = flash.errors
+        def messageInfo = flash.messageInfo
 
         List<Customer> customers = CustomerRepository.query([:]).list()
 
-        if (errors) {
-            return [errors: errors, customers : customers]
+        if (messageInfo) {
+            return [customers : customers, messageInfo: messageInfo]
         }
 
         return [customers: customers]
@@ -28,28 +28,26 @@ class PayerController {
         try {
             Payer payer = payerService.update(id, new PayerAdapter(params))
 
-            redirect(action: "show", params: [id: payer.id])
+            redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
-            redirect(action: "show", params: [id: id])
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage } , messageType: "error"]
+            redirect(action: 'show', params: [id: id])
         } catch (Exception exception) {
-            flash.errors = [message(code: "payer.errors.save.unknown")]
-            redirect(action: "show", params: [id: id])
+            flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]
+            redirect(action: 'show', params: [id: id])
         }
     }
 
     def save() {
-        Long customerId = params.long("customerId")
-
         try {
             Payer payer = payerService.save(new PayerAdapter(params))
 
-            redirect(action: "show", params: [id: payer.id])
+            redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(uri: "/payer")
         } catch (Exception exception) {
-            flash.errors = [message(code: "payer.errors.save.unknown")]
+            flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]
             redirect(uri: "/payer")
         }
     }
@@ -76,7 +74,7 @@ class PayerController {
         } catch (RuntimeException runtimeException) {
             flash.errors = [runtimeException.getMessage()]
         } catch (Exception exception) {
-            flash.errors = [message(code: "payer.errors.delete.unknown")]
+            flash.messageInfo = [messages: [message(code: "payer.errors.delete.unknown")], messageType: "error"]
         }
 
         redirect(uri: "/payer")
