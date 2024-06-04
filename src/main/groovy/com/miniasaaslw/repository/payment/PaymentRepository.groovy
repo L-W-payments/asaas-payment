@@ -1,7 +1,6 @@
 package com.miniasaaslw.repository.payment
 
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.base.BaseEntityRepository
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
 
