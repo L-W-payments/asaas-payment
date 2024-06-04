@@ -43,7 +43,6 @@ class PaymentController {
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(uri: "/payment")
-            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "payment.errors.save.unknown")], messageType: "error"]
             redirect(uri: "/payment")
@@ -69,10 +68,10 @@ class PaymentController {
 
             redirect(action: "show", id: publicId)
         } catch (RuntimeException runtimeException) {
-            flash.errors = [runtimeException.getMessage()]
+            flash.messageInfo = [runtimeException.getMessage()]
             redirect(action: "index")
         } catch (Exception exception) {
-            flash.errors = [message(code: "payment.errors.pay")]
+            flash.messageInfo = [message(code: "payment.errors.pay")]
             redirect(action: "index")
         }
     }

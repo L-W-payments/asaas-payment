@@ -12,7 +12,13 @@ trait BaseEntityRepository {
                 eq("id", Long.valueOf(search.id))
             }
 
-            if (Boolean.valueOf("search.exists")) {
+            if (search.containsKey("column")) {
+                projections {
+                    property "${search.column}"
+                }
+            }
+
+            if (Boolean.valueOf(search.exists)) {
                 projections {
                     property("id")
                 }
