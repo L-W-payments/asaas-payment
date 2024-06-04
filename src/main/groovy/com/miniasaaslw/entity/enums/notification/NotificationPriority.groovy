@@ -1,4 +1,4 @@
-package com.miniasaaslw.entity.enums
+package com.miniasaaslw.entity.enums.notification
 
 enum NotificationPriority {
 

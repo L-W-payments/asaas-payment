@@ -1,4 +1,4 @@
-<%@ page import="com.miniasaaslw.entity.enums.NotificationPriority" %>
+<%@ page import="com.miniasaaslw.entity.enums.notification.NotificationPriority" %>
 
 <g:if test="${notifications}">
     <g:each in="${notifications}" var="notification">

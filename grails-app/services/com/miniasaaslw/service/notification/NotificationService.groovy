@@ -2,7 +2,7 @@ package com.miniasaaslw.service.notification
 
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.notification.Notification
-import com.miniasaaslw.entity.enums.NotificationPriority
+import com.miniasaaslw.entity.enums.notification.NotificationPriority
 import com.miniasaaslw.repository.notification.NotificationRepository
 
 import grails.gorm.transactions.Transactional
