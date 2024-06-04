@@ -2,7 +2,7 @@ function PaymentListController(reference) {
 
     var tableReference = reference.querySelector(".js-payment-list-table");
     var inputReference = reference.querySelector(".js-payment-search-input");
-    var filterReference = reference.querySelector(".js-payment-filter-input")
+    var filterReference = reference.querySelector(".js-payment-filter-input");
     var deleteRow = null;
 
     function init() {
