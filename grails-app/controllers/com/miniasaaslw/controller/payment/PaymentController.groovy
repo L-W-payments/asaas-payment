@@ -2,9 +2,7 @@ package com.miniasaaslw.controller.payment
 
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.payer.Payer
-import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.payer.PayerRepository
-import com.miniasaaslw.repository.payment.PaymentRepository
 import com.miniasaaslw.utils.LoggedCustomer
 
 import grails.validation.ValidationException
@@ -15,14 +13,6 @@ class PaymentController {
 
     def index() {
         def errors = flash.errors
-
-        List<Long> overduePendingPaymentsIdList = PaymentRepository.query([
-                paymentStatus: PaymentStatus.PENDING,
-                "dueDate[lt]": new Date(),
-                "column"     : "id"
-        ]).list() as List<Long>
-
-        println("overduePendingPaymentsIdList: " + overduePendingPaymentsIdList)
 
         List<Payer> payers = PayerRepository.query([:]).list()
 
