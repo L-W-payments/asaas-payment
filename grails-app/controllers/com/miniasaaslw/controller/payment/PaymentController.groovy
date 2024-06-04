@@ -48,8 +48,7 @@ class PaymentController extends BaseController {
             redirect(uri: "/payment")
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "payment.errors.save.unknown")], messageType: "error"]
-            redirect(uri: "/payment")
-            flash.errors = [message(code: "payment.errors.save.unknown")]
+            redirect(action: "index")
         }
     }
 
@@ -105,6 +104,16 @@ class PaymentController extends BaseController {
         } catch (Exception exception) {
             flash.messageInfo = [message(code: "payment.errors.pay")]
             redirect(action: "index")
+        }
+    }
+
+    def show() {
+        try {
+            Long id = params.long("id")
+            return [payment: paymentService.find(LoggedCustomer.CUSTOMER, id)]
+        } catch (Exception exception) {
+            flash.errors = ["Pagamento não encontrado!"]
+            redirect(uri: "/payment")
         }
     }
 
