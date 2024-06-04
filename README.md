@@ -17,7 +17,7 @@ delete para registros no banco de dados.
 - [ ] Deve ser possível um cliente deletar uma cobrança;
 - [ ] Deve ser possível um cliente selecionar um pagador para uma cobrança;
 - [x] Deve ser possível um cliente criar um pagador;
-- [ ] Deve ser possível um cliente listar todos os pagadores;
+- [x] Deve ser possível um cliente listar todos os pagadores;
 - [x] Deve ser possível um cliente listar um pagador específico;
 - [x] Deve ser possível um cliente atualizar um pagador;
 - [x] Deve ser possível um cliente deletar um pagador;
