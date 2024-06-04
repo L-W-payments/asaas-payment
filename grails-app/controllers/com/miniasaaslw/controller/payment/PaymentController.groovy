@@ -54,11 +54,11 @@ class PaymentController extends BaseController {
 
     def checkout() {
         try {
-            Long id = params.long("id")
+            String publicId = params.id
 
-            return [payment: paymentService.find(id)]
+            return [payment: paymentService.find(publicId)]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
+            flash.messageInfo = [messages: [message(code: "payment.errors.notFound")], messageType: "error"]
             redirect(action: "index")
         }
     }
