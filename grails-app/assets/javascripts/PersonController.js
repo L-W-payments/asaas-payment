@@ -1,7 +1,7 @@
 function PersonController(reference) {
     const postalCodeField = reference.querySelector("atlas-postal-code");
 
-    const viaCepURL = "https://viacep.com.br/ws/${postalCode}/json"
+    const viaCepURL = "https://viacep.com.br/ws/${postalCode}/json";
 
     const inputObject = {
         localidade: reference.querySelector("#city"),
