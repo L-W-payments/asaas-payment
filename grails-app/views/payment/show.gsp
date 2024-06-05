@@ -29,9 +29,13 @@
         </atlas-button>
         <atlas-layout gap="4">
           <atlas-section header="Pagador">
-            <atlas-layout gap="4" inline>
-                  <atlas-input required value="${payment.payer.name} — ${payment.payer.email}" ></atlas-input>
-                  <atlas-button icon="arrow-up-right"
+            <atlas-layout gap="1" inline mobile-inline>
+              <atlas-layout>
+                <atlas-input required value="${payment.payer.name} — ${payment.payer.email}" ></atlas-input>
+              </atlas-layout>
+              <atlas-button icon="arrow-up-right"
+                                is-external-link
+                                tooltip="Exibir pagador"
                                 type="outlined"
                                 href="${createLink(
                                         controller: 'payer',
