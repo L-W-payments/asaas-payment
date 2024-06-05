@@ -49,8 +49,9 @@ class CustomerController {
     }
 
     def update() {
+        long id = params.long("id")
+
         try {
-            long id = params.long("id")
             Customer customer = customerService.update(id, new CustomerAdapter(params))
             redirect(action: 'show', params: [id: customer.id])
         } catch (ValidationException validationException) {
