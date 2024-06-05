@@ -20,6 +20,7 @@
 
         <atlas-button slot="actions"
                       type="outlined"
+                      theme="danger"
                       href="${createLink(
                               controller: 'payment',
                               action: 'delete',
