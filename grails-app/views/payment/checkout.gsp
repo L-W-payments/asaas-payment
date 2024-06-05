@@ -57,7 +57,7 @@
                     <atlas-divider spacing="16"></atlas-divider>
 
 
-                    <form action="${createLink(controller: 'payment', action: 'pay')}">
+                    <atlas-form action="${createLink(controller: 'payment', action: 'updateToReceived')}">
                         <g:if test="${payment.paymentStatus.isPending()}">
                             <atlas-input hidden name="id" value="${payment.id}"></atlas-input>
                             <atlas-button description="Pagar" theme="success" submit block></atlas-button>
@@ -69,7 +69,7 @@
                                     theme="${payment.paymentStatus.isReceived() ? 'highlight' : 'danger'}"
                                     block></atlas-button>
                         </g:else>
-                    </form>
+                    </atlas-form>
                 </atlas-panel>
             </atlas-grid>
         </atlas-page-content>
