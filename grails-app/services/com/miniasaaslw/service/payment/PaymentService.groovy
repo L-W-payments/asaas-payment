@@ -3,7 +3,6 @@ package com.miniasaaslw.service.payment
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.repository.payment.PaymentRepository
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.payment.PaymentRepository
@@ -119,7 +118,7 @@ class PaymentService {
         payment.value = paymentAdapter.value
         payment.dueDate = paymentAdapter.dueDate
         payment.paymentStatus = PaymentStatus.PENDING
-        payment.paymentType = paymentAdapter.paymentType
+        payment.billingType = paymentAdapter.billingType
 
         return payment
     }
@@ -135,8 +134,8 @@ class PaymentService {
             payment.errors.reject("payer", null, MessageUtils.getMessage("payment.errors.payer.notFound"))
         }
 
-        if (!paymentAdapter.paymentType) {
-            payment.errors.reject("paymentType", null, MessageUtils.getMessage("payment.errors.paymentType.invalid"))
+        if (!paymentAdapter.billingType) {
+            payment.errors.reject("billingType", null, MessageUtils.getMessage("payment.errors.billingType.invalid"))
         }
 
         if (!paymentAdapter.value) {

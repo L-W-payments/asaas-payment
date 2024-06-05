@@ -36,7 +36,7 @@
 
                         <atlas-summary-item
                                 label="Método de pagamento"
-                                description="${message(code: "paymentType.${payment.paymentType}.label")}"></atlas-summary-item>
+                                description="${message(code: "billingType.${payment.billingType}.label")}"></atlas-summary-item>
 
                         <atlas-summary-item
                                 label="Destinatário"
