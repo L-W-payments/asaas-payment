@@ -5,7 +5,7 @@ import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.repository.payer.PayerRepository
-import com.miniasaaslw.utils.CepUtils
+import com.miniasaaslw.utils.PostalCodeUtils
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.EmailUtils
 import com.miniasaaslw.utils.MessageUtils
@@ -158,8 +158,8 @@ class PayerService {
             payer.errors.reject("state", null, MessageUtils.getMessage("general.errors.state.invalid"))
         }
 
-        if (!CepUtils.validateCep(payerAdapter.cep)) {
-            payer.errors.reject("cep", null, MessageUtils.getMessage("general.errors.zipCode.invalid"))
+        if (!PostalCodeUtils.validatePostalCode(payerAdapter.postalCode)) {
+            payer.errors.reject("postalCode", null, MessageUtils.getMessage("general.errors.postalCode.invalid"))
         }
 
         return payer
@@ -171,7 +171,7 @@ class PayerService {
         payer.phone = payerAdapter.phone
         payer.cpfCnpj = payerAdapter.cpfCnpj
         payer.personType = payerAdapter.personType
-        payer.cep = payerAdapter.cep
+        payer.postalCode = payerAdapter.postalCode
         payer.number = payerAdapter.number
         payer.complement = payerAdapter.complement
         payer.country = payerAdapter.country

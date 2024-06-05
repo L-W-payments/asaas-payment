@@ -14,7 +14,7 @@ class BasePerson extends BaseEntity {
 
     PersonType personType
 
-    String cep
+    String postalCode
 
     String number
 
@@ -34,7 +34,7 @@ class BasePerson extends BaseEntity {
         email email: true
         phone size: 10..11
         cpfCnpj size: 11..14
-        cep size: 8..8
+        postalCode size: 8..8
         complement blank: true, nullable: true
         state size: 2..2
     }
