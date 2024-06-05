@@ -17,9 +17,9 @@ class PayerController extends BaseController {
         def messageInfo = flash.messageInfo
 
         List<Customer> customers = CustomerRepository.query([:]).list()
-      
+
         if (messageInfo) {
-            return [customers : customers, messageInfo: messageInfo]
+            return [customers: customers, messageInfo: messageInfo]
         }
 
         return [customers: customers]
@@ -33,7 +33,7 @@ class PayerController extends BaseController {
 
             redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage } , messageType: "error"]
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(action: 'show', params: [id: id])
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]

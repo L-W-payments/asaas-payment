@@ -35,8 +35,8 @@ class PaymentService {
         return payment
     }
 
-    public Payment find(Long id) {
-        Payment payment = PaymentRepository.query([id: id]).get()
+    public Payment find(String publicId) {
+        Payment payment = PaymentRepository.query([publicId: publicId]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
@@ -44,7 +44,7 @@ class PaymentService {
     }
 
     public Payment find(Customer customer, Long id) {
-        Payment payment = PaymentRepository.query([id: id, customer: customer]).get()
+        Payment payment = PaymentRepository.query([id: id, customerId: customer.id]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
@@ -88,6 +88,18 @@ class PaymentService {
         if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), validatedPayment.errors)
 
         payment.paymentStatus = PaymentStatus.RECEIVED
+        payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
+    }
+
+    public void updateToReceivedInCash(Customer customer, Long paymentId) {
+        Payment payment = find(customer, paymentId)
+
+        Payment validatedPayment = validateUpdateToReceivedInCash(payment)
+        if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("payment.errors.update.unknown"), validatedPayment.errors)
+
+        payment.paymentStatus = PaymentStatus.RECEIVED_IN_CASH
         payment.save(failOnError: true)
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
@@ -185,6 +197,24 @@ class PaymentService {
         return validationPayment
     }
 
+    private Payment validateUpdateToReceivedInCash(Payment payment) {
+        Payment validationPayment = new Payment()
+
+        if (payment.paymentStatus.isReceived()) {
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.received"))
+        }
+
+        if (payment.paymentStatus.isReceivedInCash()) {
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.receivedInCash"))
+        }
+
+        if (payment.paymentStatus.isOverdue()) {
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.overdue"))
+        }
+
+        return validationPayment
+    }
+
     private Boolean validateDescription(String description) {
         if (!description) return true
 
@@ -200,7 +230,6 @@ class PaymentService {
 
         return true
     }
-
 
     private Boolean validateDueDate(Date dueDate) {
         if (dueDate.before(new Date())) return false

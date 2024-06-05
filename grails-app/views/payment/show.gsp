@@ -1,4 +1,5 @@
 <%@ page import="com.miniasaaslw.entity.enums.payment.PaymentType" %>
+<%@ page import="com.miniasaaslw.entity.enums.payment.PaymentStatus" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -7,12 +8,25 @@
 </head>
 <body page-title="Visualizar cobrança">
       <atlas-form-panel>
+        <g:if test="${payment.paymentStatus.isPending()}">
+          <atlas-button slot="actions"
+                        href="${createLink(
+                                controller: 'payment',
+                                action: 'updateToReceivedInCash',
+                                id: payment.id)}"
+                        description="Confirmar recebimento em dinheiro">
+          </atlas-button>
+        </g:if>
+
         <atlas-button slot="actions"
+                      type="outlined"
+                      theme="danger"
                       href="${createLink(
                               controller: 'payment',
                               action: 'delete',
                               id: payment.id)}"
-                      description="Apagar"></atlas-button>
+                      description="Apagar">
+        </atlas-button>
         <atlas-layout gap="4">
           <atlas-section header="Pagador">
                 <atlas-input required value="${payment.payer.name} — ${payment.payer.email}" ></atlas-input>
