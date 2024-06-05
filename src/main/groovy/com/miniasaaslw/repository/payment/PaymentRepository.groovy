@@ -1,25 +1,27 @@
 package com.miniasaaslw.repository.payment
 
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.repository.base.BaseEntityRepository
+import com.miniasaaslw.repository.Repository
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
 
-import grails.gorm.DetachedCriteria
+import grails.compiler.GrailsCompileStatic
+import groovy.transform.CompileDynamic
+import org.grails.datastore.mapping.query.api.BuildableCriteria
 
-class PaymentRepository implements BaseEntityRepository {
+@GrailsCompileStatic
+class PaymentRepository implements Repository<Payment, PaymentRepository> {
 
-    public static DetachedCriteria<Payment> query(Map search) {
-        DetachedCriteria<Payment> query = Payment.where(defaultQuery(search))
+    @CompileDynamic
+    @Override
+    void buildCriteria() {
+        addCriteria {
+            if (joinWithCustomer(search)) {
+                createAlias("customer", "customer")
+            }
 
-        if (joinWithCustomer(search)) {
-            query.createAlias("customer", "customer")
-        }
-
-        if (joinWithPayer(search)) {
-            query.createAlias("payer", "payer")
-        }
-
-        query = query.where {
+            if (joinWithPayer(search)) {
+                createAlias("payer", "payer")
+            }
 
             if (search.containsKey("customerId")) {
                 eq("customer.id", search.customerId)
@@ -41,8 +43,22 @@ class PaymentRepository implements BaseEntityRepository {
                 like("payer.name", search."payerName[like]" + "%")
             }
         }
+    }
 
-        return query
+    @Override
+    BuildableCriteria getBuildableCriteria() {
+        return Payment.createCriteria()
+    }
+
+    @Override
+    List<String> listAllowedFilters() {
+        return [
+                "customerId",
+                "paymentStatus",
+                "dueDate[lt]",
+                "publicId",
+                "payerName[like]"
+        ]
     }
 
     private static Boolean joinWithCustomer(Map search) {
