@@ -4,7 +4,6 @@ import com.miniasaaslw.adapters.notification.NotificationAdapter
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.entity.enums.notification.NotificationType
 import com.miniasaaslw.utils.LoggedCustomer
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
@@ -31,12 +30,7 @@ class PaymentService {
 
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter(
-                MessageUtils.getMessage("notification.payment.save.title"),
-                MessageUtils.getMessage("notification.payment.save.message"),
-                "/payment/show/${payment.id}",
-                NotificationType.INFO
-        ))
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentCreated(payment))
 
         return payment
     }
@@ -67,12 +61,7 @@ class PaymentService {
         payment.deleted = false
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter(
-                MessageUtils.getMessage("notification.payment.restored.title"),
-                MessageUtils.getMessage("notification.payment.restored.message"),
-                "/payment/show/${payment.id}",
-                NotificationType.INFO
-        ))
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentRestored(payment))
     }
 
     public void delete(Customer customer, Long paymentId) {
@@ -83,12 +72,7 @@ class PaymentService {
         payment.deleted = true
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter(
-                MessageUtils.getMessage("notification.payment.deleted.title"),
-                MessageUtils.getMessage("notification.payment.deleted.message"),
-                "/payment/show/${payment.id}",
-                NotificationType.INFO
-        ))
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentDeleted(payment))
     }
 
     public List<Payment> list(Map search, Integer max, Integer offset) {
@@ -106,12 +90,7 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter(
-                MessageUtils.getMessage("notification.payment.received.title"),
-                MessageUtils.getMessage("notification.payment.received.message"),
-                "/payment/show/${payment.id}",
-                NotificationType.INFO
-        ))
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
     }
 
     public void updateToOverdue(Long id) {
@@ -124,12 +103,7 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.OVERDUE
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter(
-                MessageUtils.getMessage("notification.payment.overdue.title"),
-                MessageUtils.getMessage("notification.payment.overdue.message"),
-                "/payment/show/${payment.id}",
-                NotificationType.WARNING
-        ))
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentOverdue(payment))
     }
 
     public void processOverduePayment() {
