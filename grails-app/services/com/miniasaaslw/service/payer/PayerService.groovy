@@ -19,8 +19,8 @@ import grails.validation.ValidationException
 @Transactional
 class PayerService {
 
-    public List<Payer> list() {
-        return PayerRepository.query([:]).list()
+    public List<Payer> list(Integer max, Integer offset, Map search) {
+        return PayerRepository.query(search).list(max: max, offset: offset)
     }
 
     public Payer find(Long id) {
@@ -29,6 +29,18 @@ class PayerService {
         if (!payer) throw new RuntimeException(MessageUtils.getMessage("payer.errors.notFound"))
 
         return payer
+    }
+
+    public void restore(Long id) {
+        Payer payer = PayerRepository.query([id: id, includeDeleted: true]).get()
+
+        if (!payer) throw new RuntimeException(MessageUtils.getMessage("payer.errors.notFound"))
+
+        if (!payer.deleted) throw new RuntimeException(MessageUtils.getMessage("payer.errors.restore.notDeleted"))
+
+        payer.deleted = false
+
+        payer.save(failOnError: true)
     }
 
     public void delete(Long id) {

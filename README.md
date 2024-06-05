@@ -25,6 +25,7 @@ delete para registros no banco de dados.
 - [ ] Deve ser possível um cliente restaurar um pagador;
 - [x] Deve ser possível um cliente listar todas as notificações;
 - [x] Deve ser possível que o pagador pague uma cobrança;
+- [x] Deve ser possível um cliente confirmar o recebimento em dinheiro de uma cobrança;
 - [ ] Deve ser possível receber um email após uma cobrança ser criada;
 - [ ] Deve ser possível receber um email após uma cobrança ser deletada;
 - [ ] Deve ser possível receber um email após uma cobrança ser vencida;
@@ -46,6 +47,7 @@ delete para registros no banco de dados.
 - [x] O cliente não deve criar uma cobrança com descrição maior que 500 caracteres;
 - [x] O cliente não deve criar uma cobrança sem uma forma de pagamento;
 - [x] O cliente não deve criar uma cobrança sem um pagador;
+- [x] O cliente não deve confirmar o recebimento em dinheiro de uma cobrança se ela não estiver pendente;
 
 ## RNFs (Requisitos não funcionais)
 

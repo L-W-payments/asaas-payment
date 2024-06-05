@@ -1,22 +1,25 @@
 package com.miniasaaslw.controller.payer
 
+import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.repository.customer.CustomerRepository
+
+import grails.converters.JSON
 import grails.validation.ValidationException
 
-class PayerController {
+class PayerController extends BaseController {
 
     def payerService
 
     def index() {
-        def errors = flash.errors
+        def messageInfo = flash.messageInfo
 
         List<Customer> customers = CustomerRepository.query([:]).list()
 
-        if (errors) {
-            return [errors: errors, customers : customers]
+        if (messageInfo) {
+            return [customers: customers, messageInfo: messageInfo]
         }
 
         return [customers: customers]
@@ -28,29 +31,42 @@ class PayerController {
         try {
             Payer payer = payerService.update(id, new PayerAdapter(params))
 
-            redirect(action: "show", params: [id: payer.id])
+            redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
-            redirect(action: "show", params: [id: id])
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
+            redirect(action: 'show', params: [id: id])
         } catch (Exception exception) {
-            flash.errors = [message(code: "payer.errors.save.unknown")]
-            redirect(action: "show", params: [id: id])
+            flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]
+            redirect(action: 'show', params: [id: id])
         }
     }
 
     def save() {
-        Long customerId = params.long("customerId")
-
         try {
             Payer payer = payerService.save(new PayerAdapter(params))
 
-            redirect(action: "show", params: [id: payer.id])
+            redirect(action: 'show', params: [id: payer.id])
         } catch (ValidationException validationException) {
-            flash.errors = validationException.errors.allErrors.collect { it.defaultMessage }
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(uri: "/payer")
         } catch (Exception exception) {
-            flash.errors = [message(code: "payer.errors.save.unknown")]
+            flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]
             redirect(uri: "/payer")
+        }
+    }
+
+    def restore() {
+        try {
+            Long id = params.long("id")
+
+            payerService.restore(id)
+            render([success: true] as JSON)
+        } catch (RuntimeException runtimeException) {
+            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
+            render([success: false] as JSON)
+        } catch (Exception exception) {
+            flash.messageInfo = [messages: [message(code: "payer.errors.restore.unknown")], messageType: "error"]
+            render([success: false] as JSON)
         }
     }
 
@@ -60,9 +76,9 @@ class PayerController {
 
             return [payer: payerService.find(id)]
         } catch (RuntimeException runtimeException) {
-            flash.errors = [runtimeException.getMessage()]
+            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
         } catch (Exception exception) {
-            flash.errors = [message(code: "payer.errors.search.unknown")]
+            flash.messageInfo = [messages: [message(code: "payer.errors.search.unknown")], messageType: "error"]
         }
 
         redirect(uri: "/payer")
@@ -74,15 +90,43 @@ class PayerController {
 
             payerService.delete(id)
         } catch (RuntimeException runtimeException) {
-            flash.errors = [runtimeException.getMessage()]
+            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
         } catch (Exception exception) {
-            flash.errors = [message(code: "payer.errors.delete.unknown")]
+            flash.messageInfo = [messages: [message(code: "payer.errors.delete.unknown")], messageType: "error"]
         }
 
         redirect(uri: "/payer")
     }
 
     def list() {
-        return [payers: payerService.list()]
+        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [:])]
     }
+
+    def loadTableContent() {
+        Map search = [:]
+
+        if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
+        if (params.name) search."name[like]" = params.name
+
+        List<Payer> payerList = payerService.list(getLimitPerPage(), getOffset(), search)
+        Integer totalRecords = payerList.totalCount
+        String content = g.render(template: "/payer/templates/tableContent", model: [payerList: payerList])
+
+        render([totalRecords: totalRecords, content: content, success: true] as JSON)
+    }
+
+    def fetchDelete() {
+        try {
+            Long id = params.long("id")
+
+            payerService.delete(id)
+            render([success: true] as JSON)
+        } catch (RuntimeException runtimeException) {
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (Exception exception) {
+            render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
+        }
+    }
+
+
 }

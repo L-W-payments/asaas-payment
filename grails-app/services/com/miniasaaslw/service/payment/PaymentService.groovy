@@ -3,9 +3,9 @@ package com.miniasaaslw.service.payment
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.repository.payment.PaymentRepository
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
+import com.miniasaaslw.repository.payment.PaymentRepository
 
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -29,18 +29,35 @@ class PaymentService {
         return payment
     }
 
-    public Payment find(Long id) {
-        Payment payment = PaymentRepository.query([id: id]).get()
+    public Payment find(String publicId) {
+        Payment payment = PaymentRepository.query([publicId: publicId]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
         return payment
     }
 
-    public void delete(Customer customer, Long paymentId) {
-        Payment payment = PaymentRepository.query([id: paymentId, customer: customer]).get()
+    public Payment find(Customer customer, Long id) {
+        Payment payment = PaymentRepository.query([id: id, customerId: customer.id]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
+
+        return payment
+    }
+
+    public void restore(Long id) {
+        Payment payment = PaymentRepository.query([id: id, includeDeleted: true]).get()
+
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
+
+        if (!payment.deleted) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notDeleted"))
+
+        payment.deleted = false
+        payment.save(failOnError: true)
+    }
+
+    public void delete(Customer customer, Long paymentId) {
+        Payment payment = find(customer, paymentId)
 
         if (payment.deleted) return
 
@@ -48,19 +65,64 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
+    public List<Payment> list(Map search, Integer max, Integer offset) {
+        return PaymentRepository.query(search).list(max: max, offset: offset)
+    }
+
     public void updateToReceived(Long id) {
         Payment payment = PaymentRepository.query([id: id]).get()
 
-        if (!payment) throw new RuntimeException("Cobrança não encontrada!")
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
         Payment validatedPayment = validateUpdateToReceived(payment)
-        if (validatedPayment.hasErrors()) throw new ValidationException("Erro ao validar parâmetros da cobrança", validatedPayment.errors)
+        if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), validatedPayment.errors)
 
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
     }
 
+    public void updateToReceivedInCash(Customer customer, Long paymentId) {
+        Payment payment = find(customer, paymentId)
+
+        Payment validatedPayment = validateUpdateToReceivedInCash(payment)
+        if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("payment.errors.update.unknown"), validatedPayment.errors)
+
+        payment.paymentStatus = PaymentStatus.RECEIVED_IN_CASH
+        payment.save(failOnError: true)
+    }
+
+    public void updateToOverdue(Long id) {
+        Payment payment = PaymentRepository.query([id: id]).get()
+
+        if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
+
+        if (!payment.paymentStatus.isPending()) throw new RuntimeException(MessageUtils.getMessage("payment.errors.status.update.pending"))
+
+        payment.paymentStatus = PaymentStatus.OVERDUE
+        payment.save(failOnError: true)
+    }
+
+    public void processOverduePayment() {
+        List<Long> overduePendingPaymentsIdList = PaymentRepository.query([
+                paymentStatus: PaymentStatus.PENDING,
+                "dueDate[lt]": new Date(),
+                "column"     : "id"
+        ]).list(max: 500) as List<Long>
+
+        for (Long paymentId : overduePendingPaymentsIdList) {
+            Payment.withNewTransaction { status ->
+                try {
+                    updateToOverdue(paymentId)
+                } catch (Exception exception) {
+                    log.error("updatePendingPaymentStatus >> Erro ao atualizar status da cobrança de id: [${paymentId}] [Mensagem de erro]: ${exception.message}")
+                    status.setRollbackOnly()
+                }
+            }
+        }
+    }
+
     private Payment buildPaymentProperties(Payment payment, PaymentAdapter paymentAdapter) {
+        payment.publicId = payment.publicId ?: UUID.randomUUID().toString().toUpperCase()
         payment.customer = paymentAdapter.customer
         payment.payer = paymentAdapter.payer
         payment.value = paymentAdapter.value
@@ -113,11 +175,25 @@ class PaymentService {
         Payment validationPayment = new Payment()
 
         if (payment.paymentStatus.isReceived()) {
-            validationPayment.errors.reject("O pagamento já foi efetuado!")
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.received"))
         }
 
-        if (new Date().after(payment.dueDate)) {
-            validationPayment.errors.reject("A data de vencimento já passou!")
+        return validationPayment
+    }
+
+    private Payment validateUpdateToReceivedInCash(Payment payment) {
+        Payment validationPayment = new Payment()
+
+        if (payment.paymentStatus.isReceived()) {
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.received"))
+        }
+
+        if (payment.paymentStatus.isReceivedInCash()) {
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.receivedInCash"))
+        }
+
+        if (payment.paymentStatus.isOverdue()) {
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.overdue"))
         }
 
         return validationPayment
