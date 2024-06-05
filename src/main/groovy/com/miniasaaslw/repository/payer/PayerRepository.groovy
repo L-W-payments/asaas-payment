@@ -1,24 +1,39 @@
 package com.miniasaaslw.repository.payer
 
 import com.miniasaaslw.domain.payer.Payer
-import com.miniasaaslw.repository.base.BaseEntityRepository
-import grails.gorm.DetachedCriteria
+import com.miniasaaslw.repository.Repository
+import grails.compiler.GrailsCompileStatic
+import groovy.transform.CompileDynamic
+import org.grails.datastore.mapping.query.api.BuildableCriteria
 
-class PayerRepository implements BaseEntityRepository {
+@GrailsCompileStatic
+class PayerRepository implements Repository<Payer, PayerRepository> {
 
-    public static DetachedCriteria<Payer> query(Map search) {
-        DetachedCriteria<Payer> query = Payer.where(defaultQuery(search))
-
-        query = query.where {
+    @Override
+    @CompileDynamic
+    void buildCriteria() {
+        addCriteria {
             if (search.containsKey("customerId")) {
-                eq('customer.id', Long.valueOf(search.customerId))
+                eq("customer.id", search.customerId)
             }
 
-            if (search.containsKey("name[like]")){
-                like('name', search."name[like]" + "%")
+            if (search.containsKey("name[like]")) {
+                like("name", "%" + search."name[like]" + "%")
             }
         }
-
-        return query
     }
+
+    @Override
+    List<String> listAllowedFilters() {
+        return [
+                "customerId",
+                "name[like]"
+        ]
+    }
+
+    @Override
+    BuildableCriteria getBuildableCriteria() {
+        return Payer.createCriteria()
+    }
+
 }
