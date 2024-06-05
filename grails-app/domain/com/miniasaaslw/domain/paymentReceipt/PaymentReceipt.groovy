@@ -5,6 +5,8 @@ import com.miniasaaslw.entity.BaseEntity
 
 class PaymentReceipt extends BaseEntity {
 
+    String transactionId
+
     Payment payment
 
 }
