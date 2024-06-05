@@ -29,7 +29,16 @@
         </atlas-button>
         <atlas-layout gap="4">
           <atlas-section header="Pagador">
-                <atlas-input required value="${payment.payer.name} — ${payment.payer.email}" ></atlas-input>
+            <atlas-layout gap="4" inline>
+                  <atlas-input required value="${payment.payer.name} — ${payment.payer.email}" ></atlas-input>
+                  <atlas-button icon="arrow-up-right"
+                                type="outlined"
+                                href="${createLink(
+                                        controller: 'payer',
+                                        action: 'show',
+                                        id: payment.payerId)}">
+                  </atlas-button>
+            </atlas-layout>
           </atlas-section>
           <atlas-section header="Dados da cobrança">
             <atlas-grid>
