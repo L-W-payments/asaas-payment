@@ -4,7 +4,8 @@ enum PaymentStatus {
 
     PENDING,
     RECEIVED,
-    OVERDUE
+    OVERDUE,
+    RECEIVED_IN_CASH
 
     public boolean isReceived() {
         return this == RECEIVED
@@ -17,4 +18,9 @@ enum PaymentStatus {
     public boolean isOverdue() {
         return this == OVERDUE
     }
+
+    public boolean isReceivedInCash() {
+        return this == RECEIVED_IN_CASH
+    }
+
 }

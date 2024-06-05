@@ -69,11 +69,11 @@ class PaymentController extends BaseController {
 
     def checkout() {
         try {
-            Long id = params.long("id")
+            String publicId = params.id
 
-            return [payment: paymentService.find(id)]
+            return [payment: paymentService.find(publicId)]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
+            flash.messageInfo = [messages: [message(code: "payment.errors.notFound")], messageType: "error"]
             redirect(action: "index")
         }
     }
@@ -120,6 +120,22 @@ class PaymentController extends BaseController {
             redirect(action: "index")
         } catch (Exception exception) {
             flash.messageInfo = [message(code: "payment.errors.pay"), messageType="error"]
+            redirect(action: "index")
+        }
+    }
+
+    def updateToReceivedInCash() {
+        try {
+            Long id = params.long("id")
+
+            paymentService.updateToReceivedInCash(LoggedCustomer.CUSTOMER, id)
+
+            redirect(action: "show", id: id)
+        } catch (RuntimeException runtimeException) {
+            flash.errors = [runtimeException.getMessage()]
+            redirect(action: "index")
+        } catch (Exception exception) {
+            flash.errors = [message(code: "payment.errors.pay")]
             redirect(action: "index")
         }
     }
