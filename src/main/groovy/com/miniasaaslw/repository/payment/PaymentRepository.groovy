@@ -42,7 +42,7 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
             }
 
             if (search.containsKey("payerName[like]")) {
-                like("payer.name", search."payerName[like]" + "%")
+                like("payer.name", "%" + search."payerName[like]" + "%")
             }
         }
     }
