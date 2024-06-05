@@ -44,7 +44,7 @@
                 </atlas-col>
                 <atlas-col lg="4" md="4">
                   <atlas-datepicker name="dueDate" label="Vencimento da cobrança" prevent-past-date
-                                    required value="${dateTimeTagLib.datetime(date: payment.dueDate)}"></atlas-datepicker>
+                                    required value="${dateTimeTagLib.dateTime(date: payment.dueDate)}"></atlas-datepicker>
                 </atlas-col>
               </atlas-row>
             </atlas-grid>

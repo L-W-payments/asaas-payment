@@ -15,7 +15,7 @@
             ${message(code: "paymentStatus.${payment.paymentStatus}.label")}
         </atlas-table-col>
         <atlas-table-col>
-            ${dateTimeTagLib.datetime(date: payment.dueDate)}
+            ${dateTimeTagLib.dateTime(date: payment.dueDate)}
         </atlas-table-col>
         <atlas-button-group slot="actions" group-after="2">
             <g:if test="${payment.deleted}">
