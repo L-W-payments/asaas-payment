@@ -28,7 +28,7 @@
                     <atlas-layout justify="space-between" inline>
                         <atlas-summary-item
                                 label="Data de vencimento"
-                                description="${formatDate(date: payment.dueDate, format: 'dd/MM/yyyy')}"></atlas-summary-item>
+                                description="${dateTimeTagLib.datetime(date: payment.dateCreated)}"></atlas-summary-item>
 
                         <atlas-summary-item
                                 label="Situação"
