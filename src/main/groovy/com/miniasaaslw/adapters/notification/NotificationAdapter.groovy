@@ -2,13 +2,10 @@ package com.miniasaaslw.adapters.notification
 
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.entity.enums.notification.NotificationType
+import com.miniasaaslw.utils.DateUtils
 import com.miniasaaslw.utils.MessageUtils
 
-import java.text.SimpleDateFormat
-
 class NotificationAdapter {
-
-    private static final DATE_FORMAT = new SimpleDateFormat("dd 'de' MMM 'de' yyyy")
 
     Payment payment
 
@@ -25,7 +22,7 @@ class NotificationAdapter {
         this.title = MessageUtils.getMessage("notification.payment.saved.title")
         this.message = MessageUtils.getMessage("notification.payment.saved.message", [
                 payment.value.toString(),
-                DATE_FORMAT.format(payment.lastUpdated)
+                DateUtils.DATE_PARSER_FORMAT.format(payment.lastUpdated)
         ])
         this.url = "/payment/show/${payment.id}"
         this.type = NotificationType.INFO
@@ -48,7 +45,7 @@ class NotificationAdapter {
         this.title = MessageUtils.getMessage("notification.payment.deleted.title")
         this.message = MessageUtils.getMessage("notification.payment.deleted.message", [
                 payment.value.toString(),
-                DATE_FORMAT.format(payment.lastUpdated)
+                DateUtils.DATE_PARSER_FORMAT.format(payment.lastUpdated)
         ])
         this.url = "/payment/show/${payment.id}"
         this.type = NotificationType.INFO
@@ -62,7 +59,7 @@ class NotificationAdapter {
         this.message = MessageUtils.getMessage("notification.payment.received.message", [
                 payment.payer.name,
                 payment.value.toString(),
-                DATE_FORMAT.format(payment.lastUpdated)
+                DateUtils.DATE_PARSER_FORMAT.format(payment.lastUpdated)
         ])
         this.url = "/payment/show/${payment.id}"
         this.type = NotificationType.INFO
@@ -75,7 +72,7 @@ class NotificationAdapter {
         this.title = MessageUtils.getMessage("notification.payment.overdue.title")
         this.message = MessageUtils.getMessage("notification.payment.overdue.message", [
                 payment.payer.name,
-                DATE_FORMAT.format(payment.dueDate)
+                DateUtils.DATE_PARSER_FORMAT.format(payment.dueDate)
         ])
         this.url = "/payment/show/${payment.id}"
         this.type = NotificationType.INFO
