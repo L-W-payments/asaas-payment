@@ -1,17 +1,13 @@
 package com.miniasaaslw.service.payer
 
+import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
-import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.entity.enums.PersonType
+import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.payer.PayerRepository
-import com.miniasaaslw.utils.CepUtils
-import com.miniasaaslw.utils.CpfCnpjUtils
-import com.miniasaaslw.utils.EmailUtils
-import com.miniasaaslw.utils.MessageUtils
-import com.miniasaaslw.utils.NameUtils
-import com.miniasaaslw.utils.PhoneUtils
-import com.miniasaaslw.utils.StateUtils
+import com.miniasaaslw.repository.payment.PaymentRepository
+import com.miniasaaslw.utils.*
 
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -46,9 +42,11 @@ class PayerService {
     public void delete(Long id) {
         Payer payer = find(id)
 
-        if (payer.deleted) {
-            throw new RuntimeException(MessageUtils.getMessage("payer.errors.delete.unknown"))
-        }
+        if (payer.deleted) throw new RuntimeException(MessageUtils.getMessage("payer.errors.delete.unknown"))
+
+        Boolean hasPendingPayments = PaymentRepository.query([payerId: id, paymentStatus: PaymentStatus.PENDING]).exists()
+
+        if (hasPendingPayments) throw new RuntimeException(MessageUtils.getMessage("payer.errors.delete.pendingPayments"))
 
         payer.deleted = true
 

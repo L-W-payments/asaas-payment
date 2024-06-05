@@ -29,6 +29,10 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
                 eq("customer.id", search.customerId)
             }
 
+            if (search.containsKey("payerId")) {
+                eq("payer.id", search.payerId)
+            }
+
             if (search.containsKey("paymentStatus")) {
                 eq("paymentStatus", PaymentStatus.valueOf(search.paymentStatus.toString()))
             }
@@ -56,6 +60,7 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
     List<String> listAllowedFilters() {
         return [
                 "customerId",
+                "payerId",
                 "paymentStatus",
                 "dueDate[lt]",
                 "publicId",
