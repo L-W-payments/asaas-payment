@@ -1,7 +1,7 @@
 package com.miniasaaslw.service.emailnotification
 
 import com.miniasaaslw.adapters.emailnotification.EmailNotificationAdapter
-import com.miniasaaslw.domain.emailNotification.EmailNotification
+import com.miniasaaslw.domain.emailnotification.EmailNotification
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -14,7 +14,7 @@ class EmailNotificationService {
         emailNotification.subject = emailNotificationAdapter.subject
         emailNotification.url = emailNotificationAdapter.url
         emailNotification.body = emailNotificationAdapter.body
-        emailNotification.sent = emailNotificationAdapter.isSent
+        emailNotification.sent = emailNotificationAdapter.sent
 
         emailNotification.save(failOnError: true)
     }
