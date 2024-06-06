@@ -10,7 +10,7 @@
             ${payer.email}
         </atlas-table-col>
         <atlas-table-col>
-            <g:formatDate date="${payer.dateCreated}" format="dd/MM/yyyy"/>
+            ${dateTimeTagLib.dateTime(date: payer.dateCreated)}
         </atlas-table-col>
         <atlas-button-group slot="actions" group-after="2">
             <atlas-icon-button
