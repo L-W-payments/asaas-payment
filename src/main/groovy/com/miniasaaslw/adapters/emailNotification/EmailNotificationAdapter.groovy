@@ -14,7 +14,7 @@ class EmailNotificationAdapter {
 
     String body
 
-    Boolean isSent
+    Boolean sent
 
     public EmailNotificationAdapter buildPayerEmailPaymentCreated(Payment payment) {
         this.recipientEmail = payment.payer.email
@@ -25,7 +25,7 @@ class EmailNotificationAdapter {
                 payment.value.toString(),
                 DateUtils.formatDate(payment.dueDate)
         ])
-        this.isSent = false
+        this.sent = false
 
         return this
     }
@@ -39,7 +39,7 @@ class EmailNotificationAdapter {
                 payment.value.toString(),
                 DateUtils.formatDate(payment.dueDate)
         ])
-        this.isSent = false
+        this.sent = false
 
         return this
     }
@@ -53,7 +53,7 @@ class EmailNotificationAdapter {
                 payment.value.toString(),
                 DateUtils.formatDate(payment.dueDate)
         ])
-        this.isSent = false
+        this.sent = false
 
         return this
     }
@@ -67,7 +67,7 @@ class EmailNotificationAdapter {
                 payment.value.toString(),
                 DateUtils.formatDate(payment.dueDate)
         ])
-        this.isSent = false
+        this.sent = false
 
         return this
     }
@@ -81,7 +81,7 @@ class EmailNotificationAdapter {
                 payment.value.toString(),
                 DateUtils.formatDate(payment.dueDate)
         ])
-        this.isSent = false
+        this.sent = false
 
         return this
     }
@@ -95,7 +95,7 @@ class EmailNotificationAdapter {
                 payment.value.toString(),
                 DateUtils.formatDate(payment.dueDate)
         ])
-        this.isSent = false
+        this.sent = false
 
         return this
     }
@@ -109,7 +109,7 @@ class EmailNotificationAdapter {
                 payment.value.toString(),
                 DateUtils.formatDate(payment.dueDate)
         ])
-        this.isSent = false
+        this.sent = false
 
         return this
     }
@@ -123,7 +123,7 @@ class EmailNotificationAdapter {
                 payment.value.toString(),
                 DateUtils.formatDate(payment.dueDate)
         ])
-        this.isSent = false
+        this.sent = false
 
         return this
     }
