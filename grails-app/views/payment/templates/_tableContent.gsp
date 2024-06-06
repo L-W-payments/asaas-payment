@@ -1,6 +1,6 @@
 <g:each var="payment" in="${paymentList}">
     <atlas-table-row
-            data-delete-url="${createLink(controller: 'payment', action: 'fetchDelete', id: payment.id)}"
+            data-action-url="${createLink(controller: 'payment', action: "${payment.deleted ? 'restore' : 'fetchDelete'}", id: payment.id)}"
     >
         <atlas-table-col>
             ${payment.payer.name}
@@ -20,7 +20,7 @@
         <atlas-button-group slot="actions" group-after="2">
             <g:if test="${payment.deleted}">
                 <atlas-icon-button
-                        data-action=""
+                        data-action="restore"
                         tooltip="Restaurar cobrança"
                         icon="refresh"
                         theme="warning"
