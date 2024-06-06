@@ -7,5 +7,5 @@ import com.miniasaaslw.repository.customer.CustomerRepository
  */
 class LoggedCustomer {
 
-    public static final CUSTOMER = CustomerRepository.query([:]).first()
+    public static final CUSTOMER = CustomerRepository.query([:]).get()
 }
