@@ -33,10 +33,10 @@ class PaymentController extends BaseController {
             paymentService.restore(id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [messages: runtimeException.getMessage(), messageType: "error"]
+            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
             render([success: false] as JSON)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: message(code: "payment.errors.restore.unknown"), messageType: "error"]
+            flash.messageInfo = [messages: [message(code: "payment.errors.restore.unknown")], messageType: "error"]
             render([success: false] as JSON)
         }
     }
@@ -56,15 +56,15 @@ class PaymentController extends BaseController {
     def save() {
         try {
             paymentService.save(new PaymentAdapter(params))
-            flash.messageInfo = [messages: ["Cobrança criada com sucesso"], messageType: "success"]
-            redirect(action: "index")
+
+            flash.messageInfo = [messages: [message(code: "payment.save.success")], messageType: "success"]
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
-            redirect(uri: "/payment")
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "payment.errors.save.unknown")], messageType: "error"]
-            redirect(action: "index")
         }
+
+        redirect(action: "index")
     }
 
     def checkout() {
@@ -104,7 +104,7 @@ class PaymentController extends BaseController {
         } catch (RuntimeException runtimeException) {
             render([success: false, alert: runtimeException.getMessage()] as JSON)
         } catch (Exception exception) {
-            render([success: false, alert: "Erro ao deletar a cobrança"] as JSON)
+            render([success: false, alert: message(code: "payment.errors.delete.unknown")] as JSON)
         }
     }
 
@@ -116,10 +116,10 @@ class PaymentController extends BaseController {
 
             redirect(action: "show", id: publicId)
         } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [messages: runtimeException.getMessage(), messageType: "error"]
+            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
             redirect(action: "index")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: message(code: "payment.errors.pay"), messageType: "error"]
+            flash.messageInfo = [messages: [message(code: "payment.errors.pay")], messageType: "error"]
             redirect(action: "index")
         }
     }
@@ -132,21 +132,20 @@ class PaymentController extends BaseController {
 
             redirect(action: "show", id: id)
         } catch (RuntimeException runtimeException) {
-            flash.errors = [runtimeException.getMessage()]
+            flash.messageInfo = [runtimeException.getMessage()]
             redirect(action: "index")
         } catch (Exception exception) {
-            flash.errors = [message(code: "payment.errors.pay")]
+            flash.messageInfo = [messages: [message(code: "payment.errors.pay")], messageType: "error"]
             redirect(action: "index")
         }
     }
 
     def show() {
         try {
-            Long id = params.long("id")
-            return [payment: paymentService.find(LoggedCustomer.CUSTOMER, id)]
+            return [payment: paymentService.find(LoggedCustomer.CUSTOMER, params.long("id"))]
         } catch (Exception exception) {
-            flash.errors = ["Pagamento não encontrado!"]
-            redirect(uri: "/payment")
+            flash.messageInfo = [messages: [message(code: "payment.errors.notFound")], messageType: "error"]
+            redirect(action: "index")
         }
     }
 

@@ -1,7 +1,7 @@
 function PersonController(reference) {
     const postalCodeField = reference.querySelector("atlas-postal-code");
 
-    const viaCepURL = "https://viacep.com.br/ws/${cep}/json"
+    const viaCepURL = "https://viacep.com.br/ws/${postalCode}/json";
 
     const inputObject = {
         localidade: reference.querySelector("#city"),
@@ -30,7 +30,7 @@ function PersonController(reference) {
             return;
         }
 
-        const postalCodeData = await Atlas.request.get(viaCepURL.replace("${cep}", postalCodeField.getElementValue()));
+        const postalCodeData = await Atlas.request.get(viaCepURL.replace("${postalCode}", postalCodeField.getElementValue()));
 
         if (postalCodeData.erro) {
             populateInputAddress();

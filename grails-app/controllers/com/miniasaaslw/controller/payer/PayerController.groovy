@@ -31,13 +31,13 @@ class PayerController extends BaseController {
         try {
             Payer payer = payerService.update(id, new PayerAdapter(params))
 
-            redirect(action: 'show', params: [id: payer.id])
+            redirect(action: "show", params: [id: payer.id])
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
-            redirect(action: 'show', params: [id: id])
+            redirect(action: "show", params: [id: id])
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]
-            redirect(action: 'show', params: [id: id])
+            redirect(action: "show", params: [id: id])
         }
     }
 
@@ -45,13 +45,13 @@ class PayerController extends BaseController {
         try {
             Payer payer = payerService.save(new PayerAdapter(params))
 
-            redirect(action: 'show', params: [id: payer.id])
+            redirect(action: "show", params: [id: payer.id])
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
-            redirect(uri: "/payer")
+            redirect(action: "index")
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]
-            redirect(uri: "/payer")
+            redirect(action: "index")
         }
     }
 
@@ -81,7 +81,7 @@ class PayerController extends BaseController {
             flash.messageInfo = [messages: [message(code: "payer.errors.search.unknown")], messageType: "error"]
         }
 
-        redirect(uri: "/payer")
+        redirect(action: "index")
     }
 
     def delete() {
@@ -95,7 +95,7 @@ class PayerController extends BaseController {
             flash.messageInfo = [messages: [message(code: "payer.errors.delete.unknown")], messageType: "error"]
         }
 
-        redirect(uri: "/payer")
+        redirect(action: "index")
     }
 
     def list() {

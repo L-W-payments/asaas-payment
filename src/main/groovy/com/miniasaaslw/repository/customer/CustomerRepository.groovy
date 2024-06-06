@@ -1,15 +1,18 @@
 package com.miniasaaslw.repository.customer
 
 import com.miniasaaslw.domain.customer.Customer
-import com.miniasaaslw.repository.base.BaseEntityRepository
-import grails.gorm.DetachedCriteria
+import com.miniasaaslw.repository.Repository
 
-class CustomerRepository implements BaseEntityRepository {
+import grails.compiler.GrailsCompileStatic
 
-    public static DetachedCriteria<Customer> query(Map search) {
-        DetachedCriteria<Customer> query = Customer.where(defaultQuery(search))
+import org.grails.datastore.mapping.query.api.BuildableCriteria
 
-        query = query.where {
+@GrailsCompileStatic
+class CustomerRepository implements Repository<Customer, CustomerRepository> {
+
+    @Override
+    void buildCriteria() {
+        addCriteria {
             if (search.containsKey("cpfCnpj")) {
                 eq("cpfCnpj", search.cpfCnpj)
             }
@@ -18,8 +21,19 @@ class CustomerRepository implements BaseEntityRepository {
                 eq("email", search.email)
             }
         }
+    }
 
-        return query
+    @Override
+    BuildableCriteria getBuildableCriteria() {
+        return Customer.createCriteria()
+    }
+
+    @Override
+    List<String> listAllowedFilters() {
+        return [
+                "cpfCnpj",
+                "email"
+        ]
     }
 
     public static Boolean exists(Map search) {
