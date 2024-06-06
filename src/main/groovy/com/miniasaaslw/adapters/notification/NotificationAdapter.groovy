@@ -22,7 +22,7 @@ class NotificationAdapter {
         this.title = MessageUtils.getMessage("notification.payment.saved.title")
         this.message = MessageUtils.getMessage("notification.payment.saved.message", [
                 payment.value.toString(),
-                DateUtils.DATE_PARSER_FORMAT.format(payment.lastUpdated)
+                DateUtils.formatLongDate(payment.lastUpdated)
         ])
         this.url = "/payment/show/${payment.id}"
         this.type = NotificationType.INFO
@@ -45,7 +45,7 @@ class NotificationAdapter {
         this.title = MessageUtils.getMessage("notification.payment.deleted.title")
         this.message = MessageUtils.getMessage("notification.payment.deleted.message", [
                 payment.value.toString(),
-                DateUtils.DATE_PARSER_FORMAT.format(payment.lastUpdated)
+                DateUtils.formatLongDate(payment.lastUpdated)
         ])
         this.url = "/payment/show/${payment.id}"
         this.type = NotificationType.INFO
@@ -59,7 +59,7 @@ class NotificationAdapter {
         this.message = MessageUtils.getMessage("notification.payment.received.message", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.DATE_PARSER_FORMAT.format(payment.lastUpdated)
+                DateUtils.formatLongDate(payment.lastUpdated)
         ])
         this.url = "/payment/show/${payment.id}"
         this.type = NotificationType.INFO
@@ -72,7 +72,7 @@ class NotificationAdapter {
         this.title = MessageUtils.getMessage("notification.payment.overdue.title")
         this.message = MessageUtils.getMessage("notification.payment.overdue.message", [
                 payment.payer.name,
-                DateUtils.DATE_PARSER_FORMAT.format(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         this.url = "/payment/show/${payment.id}"
         this.type = NotificationType.INFO
