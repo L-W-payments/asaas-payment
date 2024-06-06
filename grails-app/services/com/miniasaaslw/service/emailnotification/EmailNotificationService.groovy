@@ -18,7 +18,7 @@ class EmailNotificationService {
         emailNotification.subject = emailNotificationAdapter.subject
         emailNotification.url = emailNotificationAdapter.url
         emailNotification.body = emailNotificationAdapter.body
-        emailNotification.sent = emailNotificationAdapter.isSent
+        emailNotification.sent = emailNotificationAdapter.sent
 
         emailNotification.save(failOnError: true)
     }
