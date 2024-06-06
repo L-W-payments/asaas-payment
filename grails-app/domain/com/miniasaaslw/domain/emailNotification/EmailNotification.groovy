@@ -12,6 +12,6 @@ class EmailNotification extends BaseEntity {
 
     String body
 
-    Boolean isSent
+    Boolean sent
 
 }
