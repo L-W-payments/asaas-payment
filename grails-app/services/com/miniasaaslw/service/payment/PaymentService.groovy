@@ -60,6 +60,10 @@ class PaymentService {
 
         payment.deleted = false
         payment.save(failOnError: true)
+
+        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentRestored(payment))
+        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentRestored(payment))
+
     }
 
     public void delete(Customer customer, Long paymentId) {
@@ -69,6 +73,10 @@ class PaymentService {
 
         payment.deleted = true
         payment.save(failOnError: true)
+
+        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentDeleted(payment))
+        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentDeleted(payment))
+
     }
 
     public List<Payment> list(Map search, Integer max, Integer offset) {
