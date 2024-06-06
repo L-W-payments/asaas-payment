@@ -9,4 +9,8 @@ class DateUtils {
     public static Date parseDate(String date){
         return new SimpleDateFormat(DATE_FORMAT).parse(date)
     }
+
+    public static String formatDate(Date date){
+        return new SimpleDateFormat(DATE_FORMAT).format(date)
+    }
 }
