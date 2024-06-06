@@ -1,5 +1,6 @@
 package com.miniasaaslw.service.payment
 
+import com.miniasaaslw.adapters.emailNotification.EmailNotificationAdapter
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
@@ -15,6 +16,8 @@ import groovy.time.TimeCategory
 @Transactional
 class PaymentService {
 
+    def emailNotificationService
+
     public Payment save(PaymentAdapter paymentAdapter) {
         Payment paymentData = validatePayment(paymentAdapter)
 
@@ -25,6 +28,9 @@ class PaymentService {
         Payment payment = buildPaymentProperties(new Payment(), paymentAdapter)
 
         payment.save(failOnError: true)
+
+        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentCreated(payment))
+        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentCreated(payment))
 
         return payment
     }
@@ -79,6 +85,10 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
+
+        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentPaid(payment))
+        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentCreated(payment))
+
     }
 
     public void updateToReceivedInCash(Customer customer, Long paymentId) {
@@ -89,6 +99,9 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.RECEIVED_IN_CASH
         payment.save(failOnError: true)
+
+        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentPaidInCash(payment))
+        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentPaidInCash(payment))
     }
 
     public void updateToOverdue(Long id) {
@@ -100,6 +113,9 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.OVERDUE
         payment.save(failOnError: true)
+
+        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentOverdue(payment))
+        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentOverdue(payment))
     }
 
     public void processOverduePayment() {
