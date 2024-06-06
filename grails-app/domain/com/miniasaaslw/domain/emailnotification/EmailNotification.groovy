@@ -1,4 +1,4 @@
-package com.miniasaaslw.domain.emailNotification
+package com.miniasaaslw.domain.emailnotification
 
 import com.miniasaaslw.entity.BaseEntity
 
