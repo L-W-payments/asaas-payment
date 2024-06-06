@@ -1,6 +1,6 @@
 package com.miniasaaslw.service.payment
 
-import com.miniasaaslw.adapters.emailNotification.EmailNotificationAdapter
+import com.miniasaaslw.adapters.emailnotification.EmailNotificationAdapter
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment

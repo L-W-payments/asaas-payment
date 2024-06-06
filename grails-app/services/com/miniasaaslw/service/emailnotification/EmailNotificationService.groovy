@@ -1,6 +1,6 @@
 package com.miniasaaslw.service.emailnotification
 
-import com.miniasaaslw.adapters.emailNotification.EmailNotificationAdapter
+import com.miniasaaslw.adapters.emailnotification.EmailNotificationAdapter
 import com.miniasaaslw.domain.emailNotification.EmailNotification
 import grails.gorm.transactions.Transactional
 
