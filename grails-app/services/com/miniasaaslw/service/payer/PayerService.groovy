@@ -44,9 +44,9 @@ class PayerService {
 
         if (payer.deleted) throw new RuntimeException(MessageUtils.getMessage("payer.errors.delete.unknown"))
 
-        Boolean hasPendingPayments = PaymentRepository.query([payerId: id, paymentStatus: PaymentStatus.PENDING]).exists()
+        Boolean hasActivePayments = PaymentRepository.query([payerId: id, "paymentStatus[in]": [PaymentStatus.PENDING, PaymentStatus.OVERDUE]]).exists()
 
-        if (hasPendingPayments) throw new RuntimeException(MessageUtils.getMessage("payer.errors.delete.pendingPayments"))
+        if (hasActivePayments) throw new RuntimeException(MessageUtils.getMessage("payer.errors.delete.pendingPayments"))
 
         payer.deleted = true
 
