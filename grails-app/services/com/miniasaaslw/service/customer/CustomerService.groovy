@@ -4,7 +4,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
 import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.repository.customer.CustomerRepository
-import com.miniasaaslw.utils.CepUtils
+import com.miniasaaslw.utils.PostalCodeUtils
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.EmailUtils
 import com.miniasaaslw.utils.MessageUtils
@@ -129,8 +129,8 @@ class CustomerService {
             customer.errors.reject("state", null, MessageUtils.getMessage("general.errors.state.invalid"))
         }
 
-        if (!CepUtils.validateCep(customerAdapter.cep)) {
-            customer.errors.reject("cep", null, MessageUtils.getMessage("general.errors.zipCode.invalid"))
+        if (!PostalCodeUtils.validatePostalCode(customerAdapter.postalCode)) {
+            customer.errors.reject("postalCode", null, MessageUtils.getMessage("general.errors.postalCode.invalid"))
         }
 
         if (CustomerRepository.exists([cpfCnpj: customerAdapter.cpfCnpj])) {
@@ -150,7 +150,7 @@ class CustomerService {
         customer.phone = customerAdapter.phone
         customer.cpfCnpj = customerAdapter.cpfCnpj
         customer.personType = customerAdapter.personType
-        customer.cep = customerAdapter.cep
+        customer.postalCode = customerAdapter.postalCode
         customer.number = customerAdapter.number
         customer.complement = customerAdapter.complement
         customer.country = customerAdapter.country

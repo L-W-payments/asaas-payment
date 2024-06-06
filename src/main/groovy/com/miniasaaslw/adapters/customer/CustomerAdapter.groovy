@@ -13,9 +13,9 @@ class CustomerAdapter {
 
     String cpfCnpj
 
-   PersonType personType
+    PersonType personType
 
-    String cep
+    String postalCode
 
     String number
 
@@ -38,7 +38,7 @@ class CustomerAdapter {
         this.phone = StringUtils.removeNonNumeric(params.phone as String)
         this.cpfCnpj = StringUtils.removeNonNumeric(params.cpfCnpj as String)
         this.personType = PersonType.valueOf(params.personType.toString().toUpperCase())
-        this.cep = StringUtils.removeNonNumeric(params.cep as String)
+        this.postalCode = StringUtils.removeNonNumeric(params.postalCode as String)
         this.number = params.number
         this.complement = params.complement
         this.country = params.country
