@@ -23,8 +23,8 @@ class PayerService {
         return PayerRepository.query(search).list(max: max, offset: offset)
     }
 
-    public Payer find(Long id) {
-        Payer payer = PayerRepository.query([id: id]).get()
+    public Payer find(Long customerId, Long id) {
+        Payer payer = PayerRepository.query([customerId: customerId, id: id]).get()
 
         if (!payer) throw new RuntimeException(MessageUtils.getMessage("payer.errors.notFound"))
 
@@ -43,8 +43,8 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
-    public void delete(Long id) {
-        Payer payer = find(id)
+    public void delete(Long customerId, Long id) {
+        Payer payer = find(customerId, id)
 
         if (payer.deleted) {
             throw new RuntimeException(MessageUtils.getMessage("payer.errors.delete.unknown"))
@@ -55,14 +55,14 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
-    public Payer update(Long id, PayerAdapter payerAdapter) {
+    public Payer update(Long customerId, Long id, PayerAdapter payerAdapter) {
         Payer payerValues = validatePayerParams(payerAdapter)
 
         if (payerValues.hasErrors()) {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = find(id)
+        Payer payer = find(customerId, id)
 
         payer = buildPayerProperties(payer, payerAdapter, payer.customer)
         payer.save(failOnError: true)
