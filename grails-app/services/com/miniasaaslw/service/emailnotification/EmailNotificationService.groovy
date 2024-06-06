@@ -49,7 +49,7 @@ class EmailNotificationService {
         mailService.sendMail {
             to emailNotification.recipientEmail
             subject emailNotification.subject
-            text emailNotification.body
+            text emailNotification.body + " " + emailNotification.url
         }
 
         updateToSent(emailNotification)

@@ -6,6 +6,8 @@ import com.miniasaaslw.utils.MessageUtils
 
 class EmailNotificationAdapter {
 
+    private static final String BASE_URL = "localhost:8080"
+
     String recipientEmail
 
     String subject
@@ -19,7 +21,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildPayerEmailPaymentCreated(Payment payment) {
         this.recipientEmail = payment.payer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.created")
-        this.url = "/payment/checkout/${payment.publicId}"
+        this.url = BASE_URL + "/payment/checkout/${payment.publicId}"
         this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.created", [
                 payment.customer.name,
                 payment.value.toString(),
@@ -33,7 +35,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildPayerEmailPaymentPaid(Payment payment) {
         this.recipientEmail = payment.payer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.paid")
-        this.url = "/payment/checkout/${payment.publicId}"
+        this.url = BASE_URL + "/payment/checkout/${payment.publicId}"
         this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.paid", [
                 payment.customer.name,
                 payment.value.toString(),
@@ -47,7 +49,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildPayerEmailPaymentPaidInCash(Payment payment) {
         this.recipientEmail = payment.payer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.paidInCash")
-        this.url = "/payment/checkout/${payment.publicId}"
+        this.url = BASE_URL + "/payment/checkout/${payment.publicId}"
         this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.paidInCash", [
                 payment.customer.name,
                 payment.value.toString(),
@@ -61,7 +63,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildPayerEmailPaymentOverdue(Payment payment) {
         this.recipientEmail = payment.payer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.overdue")
-        this.url = "/payment/checkout/${payment.publicId}"
+        this.url = BASE_URL + "/payment/checkout/${payment.publicId}"
         this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.overdue", [
                 payment.customer.name,
                 payment.value.toString(),
@@ -75,7 +77,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildPayerEmailPaymentDeleted(Payment payment) {
         this.recipientEmail = payment.payer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.deleted")
-        this.url = "/payment/checkout/${payment.publicId}"
+        this.url = BASE_URL + "/payment/checkout/${payment.publicId}"
         this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.deleted", [
                 payment.customer.name,
                 payment.value.toString(),
@@ -89,7 +91,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildPayerEmailPaymentRestored(Payment payment) {
         this.recipientEmail = payment.payer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.restored")
-        this.url = "/payment/checkout/${payment.publicId}"
+        this.url = BASE_URL + "/payment/checkout/${payment.publicId}"
         this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.restored", [
                 payment.customer.name,
                 payment.value.toString(),
@@ -103,7 +105,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildCustomerEmailPaymentCreated(Payment payment) {
         this.recipientEmail = payment.customer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.created")
-        this.url = "/payment/show/${payment.id}"
+        this.url = BASE_URL + "/payment/show/${payment.id}"
         this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.created", [
                 payment.payer.name,
                 payment.value.toString(),
@@ -117,7 +119,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildCustomerEmailPaymentPaid(Payment payment) {
         this.recipientEmail = payment.customer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.paid")
-        this.url = "/payment/show/${payment.id}"
+        this.url = BASE_URL + "/payment/show/${payment.id}"
         this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.paid", [
                 payment.payer.name,
                 payment.value.toString(),
@@ -131,7 +133,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildCustomerEmailPaymentPaidInCash(Payment payment) {
         this.recipientEmail = payment.customer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.paidInCash")
-        this.url = "/payment/show/${payment.id}"
+        this.url = BASE_URL + "/payment/show/${payment.id}"
         this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.paidInCash", [
                 payment.payer.name,
                 payment.value.toString(),
@@ -145,7 +147,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildCustomerEmailPaymentOverdue(Payment payment) {
         this.recipientEmail = payment.customer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.overdue")
-        this.url = "/payment/show/${payment.id}"
+        this.url = BASE_URL + "/payment/show/${payment.id}"
         this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.overdue", [
                 payment.payer.name,
                 payment.value.toString(),
@@ -159,7 +161,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildCustomerEmailPaymentDeleted(Payment payment) {
         this.recipientEmail = payment.customer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.deleted")
-        this.url = "/payment/show/${payment.id}"
+        this.url = BASE_URL + "/payment/show/${payment.id}"
         this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.deleted", [
                 payment.payer.name,
                 payment.value.toString(),
@@ -173,7 +175,7 @@ class EmailNotificationAdapter {
     public EmailNotificationAdapter buildCustomerEmailPaymentRestored(Payment payment) {
         this.recipientEmail = payment.customer.email
         this.subject = MessageUtils.getMessage("emailNotification.subject.payment.restored")
-        this.url = "/payment/show/${payment.id}"
+        this.url = BASE_URL + "/payment/show/${payment.id}"
         this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.restored", [
                 payment.payer.name,
                 payment.value.toString(),
