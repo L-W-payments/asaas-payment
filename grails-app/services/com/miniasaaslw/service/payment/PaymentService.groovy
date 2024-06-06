@@ -1,11 +1,10 @@
 package com.miniasaaslw.service.payment
 
 import com.miniasaaslw.adapters.payment.PaymentAdapter
-import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.payment.PaymentRepository
+import com.miniasaaslw.utils.MessageUtils
 
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -37,16 +36,16 @@ class PaymentService {
         return payment
     }
 
-    public Payment find(Customer customer, Long id) {
-        Payment payment = PaymentRepository.query([id: id, customerId: customer.id]).get()
+    public Payment find(Long customerId, Long id) {
+        Payment payment = PaymentRepository.query([id: id, customerId: customerId]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
         return payment
     }
 
-    public void restore(Long id) {
-        Payment payment = PaymentRepository.query([id: id, includeDeleted: true]).get()
+    public void restore(Long customerId, Long id) {
+        Payment payment = PaymentRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
@@ -56,10 +55,10 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    public void delete(Customer customer, Long paymentId) {
-        Payment payment = find(customer, paymentId)
+    public void delete(Long customerId, Long paymentId) {
+        Payment payment = find(customerId, paymentId)
 
-        if (payment.deleted) return
+        if (payment.deleted) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notDeleted"))
 
         payment.deleted = true
         payment.save(failOnError: true)
@@ -81,8 +80,8 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    public void updateToReceivedInCash(Customer customer, Long paymentId) {
-        Payment payment = find(customer, paymentId)
+    public void updateToReceivedInCash(Long customerId, Long paymentId) {
+        Payment payment = find(customerId, paymentId)
 
         Payment validatedPayment = validateUpdateToReceivedInCash(payment)
         if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("payment.errors.update.unknown"), validatedPayment.errors)
