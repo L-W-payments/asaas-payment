@@ -1,4 +1,4 @@
-package com.miniasaaslw.service.emailNotification
+package com.miniasaaslw.service.emailnotification
 
 import com.miniasaaslw.adapters.emailNotification.EmailNotificationAdapter
 import com.miniasaaslw.domain.emailNotification.EmailNotification
