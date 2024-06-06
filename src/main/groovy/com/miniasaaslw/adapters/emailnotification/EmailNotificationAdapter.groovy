@@ -1,4 +1,4 @@
-package com.miniasaaslw.adapters.emailNotification
+package com.miniasaaslw.adapters.emailnotification
 
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.utils.DateUtils
