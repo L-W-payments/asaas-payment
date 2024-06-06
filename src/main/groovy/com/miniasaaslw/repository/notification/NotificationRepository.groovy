@@ -1,20 +1,34 @@
 package com.miniasaaslw.repository.notification
 
 import com.miniasaaslw.domain.notification.Notification
-import com.miniasaaslw.repository.base.BaseEntityRepository
-import grails.gorm.DetachedCriteria
+import com.miniasaaslw.repository.Repository
 
-class NotificationRepository implements BaseEntityRepository {
+import grails.compiler.GrailsCompileStatic
 
-    public static DetachedCriteria<Notification> query(Map search) {
-        DetachedCriteria<Notification> query = Notification.where(defaultQuery(search))
+import org.grails.datastore.mapping.query.api.BuildableCriteria
 
-        query = query.where {
+@GrailsCompileStatic
+class NotificationRepository implements Repository<Notification, NotificationRepository> {
+
+    @Override
+    void buildCriteria() {
+        addCriteria {
             if (search.containsKey("customerId")) {
-                eq("customer.id", Long.valueOf(search.customerId))
+                eq("customer.id", search.customerId)
             }
         }
+    }
 
-        return query
+    @Override
+    List<String> listAllowedFilters() {
+        return [
+                "customerId"
+        ]
+    }
+
+
+    @Override
+    BuildableCriteria getBuildableCriteria() {
+        return Notification.createCriteria()
     }
 }
