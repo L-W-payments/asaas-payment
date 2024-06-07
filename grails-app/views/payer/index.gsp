@@ -11,13 +11,6 @@
         <g:render template="/utils/messages" model="${messageInfo}"/>
     </g:if>
     <atlas-form action="${createLink(controller: 'payer', action: 'save')}">
-        <atlas-section header="Cliente">
-            <atlas-select name="customerId" label="Selecione um cliente" placeholder="Selecione uma opção" required>
-                <g:each var="customer" in="${customers}">
-                    <atlas-option label="${customer.name}" value="${customer.id}"></atlas-option>
-                </g:each>
-            </atlas-select>
-        </atlas-section>
         <atlas-input hidden name="country" value="Brasil"></atlas-input>
         <g:render template="/templates/basePersonForm"
                   model="${[title: "Cadastro de Pagador"]}"></g:render>
