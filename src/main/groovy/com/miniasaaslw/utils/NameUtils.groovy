@@ -9,7 +9,7 @@ class NameUtils {
 
         if (name.endsWith(" ")) return false
 
-        if (!name.matches('^[a-zA-Z0-9 ]+$')) return false
+        if (!StringUtils.removeAccents(name).matches('^[a-zA-Z0-9 ]+$')) return false
 
         if (name.split(" ").length < 2) return false
 

@@ -1,13 +1,13 @@
 <%@ page import="com.miniasaaslw.entity.enums.payment.PaymentType" %>
-<%@ page import="com.miniasaaslw.entity.enums.payment.PaymentStatus" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta name="layout" content="main" />
   <title>Cobranças - Asaas</title>
+  <asset:javascript src="PaymentController.js"/>
 </head>
 <body page-title="Visualizar cobrança">
-      <atlas-form-panel>
+      <atlas-form-panel class="js-show-payment-panel">
         <g:if test="${payment.paymentStatus.isPending()}">
           <atlas-button slot="actions"
                         href="${createLink(
@@ -19,12 +19,12 @@
         </g:if>
 
         <atlas-button slot="actions"
+                      class="js-delete-button"
+                      data-delete-url="${createLink(controller: 'payment', action: 'delete', id: payment.id)}"
+                      data-redirect-url="${createLink(controller: 'payment', action: 'list')}"
                       type="outlined"
                       theme="danger"
-                      href="${createLink(
-                              controller: 'payment',
-                              action: 'delete',
-                              id: payment.id)}"
+                      data-action="delete"
                       description="Apagar">
         </atlas-button>
         <atlas-layout gap="4">
@@ -68,18 +68,18 @@
             <atlas-grid>
               <atlas-row>
                 <atlas-col lg="6" md="6">
-                  <atlas-selection-card name="paymentType" label="Pix" value="${PaymentType.PIX}" type="radio" ${payment.paymentType.isPix() ? 'checked' : '' } ></atlas-selection-card>
+                  <atlas-selection-card name="billingType" label="Pix" value="${BillingType.PIX}" type="radio" ${payment.billingType.isPix() ? 'checked' : '' } ></atlas-selection-card>
                 </atlas-col>
                 <atlas-col lg="6" md="6">
-                  <atlas-selection-card name="paymentType" label="Boleto" value="${PaymentType.BANK_SLIP}" type="radio" ${payment.paymentType.isBankSlip() ? 'checked' : '' } ></atlas-selection-card>
+                  <atlas-selection-card name="billingType" label="Boleto" value="${BillingType.BANK_SLIP}" type="radio" ${payment.billingType.isBankSlip() ? 'checked' : '' } ></atlas-selection-card>
                 </atlas-col>
               </atlas-row>
               <atlas-row>
                   <atlas-col lg="6" md="6">
-                    <atlas-selection-card name="paymentType" label="Cartão de Crédito" value="${PaymentType.CREDIT_CARD}" type="radio" ${payment.paymentType.isCreditCard() ? 'checked' : '' }></atlas-selection-card>
+                    <atlas-selection-card name="billingType" label="Cartão de Crédito" value="${BillingType.CREDIT_CARD}" type="radio" ${payment.billingType.isCreditCard() ? 'checked' : '' }></atlas-selection-card>
                   </atlas-col>
                 <atlas-col lg="6" md="6">
-                  <atlas-selection-card name="paymentType" label="Cartão de Débito" value="${PaymentType.DEBIT_CARD}" type="radio" ${payment.paymentType.isDebitCard() ? 'checked' : '' }></atlas-selection-card>
+                  <atlas-selection-card name="billingType" label="Cartão de Débito" value="${BillingType.DEBIT_CARD}" type="radio" ${payment.billingType.isDebitCard() ? 'checked' : '' }></atlas-selection-card>
                 </atlas-col>
               </atlas-row>
             </atlas-grid>

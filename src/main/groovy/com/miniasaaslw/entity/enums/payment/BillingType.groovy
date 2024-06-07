@@ -1,6 +1,7 @@
 package com.miniasaaslw.entity.enums.payment
 
-enum PaymentType {
+enum BillingType {
+
     BANK_SLIP,
     PIX,
     CREDIT_CARD,

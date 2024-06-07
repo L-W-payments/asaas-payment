@@ -6,6 +6,7 @@ import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.utils.LoggedCustomer
+
 import grails.converters.JSON
 import grails.validation.ValidationException
 
@@ -29,7 +30,7 @@ class PayerController extends BaseController {
         Long id = params.long("id")
 
         try {
-            Payer payer = payerService.update(id, new PayerAdapter(params))
+            Payer payer = payerService.update(LoggedCustomer.CUSTOMER.id, id, new PayerAdapter(params))
 
             redirect(action: "show", params: [id: payer.id])
         } catch (ValidationException validationException) {
@@ -74,7 +75,7 @@ class PayerController extends BaseController {
         try {
             Long id = params.long("id")
 
-            return [payer: payerService.find(id)]
+            return [payer: payerService.find(LoggedCustomer.CUSTOMER.id, id)]
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
         } catch (Exception exception) {
@@ -88,22 +89,21 @@ class PayerController extends BaseController {
         try {
             Long id = params.long("id")
 
-            payerService.delete(id)
+            payerService.delete(LoggedCustomer.CUSTOMER.id, id)
+            render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payer.errors.delete.unknown")], messageType: "error"]
+            render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
         }
-
-        redirect(action: "index")
     }
 
     def list() {
-        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [:])]
+        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [customerId: LoggedCustomer.CUSTOMER.id])]
     }
 
     def loadTableContent() {
-        Map search = [:]
+        Map search = [customerId: LoggedCustomer.CUSTOMER.id]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.name) search."name[like]" = params.name
@@ -114,19 +114,5 @@ class PayerController extends BaseController {
 
         render([totalRecords: totalRecords, content: content, success: true] as JSON)
     }
-
-    def fetchDelete() {
-        try {
-            Long id = params.long("id")
-
-            payerService.delete(id)
-            render([success: true] as JSON)
-        } catch (RuntimeException runtimeException) {
-            render([success: false, alert: runtimeException.getMessage()] as JSON)
-        } catch (Exception exception) {
-            render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
-        }
-    }
-
 
 }

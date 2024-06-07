@@ -1,6 +1,6 @@
 <g:each var="payment" in="${paymentList}">
     <atlas-table-row
-            data-action-url="${createLink(controller: 'payment', action: "${payment.deleted ? 'restore' : 'fetchDelete'}", id: payment.id)}"
+            data-action-url="${createLink(controller: 'payment', action: "${payment.deleted ? 'restore' : 'delete'}", id: payment.id)}"
     >
         <atlas-table-col>
             ${payment.payer.name}
@@ -9,7 +9,7 @@
             ${formatNumber(number: payment.value, type: "currency", locale: "pt_BR")}
         </atlas-table-col>
         <atlas-table-col>
-            ${message(code: "paymentType.${payment.paymentType}.label")}
+            ${message(code: "billingType.${payment.billingType}.label")}
         </atlas-table-col>
         <atlas-table-col>
             ${message(code: "paymentStatus.${payment.paymentStatus}.label")}
