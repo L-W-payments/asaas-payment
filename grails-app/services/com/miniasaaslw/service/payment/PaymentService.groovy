@@ -2,7 +2,6 @@ package com.miniasaaslw.service.payment
 
 import com.miniasaaslw.adapters.notification.NotificationAdapter
 import com.miniasaaslw.adapters.payment.PaymentAdapter
-import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.utils.LoggedCustomer
 import com.miniasaaslw.utils.MessageUtils
@@ -43,8 +42,8 @@ class PaymentService {
         return payment
     }
 
-    public Payment find(Customer customer, Long id) {
-        Payment payment = PaymentRepository.query([id: id, customerId: customer.id]).get()
+    public Payment find(Long customerId, Long id) {
+        Payment payment = PaymentRepository.query([id: id, customerId: customerId]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
@@ -64,10 +63,10 @@ class PaymentService {
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentRestored(payment))
     }
 
-    public void delete(Customer customer, Long paymentId) {
-        Payment payment = find(customer, paymentId)
+    public void delete(Long customerId, Long paymentId) {
+        Payment payment = find(customerId, paymentId)
 
-        if (payment.deleted) return
+        if (payment.deleted) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notDeleted"))
 
         payment.deleted = true
         payment.save(failOnError: true)
@@ -93,8 +92,8 @@ class PaymentService {
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
     }
 
-    public void updateToReceivedInCash(Customer customer, Long paymentId) {
-        Payment payment = find(customer, paymentId)
+    public void updateToReceivedInCash(Long customerId, Long paymentId) {
+        Payment payment = find(customerId, paymentId)
 
         Payment validatedPayment = validateUpdateToReceivedInCash(payment)
         if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("payment.errors.update.unknown"), validatedPayment.errors)
