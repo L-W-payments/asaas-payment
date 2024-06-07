@@ -1,5 +1,6 @@
 package com.miniasaaslw.utils
 
+import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.repository.customer.CustomerRepository
 
 /**
@@ -7,5 +8,5 @@ import com.miniasaaslw.repository.customer.CustomerRepository
  */
 class LoggedCustomer {
 
-    public static final CUSTOMER = CustomerRepository.query([:]).get()
+    public static final Customer CUSTOMER = CustomerRepository.query([:]).get()
 }
