@@ -16,172 +16,196 @@ class EmailNotificationAdapter {
 
     Boolean sent
 
-    public EmailNotificationAdapter buildPayerEmailPaymentCreated(Payment payment) {
-        this.recipientEmail = payment.payer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.created")
-        this.url = "/payment/checkout/${payment.publicId}"
-        this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.created", [
+    public static EmailNotificationAdapter buildPayerEmailPaymentCreated(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.payer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.created")
+        emailNotificationAdapter.url = "/payment/checkout/${payment.publicId}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.created", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildPayerEmailPaymentPaid(Payment payment) {
-        this.recipientEmail = payment.payer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.paid")
-        this.url = "/payment/checkout/${payment.publicId}"
-        this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.paid", [
+    public static EmailNotificationAdapter buildPayerEmailPaymentPaid(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.payer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.paid")
+        emailNotificationAdapter.url = "/payment/checkout/${payment.publicId}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.paid", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildPayerEmailPaymentPaidInCash(Payment payment) {
-        this.recipientEmail = payment.payer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.paidInCash")
-        this.url = "/payment/checkout/${payment.publicId}"
-        this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.paidInCash", [
+    public static EmailNotificationAdapter buildPayerEmailPaymentPaidInCash(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.payer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.paidInCash")
+        emailNotificationAdapter.url = "/payment/checkout/${payment.publicId}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.paidInCash", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildPayerEmailPaymentOverdue(Payment payment) {
-        this.recipientEmail = payment.payer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.overdue")
-        this.url = "/payment/checkout/${payment.publicId}"
-        this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.overdue", [
+    public static EmailNotificationAdapter buildPayerEmailPaymentOverdue(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.payer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.overdue")
+        emailNotificationAdapter.url = "/payment/checkout/${payment.publicId}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.overdue", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildPayerEmailPaymentDeleted(Payment payment) {
-        this.recipientEmail = payment.payer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.deleted")
-        this.url = "/payment/checkout/${payment.publicId}"
-        this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.deleted", [
+    public static EmailNotificationAdapter buildPayerEmailPaymentDeleted(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.payer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.deleted")
+        emailNotificationAdapter.url = "/payment/checkout/${payment.publicId}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.deleted", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildPayerEmailPaymentRestored(Payment payment) {
-        this.recipientEmail = payment.payer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.restored")
-        this.url = "/payment/checkout/${payment.publicId}"
-        this.body = MessageUtils.getMessage("emailNotification.payer.body.payment.restored", [
+    public static EmailNotificationAdapter buildPayerEmailPaymentRestored(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.payer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.restored")
+        emailNotificationAdapter.url = "/payment/checkout/${payment.publicId}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.restored", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildCustomerEmailPaymentCreated(Payment payment) {
-        this.recipientEmail = payment.customer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.created")
-        this.url = "/payment/show/${payment.id}"
-        this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.created", [
+    public static EmailNotificationAdapter buildCustomerEmailPaymentCreated(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.customer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.created")
+        emailNotificationAdapter.url = "/payment/show/${payment.id}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.created", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildCustomerEmailPaymentPaid(Payment payment) {
-        this.recipientEmail = payment.customer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.paid")
-        this.url = "/payment/show/${payment.id}"
-        this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.paid", [
+    public static EmailNotificationAdapter buildCustomerEmailPaymentPaid(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.customer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.paid")
+        emailNotificationAdapter.url = "/payment/show/${payment.id}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.paid", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildCustomerEmailPaymentPaidInCash(Payment payment) {
-        this.recipientEmail = payment.customer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.paidInCash")
-        this.url = "/payment/show/${payment.id}"
-        this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.paidInCash", [
+    public static EmailNotificationAdapter buildCustomerEmailPaymentPaidInCash(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.customer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.paidInCash")
+        emailNotificationAdapter.url = "/payment/show/${payment.id}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.paidInCash", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildCustomerEmailPaymentOverdue(Payment payment) {
-        this.recipientEmail = payment.customer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.overdue")
-        this.url = "/payment/show/${payment.id}"
-        this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.overdue", [
+    public static EmailNotificationAdapter buildCustomerEmailPaymentOverdue(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.customer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.overdue")
+        emailNotificationAdapter.url = "/payment/show/${payment.id}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.overdue", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildCustomerEmailPaymentDeleted(Payment payment) {
-        this.recipientEmail = payment.customer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.deleted")
-        this.url = "/payment/show/${payment.id}"
-        this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.deleted", [
+    public static EmailNotificationAdapter buildCustomerEmailPaymentDeleted(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.customer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.deleted")
+        emailNotificationAdapter.url = "/payment/show/${payment.id}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.deleted", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
-    public EmailNotificationAdapter buildCustomerEmailPaymentRestored(Payment payment) {
-        this.recipientEmail = payment.customer.email
-        this.subject = MessageUtils.getMessage("emailNotification.subject.payment.restored")
-        this.url = "/payment/show/${payment.id}"
-        this.body = MessageUtils.getMessage("emailNotification.customer.body.payment.restored", [
+    public static EmailNotificationAdapter buildCustomerEmailPaymentRestored(Payment payment) {
+        EmailNotificationAdapter emailNotificationAdapter = new EmailNotificationAdapter()
+
+        emailNotificationAdapter.recipientEmail = payment.customer.email
+        emailNotificationAdapter.subject = MessageUtils.getMessage("emailNotification.subject.payment.restored")
+        emailNotificationAdapter.url = "/payment/show/${payment.id}"
+        emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.restored", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
-        this.sent = false
+        emailNotificationAdapter.sent = false
 
-        return this
+        return emailNotificationAdapter
     }
 
 }
