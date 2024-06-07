@@ -1,4 +1,4 @@
-<%@ page import="com.miniasaaslw.entity.enums.payment.PaymentType" %>
+<%@ page import="com.miniasaaslw.entity.enums.payment.BillingType" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -43,18 +43,18 @@
               <atlas-grid>
                 <atlas-row>
                   <atlas-col lg="6" md="6">
-                    <atlas-selection-card name="paymentType" label="Pix" value="${PaymentType.PIX}" collapsible type="radio">O pagamento realizado através do sistema Pix é creditado na conta do destinatário de forma imediata, proporcionando uma transferência instantânea e segura dos valores, sem a necessidade de aguardar prazos adicionais para a disponibilização dos recursos.</atlas-selection-card>
+                    <atlas-selection-card name="billingType" label="Pix" value="${BillingType.PIX}" collapsible type="radio">O pagamento realizado através do sistema Pix é creditado na conta do destinatário de forma imediata, proporcionando uma transferência instantânea e segura dos valores, sem a necessidade de aguardar prazos adicionais para a disponibilização dos recursos.</atlas-selection-card>
                   </atlas-col>
                   <atlas-col lg="6" md="6">
-                    <atlas-selection-card name="paymentType" label="Boleto" value="${PaymentType.BANK_SLIP}" collapsible type="radio">O pagamento efetuado por meio de boleto bancário, após a sua quitação, pode levar até três dias úteis para ser processado e compensado, momento em que o valor será creditado na conta do destinatário, conforme os prazos estabelecidos pelas instituições financeiras.</atlas-selection-card>
+                    <atlas-selection-card name="billingType" label="Boleto" value="${BillingType.BANK_SLIP}" collapsible type="radio">O pagamento efetuado por meio de boleto bancário, após a sua quitação, pode levar até três dias úteis para ser processado e compensado, momento em que o valor será creditado na conta do destinatário, conforme os prazos estabelecidos pelas instituições financeiras.</atlas-selection-card>
                   </atlas-col>
                 </atlas-row>
                 <atlas-row>
                   <atlas-col lg="6" md="6">
-                    <atlas-selection-card name="paymentType" label="Cartão de Crédito" value="${PaymentType.CREDIT_CARD}" collapsible type="radio">O pagamento realizado com cartão de crédito é processado pela administradora e o valor pode ser creditado na conta do destinatário em um prazo de 1 a 30 dias, conforme as condições acordadas entre as partes.</atlas-selection-card>
+                    <atlas-selection-card name="billingType" label="Cartão de Crédito" value="${BillingType.CREDIT_CARD}" collapsible type="radio">O pagamento realizado com cartão de crédito é processado pela administradora e o valor pode ser creditado na conta do destinatário em um prazo de 1 a 30 dias, conforme as condições acordadas entre as partes.</atlas-selection-card>
                   </atlas-col>
                   <atlas-col lg="6" md="6">
-                    <atlas-selection-card name="paymentType" label="Cartão de Débito" value="${PaymentType.DEBIT_CARD}" collapsible type="radio">O pagamento efetuado com cartão de débito é processado imediatamente, com o valor sendo debitado diretamente da conta do pagador e creditado na conta do destinatário em tempo real ou dentro de alguns minutos, garantindo uma transferência rápida e segura dos fundos.</atlas-selection-card>
+                    <atlas-selection-card name="billingType" label="Cartão de Débito" value="${BillingType.DEBIT_CARD}" collapsible type="radio">O pagamento efetuado com cartão de débito é processado imediatamente, com o valor sendo debitado diretamente da conta do pagador e creditado na conta do destinatário em tempo real ou dentro de alguns minutos, garantindo uma transferência rápida e segura dos fundos.</atlas-selection-card>
                   </atlas-col>
                 </atlas-row>
               </atlas-grid>

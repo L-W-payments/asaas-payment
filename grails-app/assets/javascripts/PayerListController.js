@@ -3,7 +3,7 @@ function PayerListController(reference) {
     var tableReference = reference.querySelector(".js-payer-list-table");
     var inputReference = reference.querySelector(".js-payer-search-input");
     var filterReference = reference.querySelector(".js-payer-filter-input");
-    var deleteRow = null;
+    var currentRow = null;
 
     function init() {
         bindInputReference();
@@ -49,21 +49,27 @@ function PayerListController(reference) {
         tableReference.addEventListener("atlas-table-action-click", function (event) {
             var button = event.detail.button;
             var buttonAction = button.dataset.action;
-            if (buttonAction == "edit") {
+
+            if (buttonAction === "edit") {
                 window.location = event.detail.row.href;
                 return;
             }
-            if (buttonAction == "delete") {
+
+            if (buttonAction === "delete") {
                 openConfirmDeleteModal();
-                deleteRow = event.detail.row;
+                currentRow = event.detail.row;
                 return;
             }
 
+            if (buttonAction === "restore") {
+                openConfirmRestoreModal();
+                currentRow = event.detail.row;
+            }
         });
     }
 
     function confirmDelete(modal) {
-        Atlas.request.post(deleteRow.dataset.deleteUrl).then(function (response) {
+        Atlas.request.post(currentRow.dataset.actionUrl).then(function (response) {
             if (response.success) {
                 Atlas.notifications.showAlert("Pagador removido com sucesso!", "success");
                 tableReference.fetchRecords(true);
@@ -87,6 +93,32 @@ function PayerListController(reference) {
         })
     }
 
+    function confirmRestore(modal) {
+        Atlas.request.post(currentRow.dataset.actionUrl).then(function (response) {
+
+            if (response.success) {
+                Atlas.notifications.showAlert("Pagador restaurado com sucesso!", "success");
+                tableReference.fetchRecords(true);
+                modal.closeModal();
+                return;
+            }
+
+            Atlas.notifications.showAlert(response.alert, "error");
+        });
+    }
+
+    function openConfirmRestoreModal() {
+        Atlas.notifications.showConfirmation({
+            illustration: "user-avatar-groups",
+            title: "Deseja restaurar este pagador?",
+            confirmButton: {
+                description: "Confirmar restauração",
+                theme: "primary"
+            },
+            onConfirm: confirmRestore,
+            disableAutoClose: false
+        })
+    }
 
     init();
 }
