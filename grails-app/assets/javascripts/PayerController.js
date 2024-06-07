@@ -19,7 +19,7 @@ function PaymentController(reference) {
     function openConfirmDeleteModal() {
         Atlas.notifications.showConfirmation({
             illustration: "triangle-exclamation-mark-siren",
-            title: "Deseja remover este Pagador?",
+            title: "Deseja remover esta cobrança?",
             confirmButton: {
                 description: "Confirmar Remoção",
                 theme: "danger"
@@ -36,6 +36,7 @@ function PaymentController(reference) {
                 redirectToList();
                 return;
             }
+            Atlas.notifications.showAlert(response.alert, "error");
         });
     }
 
