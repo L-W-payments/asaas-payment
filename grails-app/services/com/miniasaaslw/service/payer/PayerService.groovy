@@ -31,8 +31,8 @@ class PayerService {
         return payer
     }
 
-    public void restore(Long id) {
-        Payer payer = PayerRepository.query([id: id, includeDeleted: true]).get()
+    public void restore(Long customerId, Long id) {
+        Payer payer = PayerRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
 
         if (!payer) throw new RuntimeException(MessageUtils.getMessage("payer.errors.notFound"))
 
