@@ -46,11 +46,12 @@ class PaymentController extends BaseController {
             Long id = params.long("id")
 
             paymentService.delete(LoggedCustomer.CUSTOMER.id, id)
+            render([success: true] as JSON)
+        } catch (RuntimeException runtimeException) {
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payment.errors.delete.unknown")], messageType: "error"]
+            render([success: false, alert: message(code: "payment.errors.delete.unknown")] as JSON)
         }
-
-        redirect(action: "index")
     }
 
     def save() {
@@ -93,19 +94,6 @@ class PaymentController extends BaseController {
         String content = g.render(template: "/payment/templates/tableContent", model: [paymentList: paymentList])
 
         render([totalRecords: totalRecords, content: content, success: true] as JSON)
-    }
-
-    def fetchDelete() {
-        try {
-            Long id = params.long("id")
-
-            paymentService.delete(LoggedCustomer.CUSTOMER.id, id)
-            render([success: true] as JSON)
-        } catch (RuntimeException runtimeException) {
-            render([success: false, alert: runtimeException.getMessage()] as JSON)
-        } catch (Exception exception) {
-            render([success: false, alert: message(code: "payment.errors.delete.unknown")] as JSON)
-        }
     }
 
     def updateToReceived() {
