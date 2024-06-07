@@ -22,6 +22,7 @@
         <atlas-button slot="actions"
                       class="js-delete-button"
                       data-delete-url="${createLink(controller: 'payment', action: 'delete', id: payment.id)}"
+                      data-redirect-url="${createLink(controller: 'payment', action: 'list')}"
                       type="outlined"
                       theme="danger"
                       data-action="delete"
