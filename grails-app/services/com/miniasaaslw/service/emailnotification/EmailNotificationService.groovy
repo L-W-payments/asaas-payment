@@ -9,6 +9,8 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class EmailNotificationService {
 
+    private static final String BASE_URL = "localhost:8080"
+
     def mailService
 
     public void save(EmailNotificationAdapter emailNotificationAdapter) {
@@ -49,7 +51,7 @@ class EmailNotificationService {
         mailService.sendMail {
             to emailNotification.recipientEmail
             subject emailNotification.subject
-            text emailNotification.body + " " + emailNotification.url
+            text emailNotification.body + " " + BASE_URL + emailNotification.url
         }
 
         updateToSent(emailNotification)
