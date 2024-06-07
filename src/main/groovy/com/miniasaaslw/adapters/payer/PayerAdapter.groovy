@@ -35,8 +35,8 @@ class PayerAdapter {
 
     Customer customer
 
-    public PayerAdapter(Map params) {
-        this.customer = LoggedCustomer.CUSTOMER
+    public PayerAdapter(Customer customer, Map params) {
+        this.customer = customer
         this.name = params.name
         this.email = params.email
         this.phone = StringUtils.removeNonNumeric(params.phone as String)

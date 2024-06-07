@@ -38,7 +38,7 @@ class PayerController extends BaseController {
 
     def save() {
         try {
-            Payer payer = payerService.save(new PayerAdapter(params))
+            Payer payer = payerService.save(new PayerAdapter(LoggedCustomer.CUSTOMER, params))
 
             redirect(action: "show", params: [id: payer.id])
         } catch (ValidationException validationException) {
