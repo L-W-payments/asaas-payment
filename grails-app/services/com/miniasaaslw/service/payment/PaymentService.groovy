@@ -1,6 +1,7 @@
 package com.miniasaaslw.service.payment
 
 import com.miniasaaslw.adapters.notification.NotificationAdapter
+import com.miniasaaslw.adapters.emailnotification.EmailNotificationAdapter
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.utils.LoggedCustomer
@@ -18,6 +19,8 @@ class PaymentService {
 
     def notificationService
 
+    def emailNotificationService
+
     public Payment save(PaymentAdapter paymentAdapter) {
         Payment paymentData = validatePayment(paymentAdapter)
 
@@ -30,6 +33,9 @@ class PaymentService {
         payment.save(failOnError: true)
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentCreated(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentCreated(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
 
         return payment
     }
@@ -61,6 +67,10 @@ class PaymentService {
         payment.save(failOnError: true)
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentRestored(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentRestored(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentRestored(payment))
+
     }
 
     public void delete(Long customerId, Long paymentId) {
@@ -72,6 +82,10 @@ class PaymentService {
         payment.save(failOnError: true)
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentDeleted(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentDeleted(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentDeleted(payment))
+
     }
 
     public List<Payment> list(Map search, Integer max, Integer offset) {
@@ -90,6 +104,10 @@ class PaymentService {
         payment.save(failOnError: true)
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaid(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
+
     }
 
     public void updateToReceivedInCash(Long customerId, Long paymentId) {
@@ -102,6 +120,9 @@ class PaymentService {
         payment.save(failOnError: true)
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaidInCash(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentPaidInCash(payment))
     }
 
     public void updateToOverdue(Long id) {
@@ -115,6 +136,9 @@ class PaymentService {
         payment.save(failOnError: true)
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentOverdue(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentOverdue(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentOverdue(payment))
     }
 
     public void processOverduePayment() {

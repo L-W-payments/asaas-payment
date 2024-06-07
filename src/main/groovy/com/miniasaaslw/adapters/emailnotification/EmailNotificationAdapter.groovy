@@ -25,7 +25,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.created", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -41,7 +41,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.paid", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -57,7 +57,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.paidInCash", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -73,7 +73,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.overdue", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -89,7 +89,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.deleted", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -105,7 +105,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.payer.body.payment.restored", [
                 payment.customer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -121,7 +121,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.created", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -137,7 +137,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.paid", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -153,7 +153,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.paidInCash", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -169,7 +169,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.overdue", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -185,7 +185,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.deleted", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
@@ -201,7 +201,7 @@ class EmailNotificationAdapter {
         emailNotificationAdapter.body = MessageUtils.getMessage("emailNotification.customer.body.payment.restored", [
                 payment.payer.name,
                 payment.value.toString(),
-                DateUtils.formatDate(payment.dueDate)
+                DateUtils.formatLongDate(payment.dueDate)
         ])
         emailNotificationAdapter.sent = false
 
