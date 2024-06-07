@@ -34,10 +34,10 @@ class PaymentController extends BaseController {
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
-            render([success: false] as JSON)
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "payment.errors.restore.unknown")], messageType: "error"]
-            render([success: false] as JSON)
+            render([success: false, alert: message(code: "payment.errors.restore.unknown")] as JSON)
         }
     }
 

@@ -4,7 +4,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.entity.BaseEntity
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
-import com.miniasaaslw.entity.enums.payment.PaymentType
+import com.miniasaaslw.entity.enums.payment.BillingType
 
 class Payment extends BaseEntity {
 
@@ -14,7 +14,7 @@ class Payment extends BaseEntity {
 
     Payer payer
 
-    PaymentType paymentType
+    BillingType billingType
 
     PaymentStatus paymentStatus
 
@@ -32,7 +32,7 @@ class Payment extends BaseEntity {
         publicId nullable: false, unique: true
         customer nullable: false
         payer nullable: false
-        paymentType nullable: false
+        billingType nullable: false
         paymentStatus nullable: false
         description blank: true, nullable: true
         value nullable: false

@@ -1,10 +1,12 @@
 package com.miniasaaslw.service.payment
 
+import com.miniasaaslw.adapters.notification.NotificationAdapter
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.payment.Payment
+import com.miniasaaslw.utils.LoggedCustomer
+import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.payment.PaymentRepository
-import com.miniasaaslw.utils.MessageUtils
 
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -13,6 +15,8 @@ import groovy.time.TimeCategory
 
 @Transactional
 class PaymentService {
+
+    def notificationService
 
     public Payment save(PaymentAdapter paymentAdapter) {
         Payment paymentData = validatePayment(paymentAdapter)
@@ -24,6 +28,8 @@ class PaymentService {
         Payment payment = buildPaymentProperties(new Payment(), paymentAdapter)
 
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentCreated(payment))
 
         return payment
     }
@@ -53,6 +59,8 @@ class PaymentService {
 
         payment.deleted = false
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentRestored(payment))
     }
 
     public void delete(Long customerId, Long paymentId) {
@@ -62,6 +70,8 @@ class PaymentService {
 
         payment.deleted = true
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentDeleted(payment))
     }
 
     public List<Payment> list(Map search, Integer max, Integer offset) {
@@ -78,6 +88,8 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
     }
 
     public void updateToReceivedInCash(Long customerId, Long paymentId) {
@@ -88,6 +100,8 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.RECEIVED_IN_CASH
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
     }
 
     public void updateToOverdue(Long id) {
@@ -99,14 +113,15 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.OVERDUE
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentOverdue(payment))
     }
 
     public void processOverduePayment() {
         List<Long> overduePendingPaymentsIdList = PaymentRepository.query([
                 paymentStatus: PaymentStatus.PENDING,
-                "dueDate[lt]": new Date(),
-                "column"     : "id"
-        ]).list(max: 500) as List<Long>
+                "dueDate[lt]": new Date()
+        ]).column("id").list(max: 500) as List<Long>
 
         for (Long paymentId : overduePendingPaymentsIdList) {
             Payment.withNewTransaction { status ->
@@ -127,7 +142,7 @@ class PaymentService {
         payment.value = paymentAdapter.value
         payment.dueDate = paymentAdapter.dueDate
         payment.paymentStatus = PaymentStatus.PENDING
-        payment.paymentType = paymentAdapter.paymentType
+        payment.billingType = paymentAdapter.billingType
 
         return payment
     }
@@ -143,8 +158,8 @@ class PaymentService {
             payment.errors.reject("payer", null, MessageUtils.getMessage("payment.errors.payer.notFound"))
         }
 
-        if (!paymentAdapter.paymentType) {
-            payment.errors.reject("paymentType", null, MessageUtils.getMessage("payment.errors.paymentType.invalid"))
+        if (!paymentAdapter.billingType) {
+            payment.errors.reject("billingType", null, MessageUtils.getMessage("payment.errors.billingType.invalid"))
         }
 
         if (!paymentAdapter.value) {
