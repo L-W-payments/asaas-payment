@@ -11,8 +11,9 @@
                       action="${createLink(controller: 'payer', action: 'update', id: payer.id)}">
 
         <atlas-button slot="actions" data-panel-start-editing icon="pencil" description="Editar"></atlas-button>
-        <atlas-button type="outlined" slot="actions"
-                      href="${createLink(controller: 'payer', action: 'delete', id: payer.id)}"
+        <atlas-button type="outlined" slot="actions" class="js-delete-button"
+                      data-delete-url="${createLink(controller: 'payer', action: 'delete', id: payer.id)}"
+                      data-redirect-url="${createLink(controller: 'payer', action: 'list')}"
                       description="Apagar"></atlas-button>
 
         <atlas-input hidden name="customerId" value="${payer.customerId}"></atlas-input>
