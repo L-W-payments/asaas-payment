@@ -10,7 +10,7 @@ function PaymentController(reference) {
         deleteButtonReference.addEventListener("atlas-button-click", function () {
             console.log("Entrou aqui")
             var buttonAction = deleteButtonReference.dataset.action;
-            if (buttonAction == "delete") {
+            if (buttonAction === "delete") {
                 openConfirmDeleteModal();
                 return;
             }
@@ -33,7 +33,7 @@ function PaymentController(reference) {
     function confirmDelete(modal) {
         Atlas.request.post(deleteButtonReference.dataset.deleteUrl).then(function (response) {
             if (response.success) {
-                Atlas.notifications.showAlert("Pagador removido com sucesso!", "success");
+                Atlas.notifications.showAlert("Cobrança removida com sucesso!", "success");
                 tableReference.fetchRecords(true);
                 modal.closeModal();
                 return;
