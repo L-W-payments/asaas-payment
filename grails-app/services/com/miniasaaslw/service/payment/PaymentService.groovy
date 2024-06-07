@@ -121,9 +121,8 @@ class PaymentService {
     public void processOverduePayment() {
         List<Long> overduePendingPaymentsIdList = PaymentRepository.query([
                 paymentStatus: PaymentStatus.PENDING,
-                "dueDate[lt]": new Date(),
-                "column"     : "id"
-        ]).list(max: 500) as List<Long>
+                "dueDate[lt]": new Date()
+        ]).column("id").list(max: 500) as List<Long>
 
         for (Long paymentId : overduePendingPaymentsIdList) {
             Payment.withNewTransaction { status ->
