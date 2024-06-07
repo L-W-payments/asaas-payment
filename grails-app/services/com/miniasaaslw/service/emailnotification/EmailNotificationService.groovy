@@ -26,7 +26,7 @@ class EmailNotificationService {
     }
 
     public void processEmailNotification() {
-        List<Long> notSentEmailList = EmailNotificationRepository.query([:]).column("id").list(max: 500) as List<Long>
+        List<Long> notSentEmailList = EmailNotificationRepository.query([sent: false]).column("id").list(max: 500) as List<Long>
 
         for (Long emailNotificationId : notSentEmailList) {
             EmailNotification.withNewTransaction { status ->

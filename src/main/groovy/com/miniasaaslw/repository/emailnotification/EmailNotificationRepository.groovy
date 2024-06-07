@@ -9,8 +9,8 @@ class EmailNotificationRepository implements Repository<EmailNotification, Email
     @Override
     void buildCriteria() {
         addCriteria {
-            if (!Boolean.valueOf(search.includeSent.toString())){
-                eq("sent", false)
+            if (search.containsKey("sent")){
+                eq("sent", search.sent)
             }
         }
     }
@@ -23,7 +23,7 @@ class EmailNotificationRepository implements Repository<EmailNotification, Email
     @Override
     List<String> listAllowedFilters() {
         return [
-                "includeSent"
+                "sent"
         ]
     }
 }
