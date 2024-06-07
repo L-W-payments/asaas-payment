@@ -22,7 +22,7 @@ delete para registros no banco de dados.
 - [x] Deve ser possível um cliente listar um pagador específico;
 - [x] Deve ser possível um cliente atualizar um pagador;
 - [x] Deve ser possível um cliente deletar um pagador;
-- [ ] Deve ser possível um cliente restaurar um pagador;
+- [x] Deve ser possível um cliente restaurar um pagador;
 - [x] Deve ser possível um cliente listar todas as notificações;
 - [x] Deve ser possível que o pagador pague uma cobrança;
 - [x] Deve ser possível um cliente confirmar o recebimento em dinheiro de uma cobrança;
