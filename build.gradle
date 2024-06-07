@@ -58,6 +58,7 @@ dependencies {
     implementation "org.grails.plugins:events"
     implementation "org.grails.plugins:gsp"
     implementation "org.grails.plugins:quartz:2.0.13"
+    implementation 'org.grails.plugins:mail:4.0.0'
     implementation ("org.quartz-scheduler:quartz:2.3.2") {
         exclude group: 'slf4j-api', module: 'c3p0'
     }
