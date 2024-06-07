@@ -11,9 +11,9 @@ class PaymentReceiptService {
 
         if (payment.deleted) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
-        if (!payment.paymentStatus.isReceived() && !payment.paymentStatus.isReceivedInCash()) {
-            throw new RuntimeException(MessageUtils.getMessage("paymentReceipt.errors.notReceived"))
-        }
+        if (payment.paymentStatus.isReceivedInCash()) throw new RuntimeException(MessageUtils.getMessage("paymentReceipt.errors.receivedInCash"))
+
+        if (!payment.paymentStatus.isReceived()) throw new RuntimeException(MessageUtils.getMessage("paymentReceipt.errors.notReceived"))
 
         PaymentReceipt paymentReceipt = new PaymentReceipt()
 
