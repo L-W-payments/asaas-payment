@@ -13,15 +13,18 @@ delete para registros no banco de dados.
 - [x] Deve ser possível um cliente atualizar seus dados;
 - [x] Deve ser possível um cliente criar uma cobrança;
 - [x] Deve ser possível um cliente listar todas as cobranças;
-- [ ] Deve ser possível um cliente listar uma cobrança específica;
+- [x] Deve ser possível um cliente listar uma cobrança específica;
 - [x] Deve ser possível um cliente deletar uma cobrança;
+- [x] Deve ser possível um cliente restaurar uma cobrança;
 - [x] Deve ser possível um cliente selecionar um pagador para uma cobrança;
 - [x] Deve ser possível um cliente criar um pagador;
 - [x] Deve ser possível um cliente listar todos os pagadores;
 - [x] Deve ser possível um cliente listar um pagador específico;
 - [x] Deve ser possível um cliente atualizar um pagador;
 - [x] Deve ser possível um cliente deletar um pagador;
-- [ ] Deve ser possível um cliente listar todas as notificações;
+- [x] Deve ser possível um cliente restaurar um pagador;
+- [x] Deve ser possível um cliente listar todas as notificações;
+- [x] Deve ser possível que o pagador pague uma cobrança;
 - [x] Deve ser possível um cliente confirmar o recebimento em dinheiro de uma cobrança;
 - [ ] Deve ser possível receber um email após uma cobrança ser criada;
 - [ ] Deve ser possível receber um email após uma cobrança ser deletada;
@@ -59,4 +62,4 @@ delete para registros no banco de dados.
 - [ ] A aplicação deve ser desenvolvida com Spring Security;
 - [x] A aplicação deve ser desenvolvida com o Atlas;
 - [x] A aplicação deve utilizar repositórios para interação com domínios;
-- [ ] A aplicação deve utilizar Jobs para vencer as cobranças;
+- [x] A aplicação deve utilizar Jobs para vencer as cobranças;

@@ -5,13 +5,13 @@ import com.miniasaaslw.adapters.customer.CustomerAdapter
 
 import grails.validation.ValidationException
 
-
 class CustomerController {
 
     def customerService
 
     def index() {
         def messageInfo = flash.messageInfo
+
         if (messageInfo) {
             return [messageInfo: messageInfo]
         }
@@ -20,20 +20,23 @@ class CustomerController {
     def save() {
         try {
             Customer customer = customerService.save(new CustomerAdapter(params))
+
             redirect(action: "show", id: customer.id)
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
-            redirect(uri: '/customer')
+            redirect(action: "index")
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "customer.errors.save.unknown")], messageType: "error"]
-            redirect(uri: '/customer')
+            redirect(action: "index")
         }
     }
 
     def show() {
         def messageInfo = flash.messageInfo
+
         try {
             Customer customer = customerService.find(params.long("id"))
+
             if (customer) {
                 if (messageInfo) {
                     return [customer: customer, messageInfo: messageInfo]
@@ -41,10 +44,10 @@ class CustomerController {
                 return [customer: customer]
             }
         } catch (RuntimeException runtimeException) {
-            redirect(uri: "/customer")
+            redirect(action: "index")
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "customer.errors.search.unknown")], messageType: "error"]
-            redirect(uri: '/customer')
+            redirect(action: "index")
         }
     }
 
@@ -53,26 +56,25 @@ class CustomerController {
 
         try {
             Customer customer = customerService.update(id, new CustomerAdapter(params))
-            redirect(action: 'show', params: [id: customer.id])
+
+            redirect(action: "show", id: customer.id)
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
-            redirect(uri: ('/customer/show/' + id))
+            redirect(action: "show", id: id)
         } catch (Exception exception) {
             flash.messageInfo = [messages: ["Erro ao atualizar sua conta"], messageType: "error"]
-            redirect(uri: '/customer')
+            redirect(action: "index")
         }
     }
 
     def delete() {
         try {
-            long id = params.long("id")
-            customerService.delete(id)
-            redirect(uri: "/customer")
+            customerService.delete(params.long("id"))
         } catch (RuntimeException runtimeException) {
-            redirect(uri: "/customer")
+            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
         } catch (Exception exception) {
             flash.messageInfo = [messages: [message(code: "customer.errors.delete.unknown")], messageType: "error"]
-            redirect(uri: "/customer")
         }
+        redirect(action: "index")
     }
 }

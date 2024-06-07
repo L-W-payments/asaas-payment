@@ -1,8 +1,7 @@
 <g:each var="payer" in="${payerList}">
     <atlas-table-row
             href="${createLink(controller: "payer", action: "show", id: payer.id)}"
-            data-delete-url="${createLink(controller: "payer", action: "fetchDelete", id: payer.id)}"
-    >
+            data-action-url="${createLink(controller: "payer", action: "${payer.deleted ? 'restore' : 'fetchDelete'}", id: payer.id)}">
         <atlas-table-col>
             ${payer.name}
         </atlas-table-col>
@@ -10,7 +9,7 @@
             ${payer.email}
         </atlas-table-col>
         <atlas-table-col>
-            <g:formatDate date="${payer.dateCreated}" format="dd/MM/yyyy"/>
+            ${dateTimeTagLib.dateTime(date: payer.dateCreated)}
         </atlas-table-col>
         <atlas-button-group slot="actions" group-after="2">
             <atlas-icon-button
@@ -22,7 +21,7 @@
             </atlas-icon-button>
             <g:if test="${payer.deleted}">
                 <atlas-icon-button
-                        data-action=""
+                        data-action="restore"
                         tooltip="Restaurar pagador"
                         icon="refresh"
                         theme="warning"

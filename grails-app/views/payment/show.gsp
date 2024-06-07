@@ -29,7 +29,20 @@
         </atlas-button>
         <atlas-layout gap="4">
           <atlas-section header="Pagador">
+            <atlas-layout gap="1" inline mobile-inline>
+              <atlas-layout>
                 <atlas-input required value="${payment.payer.name} — ${payment.payer.email}" ></atlas-input>
+              </atlas-layout>
+              <atlas-button icon="arrow-up-right"
+                                is-external-link
+                                tooltip="Exibir pagador"
+                                type="outlined"
+                                href="${createLink(
+                                        controller: 'payer',
+                                        action: 'show',
+                                        id: payment.payerId)}">
+                  </atlas-button>
+            </atlas-layout>
           </atlas-section>
           <atlas-section header="Dados da cobrança">
             <atlas-grid>
@@ -44,7 +57,7 @@
                 </atlas-col>
                 <atlas-col lg="4" md="4">
                   <atlas-datepicker name="dueDate" label="Vencimento da cobrança" prevent-past-date
-                                    required value="<g:formatDate date="${payment.dueDate}" format="dd/MM/yyyy"/>"></atlas-datepicker>
+                                    required value="${dateTimeTagLib.dateTime(date: payment.dueDate)}"></atlas-datepicker>
                 </atlas-col>
               </atlas-row>
             </atlas-grid>

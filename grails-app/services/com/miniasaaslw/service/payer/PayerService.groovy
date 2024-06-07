@@ -27,8 +27,8 @@ class PayerService {
         return payer
     }
 
-    public void restore(Long id) {
-        Payer payer = PayerRepository.query([id: id, includeDeleted: true]).get()
+    public void restore(Long customerId, Long id) {
+        Payer payer = PayerRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
 
         if (!payer) throw new RuntimeException(MessageUtils.getMessage("payer.errors.notFound"))
 
@@ -156,8 +156,8 @@ class PayerService {
             payer.errors.reject("state", null, MessageUtils.getMessage("general.errors.state.invalid"))
         }
 
-        if (!CepUtils.validateCep(payerAdapter.cep)) {
-            payer.errors.reject("cep", null, MessageUtils.getMessage("general.errors.zipCode.invalid"))
+        if (!PostalCodeUtils.validatePostalCode(payerAdapter.postalCode)) {
+            payer.errors.reject("postalCode", null, MessageUtils.getMessage("general.errors.postalCode.invalid"))
         }
 
         return payer
@@ -169,7 +169,7 @@ class PayerService {
         payer.phone = payerAdapter.phone
         payer.cpfCnpj = payerAdapter.cpfCnpj
         payer.personType = payerAdapter.personType
-        payer.cep = payerAdapter.cep
+        payer.postalCode = payerAdapter.postalCode
         payer.number = payerAdapter.number
         payer.complement = payerAdapter.complement
         payer.country = payerAdapter.country
