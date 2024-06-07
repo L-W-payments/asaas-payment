@@ -35,8 +35,8 @@ class PaymentService {
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentCreated(payment))
 
-        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentCreated(payment))
-        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentCreated(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentCreated(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
 
         return payment
     }
@@ -69,8 +69,8 @@ class PaymentService {
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentRestored(payment))
 
-        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentRestored(payment))
-        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentRestored(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentRestored(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentRestored(payment))
 
     }
 
@@ -84,8 +84,8 @@ class PaymentService {
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentDeleted(payment))
 
-        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentDeleted(payment))
-        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentDeleted(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentDeleted(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentDeleted(payment))
 
     }
 
@@ -106,8 +106,8 @@ class PaymentService {
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
 
-        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentPaid(payment))
-        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentCreated(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaid(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
 
     }
 
@@ -122,8 +122,8 @@ class PaymentService {
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
 
-        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentPaidInCash(payment))
-        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentPaidInCash(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaidInCash(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentPaidInCash(payment))
     }
 
     public void updateToOverdue(Long id) {
@@ -138,8 +138,8 @@ class PaymentService {
 
         notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentOverdue(payment))
 
-        emailNotificationService.save(new EmailNotificationAdapter().buildCustomerEmailPaymentOverdue(payment))
-        emailNotificationService.save(new EmailNotificationAdapter().buildPayerEmailPaymentOverdue(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentOverdue(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentOverdue(payment))
     }
 
     public void processOverduePayment() {
