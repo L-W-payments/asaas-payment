@@ -9,7 +9,7 @@
             ${formatNumber(number: payment.value, type: "currency", locale: "pt_BR")}
         </atlas-table-col>
         <atlas-table-col>
-            ${message(code: "paymentType.${payment.paymentType}.label")}
+            ${message(code: "billingType.${payment.billingType}.label")}
         </atlas-table-col>
         <atlas-table-col>
             ${message(code: "paymentStatus.${payment.paymentStatus}.label")}
