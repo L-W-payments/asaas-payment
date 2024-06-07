@@ -1,8 +1,10 @@
 package com.miniasaaslw.service.payment
 
+import com.miniasaaslw.adapters.notification.NotificationAdapter
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
+import com.miniasaaslw.utils.LoggedCustomer
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.payment.PaymentRepository
@@ -15,6 +17,8 @@ import groovy.time.TimeCategory
 @Transactional
 class PaymentService {
 
+    def notificationService
+
     public Payment save(PaymentAdapter paymentAdapter) {
         Payment paymentData = validatePayment(paymentAdapter)
 
@@ -25,6 +29,8 @@ class PaymentService {
         Payment payment = buildPaymentProperties(new Payment(), paymentAdapter)
 
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentCreated(payment))
 
         return payment
     }
@@ -54,6 +60,8 @@ class PaymentService {
 
         payment.deleted = false
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentRestored(payment))
     }
 
     public void delete(Customer customer, Long paymentId) {
@@ -63,6 +71,8 @@ class PaymentService {
 
         payment.deleted = true
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentDeleted(payment))
     }
 
     public List<Payment> list(Map search, Integer max, Integer offset) {
@@ -79,6 +89,8 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
     }
 
     public void updateToReceivedInCash(Customer customer, Long paymentId) {
@@ -89,6 +101,8 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.RECEIVED_IN_CASH
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
     }
 
     public void updateToOverdue(Long id) {
@@ -100,6 +114,8 @@ class PaymentService {
 
         payment.paymentStatus = PaymentStatus.OVERDUE
         payment.save(failOnError: true)
+
+        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentOverdue(payment))
     }
 
     public void processOverduePayment() {
