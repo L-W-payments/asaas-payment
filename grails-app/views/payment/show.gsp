@@ -4,9 +4,10 @@
 <head>
   <meta name="layout" content="main" />
   <title>Cobranças - Asaas</title>
+  <asset:javascript src="PaymentController.js"/>
 </head>
 <body page-title="Visualizar cobrança">
-      <atlas-form-panel>
+      <atlas-form-panel class="js-show-payment-panel">
         <g:if test="${payment.paymentStatus.isPending()}">
           <atlas-button slot="actions"
                         href="${createLink(
@@ -18,12 +19,12 @@
         </g:if>
 
         <atlas-button slot="actions"
+                      class="js-delete-button"
+                      data-delete-url="${createLink(controller: 'payment', action: 'delete', id: payment.id)}"
+                      data-redirect-url="${createLink(controller: 'payment', action: 'list')}"
                       type="outlined"
                       theme="danger"
-                      href="${createLink(
-                              controller: 'payment',
-                              action: 'delete',
-                              id: payment.id)}"
+                      data-action="delete"
                       description="Apagar">
         </atlas-button>
         <atlas-layout gap="4">

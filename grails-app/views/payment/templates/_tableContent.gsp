@@ -1,6 +1,6 @@
 <g:each var="payment" in="${paymentList}">
     <atlas-table-row
-            data-action-url="${createLink(controller: 'payment', action: "${payment.deleted ? 'restore' : 'fetchDelete'}", id: payment.id)}"
+            data-action-url="${createLink(controller: 'payment', action: "${payment.deleted ? 'restore' : 'delete'}", id: payment.id)}"
     >
         <atlas-table-col>
             ${payment.payer.name}

@@ -92,13 +92,12 @@ class PayerController extends BaseController {
             Long id = params.long("id")
 
             payerService.delete(LoggedCustomer.CUSTOMER.id, id)
+            render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payer.errors.delete.unknown")], messageType: "error"]
+            render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
         }
-
-        redirect(action: "index")
     }
 
     def list() {
@@ -117,19 +116,5 @@ class PayerController extends BaseController {
 
         render([totalRecords: totalRecords, content: content, success: true] as JSON)
     }
-
-    def fetchDelete() {
-        try {
-            Long id = params.long("id")
-
-            payerService.delete(LoggedCustomer.CUSTOMER.id, id)
-            render([success: true] as JSON)
-        } catch (RuntimeException runtimeException) {
-            render([success: false, alert: runtimeException.getMessage()] as JSON)
-        } catch (Exception exception) {
-            render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
-        }
-    }
-
 
 }
