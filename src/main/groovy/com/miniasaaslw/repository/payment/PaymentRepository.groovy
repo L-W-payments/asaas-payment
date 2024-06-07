@@ -1,25 +1,29 @@
 package com.miniasaaslw.repository.payment
 
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.repository.base.BaseEntityRepository
+import com.miniasaaslw.repository.Repository
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
 
-import grails.gorm.DetachedCriteria
+import grails.compiler.GrailsCompileStatic
 
-class PaymentRepository implements BaseEntityRepository {
+import groovy.transform.CompileDynamic
 
-    public static DetachedCriteria<Payment> query(Map search) {
-        DetachedCriteria<Payment> query = Payment.where(defaultQuery(search))
+import org.grails.datastore.mapping.query.api.BuildableCriteria
 
-        if (joinWithCustomer(search)) {
-            query.createAlias("customer", "customer")
-        }
+@GrailsCompileStatic
+class PaymentRepository implements Repository<Payment, PaymentRepository> {
 
-        if (joinWithPayer(search)) {
-            query.createAlias("payer", "payer")
-        }
+    @CompileDynamic
+    @Override
+    void buildCriteria() {
+        addCriteria {
+            if (joinWithCustomer(search)) {
+                createAlias("customer", "customer")
+            }
 
-        query = query.where {
+            if (joinWithPayer(search)) {
+                createAlias("payer", "payer")
+            }
 
             if (search.containsKey("customerId")) {
                 eq("customer.id", search.customerId)
@@ -38,11 +42,25 @@ class PaymentRepository implements BaseEntityRepository {
             }
 
             if (search.containsKey("payerName[like]")) {
-                like("payer.name", search."payerName[like]" + "%")
+                like("payer.name", "%" + search."payerName[like]" + "%")
             }
         }
+    }
 
-        return query
+    @Override
+    BuildableCriteria getBuildableCriteria() {
+        return Payment.createCriteria()
+    }
+
+    @Override
+    List<String> listAllowedFilters() {
+        return [
+                "customerId",
+                "paymentStatus",
+                "dueDate[lt]",
+                "publicId",
+                "payerName[like]"
+        ]
     }
 
     private static Boolean joinWithCustomer(Map search) {
