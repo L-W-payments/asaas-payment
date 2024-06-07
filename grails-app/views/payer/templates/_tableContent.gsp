@@ -1,7 +1,7 @@
 <g:each var="payer" in="${payerList}">
     <atlas-table-row
             href="${createLink(controller: "payer", action: "show", id: payer.id)}"
-            data-action-url="${createLink(controller: "payer", action: "${payer.deleted ? 'restore' : 'fetchDelete'}", id: payer.id)}">
+            data-action-url="${createLink(controller: "payer", action: "${payer.deleted ? 'restore' : 'delete'}", id: payer.id)}">
         <atlas-table-col>
             ${payer.name}
         </atlas-table-col>
