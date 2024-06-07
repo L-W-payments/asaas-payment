@@ -14,8 +14,4 @@ class DateUtils {
     public static String formatLongDate(Date date) {
         return new SimpleDateFormat(LONG_DATE_FORMAT).format(date)
     }
-
-    public static String formatDate(Date date){
-        return new SimpleDateFormat(DATE_FORMAT).format(date)
-    }
 }
