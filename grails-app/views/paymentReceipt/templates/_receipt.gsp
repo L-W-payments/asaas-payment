@@ -1,3 +1,5 @@
+<%@ page import="com.miniasaaslw.entity.enums.PersonType" %>
+
 <atlas-panel class="js-receipt-content">
     <atlas-layout inline justify="space-between">
         <atlas-heading size="h5">
@@ -13,7 +15,7 @@
         <atlas-layout gap="2">
             <atlas-text muted size="sm">${receipt.payment.payer.name}</atlas-text>
             <atlas-text muted size="sm">${receipt.payment.payer.email}</atlas-text>
-            <atlas-text muted size="sm">${receipt.payment.payer.phone}</atlas-text>
+            <atlas-text muted size="sm">${formatterTagLib.phone(phone: receipt.payment.payer.phone)}</atlas-text>
         </atlas-layout>
 
         <atlas-image src="https://atlas.asaas.com/assets/images/logos/asaas-small-logo.svg"
@@ -35,12 +37,12 @@
 
         <atlas-text bold muted size="sm">
             Data do vencimento: <atlas-text muted
-                                            size="sm">${dateTimeTagLib.dateTime(date: receipt.payment.dueDate)}</atlas-text>
+                                            size="sm">${formatterTagLib.dateTime(date: receipt.payment.dueDate)}</atlas-text>
         </atlas-text>
 
         <atlas-text bold muted size="sm">
             Data de pagamento: <atlas-text muted
-                                           size="sm">${g.formatDate(date: receipt.dateCreated, format: "dd/MM/yyyy 'às' HH:mm")}</atlas-text>
+                                           size="sm">${formatterTagLib.dateTime(date: receipt.dateCreated, longDate: true)}</atlas-text>
         </atlas-text>
 
         <atlas-text bold muted size="sm">
@@ -55,10 +57,16 @@
             Nome do recebedor: <atlas-text muted
                                            size="sm">${receipt.payment.customer.name}</atlas-text>
         </atlas-text>
-
-        <atlas-text bold muted size="sm">
-            CPF/CNPJ: <atlas-text muted size="sm">${receipt.payment.customer.cpfCnpj}</atlas-text>
-        </atlas-text>
+        <g:if test="${receipt.payment.customer.personType.isNatural()}">
+            <atlas-text bold muted size="sm">
+                CPF: <atlas-text muted size="sm">${formatterTagLib.cpf(cpf: receipt.payment.customer.cpfCnpj)}</atlas-text>
+            </atlas-text>
+        </g:if>
+        <g:else>
+            <atlas-text bold muted size="sm">
+                CNPJ: <atlas-text muted size="sm">${formatterTagLib.cnpj(cnpj: receipt.payment.customer.cpfCnpj)}</atlas-text>
+            </atlas-text>
+        </g:else>
 
         <atlas-text bold muted size="sm">
             Instituição: <atlas-text muted
