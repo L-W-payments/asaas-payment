@@ -1,4 +1,4 @@
-<%@ page import="com.miniasaaslw.entity.enums.payment.PaymentType" %>
+<%@ page import="com.miniasaaslw.entity.enums.payment.BillingType" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>

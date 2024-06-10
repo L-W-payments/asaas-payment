@@ -32,7 +32,7 @@ class PaymentService {
 
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentCreated(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentCreated(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentCreated(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
@@ -66,7 +66,7 @@ class PaymentService {
         payment.deleted = false
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentRestored(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentRestored(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentRestored(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentRestored(payment))
@@ -81,7 +81,7 @@ class PaymentService {
         payment.deleted = true
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentDeleted(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentDeleted(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentDeleted(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentDeleted(payment))
@@ -103,7 +103,7 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentReceived(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaid(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
@@ -119,7 +119,7 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.RECEIVED_IN_CASH
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentReceived(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaidInCash(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentPaidInCash(payment))
@@ -135,7 +135,7 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.OVERDUE
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentOverdue(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentOverdue(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentOverdue(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentOverdue(payment))
