@@ -1,8 +1,8 @@
 package com.miniasaaslw.service.payment
 
 import com.miniasaaslw.adapters.notification.NotificationAdapter
+import com.miniasaaslw.adapters.emailnotification.EmailNotificationAdapter
 import com.miniasaaslw.adapters.payment.PaymentAdapter
-import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.utils.LoggedCustomer
 import com.miniasaaslw.utils.MessageUtils
@@ -19,6 +19,8 @@ class PaymentService {
 
     def notificationService
 
+    def emailNotificationService
+
     public Payment save(PaymentAdapter paymentAdapter) {
         Payment paymentData = validatePayment(paymentAdapter)
 
@@ -30,7 +32,10 @@ class PaymentService {
 
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentCreated(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentCreated(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentCreated(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
 
         return payment
     }
@@ -43,8 +48,8 @@ class PaymentService {
         return payment
     }
 
-    public Payment find(Customer customer, Long id) {
-        Payment payment = PaymentRepository.query([id: id, customerId: customer.id]).get()
+    public Payment find(Long customerId, Long id) {
+        Payment payment = PaymentRepository.query([id: id, customerId: customerId]).get()
 
         if (!payment) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notFound"))
 
@@ -61,18 +66,26 @@ class PaymentService {
         payment.deleted = false
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentRestored(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentRestored(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentRestored(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentRestored(payment))
+
     }
 
-    public void delete(Customer customer, Long paymentId) {
-        Payment payment = find(customer, paymentId)
+    public void delete(Long customerId, Long paymentId) {
+        Payment payment = find(customerId, paymentId)
 
-        if (payment.deleted) return
+        if (payment.deleted) throw new RuntimeException(MessageUtils.getMessage("payment.errors.notDeleted"))
 
         payment.deleted = true
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentDeleted(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentDeleted(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentDeleted(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentDeleted(payment))
+
     }
 
     public List<Payment> list(Map search, Integer max, Integer offset) {
@@ -90,11 +103,15 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentReceived(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaid(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
+
     }
 
-    public void updateToReceivedInCash(Customer customer, Long paymentId) {
-        Payment payment = find(customer, paymentId)
+    public void updateToReceivedInCash(Long customerId, Long paymentId) {
+        Payment payment = find(customerId, paymentId)
 
         Payment validatedPayment = validateUpdateToReceivedInCash(payment)
         if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("payment.errors.update.unknown"), validatedPayment.errors)
@@ -102,7 +119,10 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.RECEIVED_IN_CASH
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentReceived(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentReceived(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaidInCash(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentPaidInCash(payment))
     }
 
     public void updateToOverdue(Long id) {
@@ -115,7 +135,10 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.OVERDUE
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, new NotificationAdapter().buildPaymentOverdue(payment))
+        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentOverdue(payment))
+
+        emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentOverdue(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentOverdue(payment))
     }
 
     public void processOverduePayment() {
