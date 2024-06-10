@@ -5,11 +5,14 @@ import com.miniasaaslw.domain.emailnotification.EmailNotification
 import com.miniasaaslw.repository.emailnotification.EmailNotificationRepository
 
 import grails.gorm.transactions.Transactional
+import grails.gsp.PageRenderer
 
 @Transactional
 class EmailNotificationService {
 
     private static final String BASE_URL = "localhost:8080"
+
+    PageRenderer pageRenderer
 
     def mailService
 
@@ -48,12 +51,21 @@ class EmailNotificationService {
     private void sendEmail(long emailNotificationId) {
         EmailNotification emailNotification = EmailNotificationRepository.query([id: emailNotificationId]).get()
 
-        mailService.sendMail {
-            to emailNotification.recipientEmail
-            subject emailNotification.subject
-            text emailNotification.body + " " + BASE_URL + emailNotification.url
+        try{
+            String emailBody = pageRenderer.render(view: "/templates/email/baseEmail")
+
+            mailService.sendMail {
+                to emailNotification.recipientEmail
+                subject emailNotification.subject
+                text emailNotification.body + " " + BASE_URL + emailNotification.url
+                html emailBody
+            }
+            updateToSent(emailNotification)
+        }catch (Exception ex){
+            ex.printStackTrace()
         }
 
-        updateToSent(emailNotification)
+
+
     }
 }
