@@ -6,7 +6,6 @@
     <title>Notificação de Cobrança - Asaas</title>
     <style>
     body {
-        font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
         background-color: #f5f5f5;
@@ -83,7 +82,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <img src="logo.png" alt="Asaas Logo">
+        <img src="https://atlas.asaas.com/assets/images/logos/asaas-logo.7POEJYYY.svg" alt="Asaas Logo">
         <h1>${emailNotification.subject}</h1>
     </div>
 
