@@ -6,7 +6,9 @@ class FormatterTagLib {
     static namespace = "formatterTagLib"
 
     def dateTime = { attrs ->
-        String format = DateUtils.SIMPLE_DATE_FORMAT
+        Boolean longDate = attrs.longDate ?: false
+        String format = longDate ? DateUtils.LONG_DATE_FORMAT : DateUtils.SIMPLE_DATE_FORMAT
+
         out << g.formatDate(format: format, date: attrs.date)
     }
 

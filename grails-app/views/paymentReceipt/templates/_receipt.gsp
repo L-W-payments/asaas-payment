@@ -42,7 +42,7 @@
 
         <atlas-text bold muted size="sm">
             Data de pagamento: <atlas-text muted
-                                           size="sm">${g.formatDate(date: receipt.dateCreated, format: "dd/MM/yyyy 'às' HH:mm")}</atlas-text>
+                                           size="sm">${formatterTagLib.dateTime(date: receipt.dateCreated, longDate: true)}</atlas-text>
         </atlas-text>
 
         <atlas-text bold muted size="sm">
