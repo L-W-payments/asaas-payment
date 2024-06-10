@@ -15,7 +15,7 @@
         <atlas-layout gap="2">
             <atlas-text muted size="sm">${receipt.payment.payer.name}</atlas-text>
             <atlas-text muted size="sm">${receipt.payment.payer.email}</atlas-text>
-            <atlas-text muted size="sm">${receipt.payment.payer.phone}</atlas-text>
+            <atlas-text muted size="sm">${formatterTagLib.phone(phone: receipt.payment.payer.phone)}</atlas-text>
         </atlas-layout>
 
         <atlas-image src="https://atlas.asaas.com/assets/images/logos/asaas-small-logo.svg"
