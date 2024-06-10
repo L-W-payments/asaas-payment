@@ -15,4 +15,9 @@ class FormatterTagLib {
         out << cpf[0..2] + "." + cpf[3..5] + "." + cpf[6..8] + "-" + cpf[9..10]
     }
 
+    def cnpj = { attrs ->
+        String cnpj = attrs.cnpj
+        out << cnpj[0..1] + "." + cnpj[2..4] + "." + cnpj[5..7] + "/" + cnpj[8..11] + "-" + cnpj[12..13]
+    }
+
 }
