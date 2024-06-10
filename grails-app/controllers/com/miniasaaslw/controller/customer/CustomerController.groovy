@@ -3,8 +3,10 @@ package com.miniasaaslw.controller.customer
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
 
+import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
 
+@Secured(['ROLE_MEMBER'])
 class CustomerController {
 
     def customerService

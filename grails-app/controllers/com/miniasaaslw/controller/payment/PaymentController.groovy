@@ -9,7 +9,9 @@ import com.miniasaaslw.utils.LoggedCustomer
 
 import grails.converters.JSON
 import grails.validation.ValidationException
+import grails.plugin.springsecurity.annotation.Secured
 
+@Secured(['ROLE_MEMBER'])
 class PaymentController extends BaseController {
 
     def paymentService
@@ -68,6 +70,7 @@ class PaymentController extends BaseController {
         redirect(action: "index")
     }
 
+    @Secured(["permitAll"])
     def checkout() {
         try {
             String publicId = params.id
@@ -113,6 +116,7 @@ class PaymentController extends BaseController {
         }
     }
 
+    @Secured(['permitAll'])
     def updateToReceivedInCash() {
         try {
             Long id = params.long("id")
