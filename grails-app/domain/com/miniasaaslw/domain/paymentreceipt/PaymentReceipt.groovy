@@ -1,4 +1,4 @@
-package com.miniasaaslw.domain.paymentReceipt
+package com.miniasaaslw.domain.paymentreceipt
 
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.entity.BaseEntity
@@ -9,4 +9,8 @@ class PaymentReceipt extends BaseEntity {
 
     Payment payment
 
+    static constraints = {
+        publicId unique: true
+        payment unique: true
+    }
 }
