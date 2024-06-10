@@ -87,9 +87,9 @@
 
                 <form class="form" action="${postUrl ?: '/login/authenticate'}" method="post" autocomplete="off">
                     <div class="form-group">
-                        <label for="username">Nome</label>
-                        <input id="username" name="${securityConfig.apf.usernameParameter}"
-                               placeholder="Digite seu nome"/>
+                        <label for="email">E-mail</label>
+                        <input id="email" name="${securityConfig.apf.usernameParameter}"
+                               placeholder="Digite seu e-mail"/>
                     </div>
 
                     <div class="form-group">
