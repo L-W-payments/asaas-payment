@@ -4,6 +4,8 @@
 <head>
     <title>Pagamento - Asaas</title>
 
+    <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
+
     <asset:stylesheet src="new-theme.scss"/>
 
     <link rel="stylesheet" href="https://atlas.asaas.com/v15.18.0/atlas.min.css" crossorigin="anonymous">

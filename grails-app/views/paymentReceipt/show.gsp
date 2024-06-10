@@ -2,6 +2,7 @@
 <head>
     <title>Comprovante de pagamento - Asaas</title>
 
+    <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
     <asset:stylesheet src="new-theme.scss"/>
     <asset:stylesheet src="receipt.scss"/>
 
