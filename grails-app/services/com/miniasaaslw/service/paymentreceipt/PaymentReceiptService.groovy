@@ -1,7 +1,7 @@
 package com.miniasaaslw.service.paymentreceipt
 
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.domain.paymentreceipt.PaymentReceipt
+import com.miniasaaslw.domain.paymentReceipt.PaymentReceipt
 import com.miniasaaslw.utils.MessageUtils
 
 class PaymentReceiptService {
