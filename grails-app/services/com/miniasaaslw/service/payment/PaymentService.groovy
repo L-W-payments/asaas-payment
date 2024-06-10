@@ -106,7 +106,7 @@ class PaymentService {
         notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentReceived(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaid(payment))
-        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentPaid(payment))
 
     }
 
