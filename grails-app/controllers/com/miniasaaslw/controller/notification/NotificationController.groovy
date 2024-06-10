@@ -4,7 +4,9 @@ import com.miniasaaslw.domain.notification.Notification
 import com.miniasaaslw.utils.LoggedCustomer
 
 import grails.converters.JSON
+import grails.plugin.springsecurity.annotation.Secured
 
+@Secured(['ROLE_MEMBER'])
 class NotificationController {
 
     def notificationService

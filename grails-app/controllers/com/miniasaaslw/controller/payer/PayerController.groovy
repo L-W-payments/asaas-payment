@@ -7,7 +7,9 @@ import com.miniasaaslw.utils.LoggedCustomer
 
 import grails.converters.JSON
 import grails.validation.ValidationException
+import grails.plugin.springsecurity.annotation.Secured
 
+@Secured(['ROLE_MEMBER'])
 class PayerController extends BaseController {
 
     def payerService
