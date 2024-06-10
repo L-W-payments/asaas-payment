@@ -1,3 +1,5 @@
+<%@ page import="com.miniasaaslw.entity.enums.PersonType" %>
+
 <atlas-panel class="js-receipt-content">
     <atlas-layout inline justify="space-between">
         <atlas-heading size="h5">
@@ -55,10 +57,16 @@
             Nome do recebedor: <atlas-text muted
                                            size="sm">${receipt.payment.customer.name}</atlas-text>
         </atlas-text>
-
-        <atlas-text bold muted size="sm">
-            CPF/CNPJ: <atlas-text muted size="sm">${receipt.payment.customer.cpfCnpj}</atlas-text>
-        </atlas-text>
+        <g:if test="${receipt.payment.customer.personType.isNatural()}">
+            <atlas-text bold muted size="sm">
+                CPF: <atlas-text muted size="sm">${formatterTagLib.cpf(cpf: receipt.payment.customer.cpfCnpj)}</atlas-text>
+            </atlas-text>
+        </g:if>
+        <g:else>
+            <atlas-text bold muted size="sm">
+                CNPJ: <atlas-text muted size="sm">${formatterTagLib.cnpj(cnpj: receipt.payment.customer.cpfCnpj)}</atlas-text>
+            </atlas-text>
+        </g:else>
 
         <atlas-text bold muted size="sm">
             Instituição: <atlas-text muted
