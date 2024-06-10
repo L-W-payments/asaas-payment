@@ -9,7 +9,7 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class EmailNotificationService {
 
-    private static final String BASE_URL = "localhost:8080"
+    private static final String BASE_URL = "http://localhost:8080"
 
     def mailService
 
@@ -48,10 +48,15 @@ class EmailNotificationService {
     private void sendEmail(long emailNotificationId) {
         EmailNotification emailNotification = EmailNotificationRepository.query([id: emailNotificationId]).get()
 
+        Map model = [
+            emailNotification: emailNotification,
+            url: BASE_URL + emailNotification.url
+        ]
+
         mailService.sendMail {
             to emailNotification.recipientEmail
             subject emailNotification.subject
-            text emailNotification.body + " " + BASE_URL + emailNotification.url
+            html(view: "/templates/email/baseEmail", model: model)
         }
 
         updateToSent(emailNotification)

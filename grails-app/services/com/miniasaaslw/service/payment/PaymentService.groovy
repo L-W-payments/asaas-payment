@@ -72,6 +72,7 @@ class PaymentService {
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentRestored(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentRestored(payment))
+
     }
 
     public void delete(Long customerId, Long paymentId) {
@@ -86,6 +87,7 @@ class PaymentService {
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentDeleted(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentDeleted(payment))
+
     }
 
     public List<Payment> list(Map search, Integer max, Integer offset) {
@@ -108,7 +110,8 @@ class PaymentService {
         notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentReceived(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaid(payment))
-        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentPaid(payment))
+
     }
 
     public void updateToReceivedInCash(Long customerId, Long paymentId) {
