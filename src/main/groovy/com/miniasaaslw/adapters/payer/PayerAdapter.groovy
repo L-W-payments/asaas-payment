@@ -2,7 +2,7 @@ package com.miniasaaslw.adapters.payer
 
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.entity.enums.PersonType
-import com.miniasaaslw.repository.customer.CustomerRepository
+import com.miniasaaslw.utils.LoggedCustomer
 import com.miniasaaslw.utils.StringUtils
 
 class PayerAdapter {
@@ -35,7 +35,8 @@ class PayerAdapter {
 
     Customer customer
 
-    public PayerAdapter(Map params) {
+    public PayerAdapter(Customer customer, Map params) {
+        this.customer = customer
         this.name = params.name
         this.email = params.email
         this.phone = StringUtils.removeNonNumeric(params.phone as String)
@@ -49,6 +50,5 @@ class PayerAdapter {
         this.state = params.state
         this.district = params.district
         this.street = params.street
-        this.customer = CustomerRepository.query([id: params.customerId as Long]).get()
     }
 }
