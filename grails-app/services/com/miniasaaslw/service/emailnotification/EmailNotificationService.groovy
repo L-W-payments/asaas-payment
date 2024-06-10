@@ -9,7 +9,7 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class EmailNotificationService {
 
-    private static final String BASE_URL = "https://localhost:8080"
+    private static final String BASE_URL = "http://localhost:8080"
 
     def mailService
 
