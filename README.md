@@ -26,10 +26,10 @@ delete para registros no banco de dados.
 - [x] Deve ser possível um cliente listar todas as notificações;
 - [x] Deve ser possível que o pagador pague uma cobrança;
 - [x] Deve ser possível um cliente confirmar o recebimento em dinheiro de uma cobrança;
-- [ ] Deve ser possível receber um email após uma cobrança ser criada;
-- [ ] Deve ser possível receber um email após uma cobrança ser deletada;
-- [ ] Deve ser possível receber um email após uma cobrança ser vencida;
-- [ ] Deve ser possível receber um email após uma cobrança ser paga;
+- [x] Deve ser possível receber um email após uma cobrança ser criada;
+- [x] Deve ser possível receber um email após uma cobrança ser deletada;
+- [x] Deve ser possível receber um email após uma cobrança ser vencida;
+- [x] Deve ser possível receber um email após uma cobrança ser paga;
 
 ## RNs (Regras de negócio)
 
