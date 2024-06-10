@@ -1,12 +1,21 @@
 package com.miniasaaslw.service.paymentreceipt
 
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.domain.paymentReceipt.PaymentReceipt
+import com.miniasaaslw.domain.paymentreceipt.PaymentReceipt
+import com.miniasaaslw.repository.paymentreceipt.PaymentReceiptRepository
 import com.miniasaaslw.utils.MessageUtils
 
 import grails.validation.ValidationException
 
 class PaymentReceiptService {
+
+    public PaymentReceipt find(String publicId) {
+        PaymentReceipt paymentReceipt = PaymentReceiptRepository.query([publicId: publicId]).get()
+
+        if (!paymentReceipt) throw new RuntimeException(MessageUtils.getMessage("paymentReceipt.errors.notFound"))
+
+        return paymentReceipt
+    }
 
     public void save(Payment payment) {
         Payment paymentData = validatePayment(payment)
