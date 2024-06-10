@@ -35,7 +35,7 @@
 
         <atlas-text bold muted size="sm">
             Data do vencimento: <atlas-text muted
-                                            size="sm">${dateTimeTagLib.dateTime(date: receipt.payment.dueDate)}</atlas-text>
+                                            size="sm">${formatterTagLib.dateTime(date: receipt.payment.dueDate)}</atlas-text>
         </atlas-text>
 
         <atlas-text bold muted size="sm">

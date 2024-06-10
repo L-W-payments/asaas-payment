@@ -2,8 +2,8 @@ package com.miniasaaslw
 
 import com.miniasaaslw.utils.DateUtils
 
-class DateTimeTagLib {
-    static namespace = "dateTimeTagLib"
+class FormatterTagLib {
+    static namespace = "formatterTagLib"
 
     def dateTime = { attrs ->
         String format = DateUtils.SIMPLE_DATE_FORMAT
