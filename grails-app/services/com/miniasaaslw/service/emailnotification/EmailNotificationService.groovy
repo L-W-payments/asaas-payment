@@ -13,7 +13,6 @@ class EmailNotificationService {
 
     def mailService
 
-
     public void save(EmailNotificationAdapter adapter) {
         EmailNotification emailNotification = new EmailNotification()
 
