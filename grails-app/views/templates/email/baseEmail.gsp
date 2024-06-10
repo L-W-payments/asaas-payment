@@ -46,15 +46,6 @@
         line-height: 1.6;
     }
 
-    .content a {
-        color: #0044cc;
-        text-decoration: none;
-    }
-
-    .content a:hover {
-        text-decoration: underline;
-    }
-
     .footer {
         background-color: #f9f9f9;
         text-align: center;
@@ -62,13 +53,7 @@
         border-top: 1px solid #ddd;
     }
 
-    .footer .app-links img,
-    .footer .social-links img {
-        max-width: 100px;
-        margin: 10px;
-    }
-
-    .footer .address {
+    .footer .info {
         font-size: 12px;
         color: #666;
     }
@@ -82,7 +67,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <img src="https://atlas.asaas.com/assets/images/logos/asaas-logo.7POEJYYY.svg" alt="Asaas Logo">
+        <img src="https://ci3.googleusercontent.com/meips/ADKq_Na3rzr-X1iaRzx_vziBtmsyPBx2XQuka7kT_QAZiuufZ1a13igtStihxTU84j6MvdLhEBJCNfpJuFVgsjSz5mCpuu1HeVRcwnro155iKLwX9qup-Q7bO2XZY6jvkLMK4ZX7rhIh4DkUEEx7IKia5A=s0-d-e1-ft#https://www.asaas.com/assets/emails/asaas-name-white-11af35809d5ae4dcd235671ff4bf79e1.png" crossorigin="anonymous" alt="Asaas Logo">
         <h1>${emailNotification.subject}</h1>
     </div>
 
@@ -92,7 +77,7 @@
     </div>
     <div class="footer">
         <p>Abraços, Equipe Asaas 💙</p>
-        <p class="address">Enviado por <strong>L&W Payments - ASAAS Payment. </strong><br>Av. Rolf Wiest, 277, Sl. 820 - Bom Retiro, Joinville - SC, 89223-005.</p>
+        <p class="info">Enviado por <strong>L&W Payments - ASAAS Payment.</strong></p>
     </div>
 </div>
 </body>
