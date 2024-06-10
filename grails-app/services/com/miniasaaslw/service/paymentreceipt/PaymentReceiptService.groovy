@@ -40,7 +40,7 @@ class PaymentReceiptService {
         }
 
         if (payment.deleted) {
-            validatePayment.errors.reject("deleted", null, MessageUtils.getMessage("payment.errors.deleted"))
+            validatePayment.errors.reject("deleted", null, MessageUtils.getMessage("payment.errors.notFound"))
         }
 
         if (payment.paymentStatus.isReceivedInCash()) {
