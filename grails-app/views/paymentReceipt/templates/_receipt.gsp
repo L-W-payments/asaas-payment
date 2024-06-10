@@ -30,7 +30,7 @@
 
         <atlas-text bold muted size="sm">
             Forma de pagamento: <atlas-text muted
-                                            size="sm">${message(code: "paymentType.${receipt.payment.paymentType}.label")}</atlas-text>
+                                            size="sm">${message(code: "billingType.${receipt.payment.billingType}.label")}</atlas-text>
         </atlas-text>
 
         <atlas-text bold muted size="sm">
