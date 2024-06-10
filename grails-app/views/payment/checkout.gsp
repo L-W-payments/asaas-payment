@@ -60,6 +60,7 @@
                     <atlas-form action="${createLink(controller: 'payment', action: 'updateToReceived')}">
                         <g:if test="${payment.paymentStatus.isPending()}">
                             <atlas-input hidden name="id" value="${payment.id}"></atlas-input>
+                            <atlas-input hidden name="publicId" value="${payment.publicId}"></atlas-input>
                             <atlas-button description="Pagar" theme="success" submit block></atlas-button>
                         </g:if>
                         <g:else>
