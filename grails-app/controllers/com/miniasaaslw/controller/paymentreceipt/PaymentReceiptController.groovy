@@ -6,7 +6,7 @@ class PaymentReceiptController {
 
     def index() {}
 
-    def receipt() {
+    def show() {
         try {
             String publicId = params.id
 
