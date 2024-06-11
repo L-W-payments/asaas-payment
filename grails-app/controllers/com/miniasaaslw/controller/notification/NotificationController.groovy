@@ -1,7 +1,7 @@
 package com.miniasaaslw.controller.notification
 
 import com.miniasaaslw.domain.notification.Notification
-import com.miniasaaslw.utils.LoggedCustomer
+import com.miniasaaslw.domain.security.User
 
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
@@ -15,7 +15,7 @@ class NotificationController {
 
     def list() {
         try {
-            List<Notification> notifications = notificationService.list(LoggedCustomer.CUSTOMER.id)
+            List<Notification> notifications = notificationService.list((getAuthenticatedUser() as User).customerId)
             String template = g.render(template: "/templates/notifications", model: [notifications: notifications])
 
             render([success: true, template: template] as JSON)
