@@ -9,7 +9,7 @@
             ${payer.email}
         </atlas-table-col>
         <atlas-table-col>
-            ${dateTimeTagLib.dateTime(date: payer.dateCreated)}
+            ${formatterTagLib.dateTime(date: payer.dateCreated)}
         </atlas-table-col>
         <atlas-button-group slot="actions" group-after="2">
             <atlas-icon-button

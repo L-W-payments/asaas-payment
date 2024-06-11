@@ -4,6 +4,8 @@
 <head>
     <title>Pagamento - Asaas</title>
 
+    <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
+
     <asset:stylesheet src="new-theme.scss"/>
 
     <link rel="stylesheet" href="https://atlas.asaas.com/v15.18.0/atlas.min.css" crossorigin="anonymous">
@@ -28,7 +30,7 @@
                     <atlas-layout justify="space-between" inline>
                         <atlas-summary-item
                                 label="Data de vencimento"
-                                description="${dateTimeTagLib.dateTime(date: payment.dateCreated)}"></atlas-summary-item>
+                                description="${formatterTagLib.dateTime(date: payment.dateCreated)}"></atlas-summary-item>
 
                         <atlas-summary-item
                                 label="Situação"
@@ -60,6 +62,7 @@
                     <atlas-form action="${createLink(controller: 'payment', action: 'updateToReceived')}">
                         <g:if test="${payment.paymentStatus.isPending()}">
                             <atlas-input hidden name="id" value="${payment.id}"></atlas-input>
+                            <atlas-input hidden name="publicId" value="${payment.publicId}"></atlas-input>
                             <atlas-button description="Pagar" theme="success" submit block></atlas-button>
                         </g:if>
                         <g:else>

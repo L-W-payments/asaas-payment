@@ -1,4 +1,4 @@
-<%@ page import="com.miniasaaslw.entity.enums.payment.PaymentType" %>
+<%@ page import="com.miniasaaslw.entity.enums.payment.BillingType" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -57,7 +57,7 @@
                 </atlas-col>
                 <atlas-col lg="4" md="4">
                   <atlas-datepicker name="dueDate" label="Vencimento da cobrança" prevent-past-date
-                                    required value="${dateTimeTagLib.dateTime(date: payment.dueDate)}"></atlas-datepicker>
+                                    required value="${formatterTagLib.dateTime(date: payment.dueDate)}"></atlas-datepicker>
                 </atlas-col>
               </atlas-row>
             </atlas-grid>
