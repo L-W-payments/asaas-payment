@@ -15,12 +15,11 @@ class UserAdapter {
 
     String confirmPassword
 
-    public UserAdapter(Customer customer, Role role , Map params) {
+    public UserAdapter(Customer customer, Role role, Map params) {
         this.customer = customer
         this.role = role
         this.email = params.email
         this.password = params.password
         this.confirmPassword = params.confirmPassword
     }
-
 }
