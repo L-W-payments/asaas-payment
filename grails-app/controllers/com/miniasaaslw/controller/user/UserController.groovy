@@ -31,7 +31,7 @@ class UserController extends BaseController {
 
     def save() {
         try {
-            userService.save(new UserAdapter(LoggedCustomer.CUSTOMER, Role.findByAuthority('ROLE_MEMBER'), params))
+            userService.save(new UserAdapter((getAuthenticatedUser() as User).customer, Role.findByAuthority('ROLE_MEMBER'), params))
 
             flash.messageInfo = [messages: [MessageUtils.getMessage("user.success.save")], messageType: "success"]
             redirect(action: "index")
@@ -45,7 +45,7 @@ class UserController extends BaseController {
     }
 
     def list() {
-        return [userList: userService.list([customerId: LoggedCustomer.CUSTOMER.id], getLimitPerPage(), getOffset())]
+        return [userList: userService.list([customerId: (getAuthenticatedUser() as User).customerId], getLimitPerPage(), getOffset())]
     }
 
     @CompileDynamic
