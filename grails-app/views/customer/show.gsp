@@ -11,7 +11,7 @@
                   description="Apagar"></atlas-button>
     <atlas-input hidden name="country" value="Brasil"></atlas-input>
     <g:render template="/templates/basePersonForm"
-              model="${[person: customer]}"></g:render>
+              model="${[person: customer, isCustomer: false]}"/>
 
 </atlas-form-panel>
 </body>

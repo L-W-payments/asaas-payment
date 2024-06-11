@@ -9,10 +9,10 @@
 </head>
 
 <body page-title="Cadastro de Cliente">
-    <g:if test="${messageInfo}">
-        <g:render template="/utils/messages" model="${messageInfo}"/>
-    </g:if>
     <atlas-grid container>
+        <g:if test="${messageInfo}">
+            <g:render template="/utils/messages" model="${messageInfo}"/>
+        </g:if>
         <atlas-layout alignment="center">
             <atlas-image src="https://atlas.asaas.com/assets/images/logos/asaas-logo.7POEJYYY.svg"
                          height="100" style="margin-top: 32px;"></atlas-image>
@@ -21,7 +21,7 @@
             <atlas-form class="js-person-form" action="${createLink(controller: 'customer', action: 'save')}">
                 <atlas-input hidden name="country" value="Brasil"></atlas-input>
                 <g:render template="/templates/basePersonForm"
-                          model="${[title: "Criando sua conta"]}"></g:render>
+                          model="${[title: "Criando sua conta", isCustomer: true]}"/>
                 <atlas-layout inline gap="2" alignment="center" justify="space-between">
                     <atlas-button submit description="Criar conta" ></atlas-button>
                     <atlas-text>Já possui uma conta? <atlas-link href="/login/auth">Entrar</atlas-link></atlas-text>
