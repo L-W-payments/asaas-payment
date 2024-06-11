@@ -40,7 +40,7 @@ class CustomerService {
     }
 
     public Customer update(long id, CustomerAdapter customerAdapter) {
-        Customer customer = validateCustomer(customerAdapter)
+        Customer customer = validateCustomer(customerAdapter, true)
         if (customer.hasErrors()) {
             throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), customer.errors)
         }
@@ -50,7 +50,7 @@ class CustomerService {
         customer.save(failOnError: true)
         return customer
     }
-    
+
     public void delete(Long id) {
         Customer customer = find(id)
 
@@ -68,7 +68,7 @@ class CustomerService {
         return customer
     }
 
-    private Customer validateCustomer(CustomerAdapter customerAdapter) {
+    private Customer validateCustomer(CustomerAdapter customerAdapter, boolean isUpdate = false) {
         Customer customer = new Customer()
 
         if (!customerAdapter.name) {
@@ -143,12 +143,14 @@ class CustomerService {
             customer.errors.reject("postalCode", null, MessageUtils.getMessage("general.errors.postalCode.invalid"))
         }
 
-        if (CustomerRepository.exists([cpfCnpj: customerAdapter.cpfCnpj])) {
-            customer.errors.reject("cpfCnpj", null, MessageUtils.getMessage("general.errors.cpfCnpj.duplicated"))
-        }
+        if (!isUpdate) {
+            if (CustomerRepository.exists([cpfCnpj: customerAdapter.cpfCnpj])) {
+                customer.errors.reject("cpfCnpj", null, MessageUtils.getMessage("general.errors.cpfCnpj.duplicated"))
+            }
 
-        if (CustomerRepository.exists([email: customerAdapter.email])) {
-            customer.errors.reject("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
+            if (CustomerRepository.exists([email: customerAdapter.email])) {
+                customer.errors.reject("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
+            }
         }
 
         return customer

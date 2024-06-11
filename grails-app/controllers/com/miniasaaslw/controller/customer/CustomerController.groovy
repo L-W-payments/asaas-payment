@@ -1,16 +1,20 @@
 package com.miniasaaslw.controller.customer
 
-import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
+import com.miniasaaslw.domain.customer.Customer
+import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.service.customer.CustomerService
 import com.miniasaaslw.utils.MessageUtils
 
 import grails.compiler.GrailsCompileStatic
+import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
 
+import groovy.transform.CompileDynamic
+
 @GrailsCompileStatic
-@Secured(["isAuthenticated()"])
+@Secured(["ROLE_ADMIN"])
 class CustomerController {
 
     CustomerService customerService
@@ -28,61 +32,65 @@ class CustomerController {
     def save() {
         try {
             customerService.save(new CustomerAdapter(params), params)
-
-            redirect(uri: "/index")
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
-            redirect(action: "index")
         } catch (Exception exception) {
             flash.messageInfo = [messages: [MessageUtils.getMessage("customer.errors.save.unknown")], messageType: "error"]
-            redirect(action: "index")
         }
+
+        redirect(uri: "/index")
     }
 
+    @CompileDynamic
     def show() {
         def messageInfo = flash.messageInfo
 
         try {
-            Customer customer = customerService.find(params.long("id"))
+            Customer customer = customerService.find((getAuthenticatedUser() as User).customerId)
 
             if (customer) {
                 if (messageInfo) {
                     return [customer: customer, messageInfo: messageInfo]
                 }
+
                 return [customer: customer]
             }
         } catch (RuntimeException runtimeException) {
-            redirect(action: "index")
+            redirect(uri: "/index")
         } catch (Exception exception) {
             flash.messageInfo = [messages: [MessageUtils.getMessage("customer.errors.search.unknown")], messageType: "error"]
-            redirect(action: "index")
+            redirect(uri: "/index")
         }
     }
 
+    @CompileDynamic
     def update() {
-        long id = params.long("id")
+        Long customerId = (getAuthenticatedUser() as User).customerId
 
         try {
-            Customer customer = customerService.update(id, new CustomerAdapter(params))
-
-            redirect(action: "show", id: customer.id)
+            customerService.update(customerId, new CustomerAdapter(params))
+            redirect(action: "show")
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
-            redirect(action: "show", id: id)
+            redirect(action: "show")
         } catch (Exception exception) {
             flash.messageInfo = [messages: ["Erro ao atualizar sua conta"], messageType: "error"]
-            redirect(action: "index")
+            redirect(uri: "/index")
         }
     }
 
+    @CompileDynamic
     def delete() {
         try {
-            customerService.delete(params.long("id"))
+            customerService.delete((getAuthenticatedUser() as User).customerId)
+            render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
         } catch (Exception exception) {
             flash.messageInfo = [messages: [MessageUtils.getMessage("customer.errors.delete.unknown")], messageType: "error"]
+            render([success: false, alert: MessageUtils.getMessage("customer.errors.delete.unknown")] as JSON)
         }
-        redirect(action: "index")
+        redirect(uri: "/index")
     }
 }
