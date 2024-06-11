@@ -27,9 +27,9 @@ class CustomerController {
     @Secured(["permitAll"])
     def save() {
         try {
-            Customer customer = customerService.save(new CustomerAdapter(params), params)
+            customerService.save(new CustomerAdapter(params), params)
 
-            redirect(action: "show", id: customer.id)
+            redirect(uri: "/index")
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(action: "index")
