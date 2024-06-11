@@ -1,13 +1,13 @@
 package com.miniasaaslw.service.payment
 
-import com.miniasaaslw.adapters.notification.NotificationAdapter
 import com.miniasaaslw.adapters.emailnotification.EmailNotificationAdapter
+import com.miniasaaslw.adapters.notification.NotificationAdapter
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.utils.LoggedCustomer
-import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.payment.PaymentRepository
+import com.miniasaaslw.utils.LoggedCustomer
+import com.miniasaaslw.utils.MessageUtils
 
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -17,9 +17,11 @@ import groovy.time.TimeCategory
 @Transactional
 class PaymentService {
 
+    def emailNotificationService
+
     def notificationService
 
-    def emailNotificationService
+    def paymentReceiptService
 
     public Payment save(PaymentAdapter paymentAdapter) {
         Payment paymentData = validatePayment(paymentAdapter)
@@ -103,10 +105,12 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.RECEIVED
         payment.save(failOnError: true)
 
+        paymentReceiptService.save(payment)
+
         notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentReceived(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaid(payment))
-        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
+        emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentPaid(payment))
 
     }
 

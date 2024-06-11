@@ -1,10 +1,8 @@
 package com.miniasaaslw.controller.payer
 
 import com.miniasaaslw.controller.BaseController
-import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
-import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.utils.LoggedCustomer
 
 import grails.converters.JSON
@@ -19,13 +17,9 @@ class PayerController extends BaseController {
     def index() {
         def messageInfo = flash.messageInfo
 
-        List<Customer> customers = CustomerRepository.query([:]).list()
-
         if (messageInfo) {
-            return [customers: customers, messageInfo: messageInfo]
+            return [messageInfo: messageInfo]
         }
-
-        return [customers: customers]
     }
 
     def update() {
@@ -46,7 +40,7 @@ class PayerController extends BaseController {
 
     def save() {
         try {
-            Payer payer = payerService.save(new PayerAdapter(params))
+            Payer payer = payerService.save(new PayerAdapter(LoggedCustomer.CUSTOMER, params))
 
             redirect(action: "show", params: [id: payer.id])
         } catch (ValidationException validationException) {

@@ -10,8 +10,11 @@
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
+    <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
+
     <asset:stylesheet src="application.css"/>
     <asset:stylesheet src="new-theme.scss"/>
+
 
     <link rel="stylesheet" href="https://atlas.asaas.com/v15.18.0/atlas.min.css" crossorigin="anonymous">
     <script defer src="https://atlas.asaas.com/v15.18.0/atlas.min.js" crossorigin="anonymous"></script>
