@@ -3,6 +3,7 @@ package com.miniasaaslw.service.user
 import com.miniasaaslw.adapters.user.UserAdapter
 import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.domain.security.UserRole
+import com.miniasaaslw.repository.user.UserRepository
 import com.miniasaaslw.utils.EmailUtils
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.utils.PasswordUtils
@@ -14,6 +15,10 @@ import grails.validation.ValidationException
 @Transactional
 @GrailsCompileStatic
 class UserService {
+
+    public List<User> list(Map search, Integer max, Integer offset) {
+        return UserRepository.query(search).list(max: max, offset: offset)
+    }
 
     public User save(UserAdapter userAdapter) {
         User user = validateUser(userAdapter)
