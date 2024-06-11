@@ -6,6 +6,7 @@ import com.miniasaaslw.domain.security.UserRole
 import com.miniasaaslw.utils.EmailUtils
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.utils.PasswordUtils
+
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
