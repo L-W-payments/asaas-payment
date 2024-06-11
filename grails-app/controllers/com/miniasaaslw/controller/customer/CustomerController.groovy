@@ -11,6 +11,7 @@ class CustomerController {
 
     def customerService
 
+    @Secured(["permitAll"])
     def index() {
         def messageInfo = flash.messageInfo
 
@@ -19,6 +20,7 @@ class CustomerController {
         }
     }
 
+    @Secured(["permitAll"])
     def save() {
         try {
             Customer customer = customerService.save(new CustomerAdapter(params))
