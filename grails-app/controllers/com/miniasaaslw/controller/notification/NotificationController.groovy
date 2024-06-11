@@ -6,7 +6,7 @@ import com.miniasaaslw.utils.LoggedCustomer
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(['ROLE_MEMBER'])
+@Secured(['isAuthenticated()'])
 class NotificationController {
 
     def notificationService
@@ -15,7 +15,7 @@ class NotificationController {
 
     def list() {
         try {
-            List<Notification> notifications = notificationService.list(LoggedCustomer.CUSTOMER.id, 50, 0)
+            List<Notification> notifications = notificationService.list(LoggedCustomer.CUSTOMER.id)
             String template = g.render(template: "/templates/notifications", model: [notifications: notifications])
 
             render([success: true, template: template] as JSON)
