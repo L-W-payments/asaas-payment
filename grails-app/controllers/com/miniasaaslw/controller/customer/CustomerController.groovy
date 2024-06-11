@@ -2,15 +2,20 @@ package com.miniasaaslw.controller.customer
 
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
+import com.miniasaaslw.service.customer.CustomerService
+import com.miniasaaslw.utils.MessageUtils
 
+import grails.compiler.GrailsCompileStatic
 import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
 
-@Secured(['ROLE_MEMBER'])
+@GrailsCompileStatic
+@Secured(["isAuthenticated()"])
 class CustomerController {
 
-    def customerService
+    CustomerService customerService
 
+    @Secured(["permitAll"])
     def index() {
         def messageInfo = flash.messageInfo
 
@@ -19,16 +24,17 @@ class CustomerController {
         }
     }
 
+    @Secured(["permitAll"])
     def save() {
         try {
-            Customer customer = customerService.save(new CustomerAdapter(params))
+            customerService.save(new CustomerAdapter(params), params)
 
-            redirect(action: "show", id: customer.id)
+            redirect(uri: "/index")
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(action: "index")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "customer.errors.save.unknown")], messageType: "error"]
+            flash.messageInfo = [messages: [MessageUtils.getMessage("customer.errors.save.unknown")], messageType: "error"]
             redirect(action: "index")
         }
     }
@@ -48,7 +54,7 @@ class CustomerController {
         } catch (RuntimeException runtimeException) {
             redirect(action: "index")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "customer.errors.search.unknown")], messageType: "error"]
+            flash.messageInfo = [messages: [MessageUtils.getMessage("customer.errors.search.unknown")], messageType: "error"]
             redirect(action: "index")
         }
     }
@@ -75,7 +81,7 @@ class CustomerController {
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "customer.errors.delete.unknown")], messageType: "error"]
+            flash.messageInfo = [messages: [MessageUtils.getMessage("customer.errors.delete.unknown")], messageType: "error"]
         }
         redirect(action: "index")
     }

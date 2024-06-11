@@ -64,7 +64,7 @@
                         href="${createLink(controller: 'customer', action: 'show', id: LoggedCustomer.CUSTOMER.id)}">
                     Meu perfil
                 </atlas-dropdown-item>
-                <atlas-dropdown-item icon="power" theme="danger">Sair</atlas-dropdown-item>
+                <atlas-dropdown-item href="/logout" icon="power" theme="danger">Sair</atlas-dropdown-item>
             </atlas-dropdown>
         </div>
     </atlas-navbar>

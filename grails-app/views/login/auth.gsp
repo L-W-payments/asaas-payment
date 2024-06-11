@@ -42,6 +42,8 @@
 
                     <button type="submit">Entrar</button>
 
+                    <p class="description">Não possui uma conta? <a class="link" href="/customer">Registre-se</a></p>
+
                     <g:if test="${flash.message}">
                         <div class="error">${flash.message}</div>
                     </g:if>

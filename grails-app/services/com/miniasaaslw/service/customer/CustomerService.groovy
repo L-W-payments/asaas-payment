@@ -1,9 +1,12 @@
 package com.miniasaaslw.service.customer
 
+import com.miniasaaslw.adapters.user.UserAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
+import com.miniasaaslw.domain.security.Role
 import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.repository.customer.CustomerRepository
+import com.miniasaaslw.service.user.UserService
 import com.miniasaaslw.utils.PostalCodeUtils
 import com.miniasaaslw.utils.CpfCnpjUtils
 import com.miniasaaslw.utils.EmailUtils
@@ -12,13 +15,17 @@ import com.miniasaaslw.utils.NameUtils
 import com.miniasaaslw.utils.PhoneUtils
 import com.miniasaaslw.utils.StateUtils
 
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
+@GrailsCompileStatic
 @Transactional
 class CustomerService {
 
-    public Customer save(CustomerAdapter customerAdapter) {
+    UserService userService
+
+    public Customer save(CustomerAdapter customerAdapter, Map userParams) {
         Customer customer = validateCustomer(customerAdapter)
         if (customer.hasErrors()) {
             throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), customer.errors)
@@ -26,7 +33,10 @@ class CustomerService {
 
         customer = buildCustomerProperties(customerAdapter, new Customer())
 
-        return customer.save(failOnError: true)
+        customer.save(failOnError: true)
+        userService.save(new UserAdapter(customer, Role.findByAuthority("ROLE_ADMIN"), userParams))
+
+        return customer
     }
 
     public Customer update(long id, CustomerAdapter customerAdapter) {
