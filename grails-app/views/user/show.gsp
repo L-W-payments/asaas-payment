@@ -6,9 +6,6 @@
 </head>
 
 <body page-title="Visualizar Usuário">
-        <g:if test="${messageInfo}">
-            <g:render template="/utils/messages" model="${messageInfo}"/>
-        </g:if>
         <atlas-form-panel header="Dados do usuário">
         <atlas-button slot="actions" data-panel-start-editing icon="pencil" description="Editar"></atlas-button>
 
