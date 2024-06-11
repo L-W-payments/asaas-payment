@@ -21,12 +21,19 @@ class UserController extends BaseController {
 
     UserService userService
 
-    def index() {}
+    def index() {
+        def messageInfo = flash.messageInfo
+
+        if (messageInfo) {
+            return [messageInfo: messageInfo]
+        }
+    }
 
     def save() {
         try {
             userService.save(new UserAdapter(LoggedCustomer.CUSTOMER, Role.findByAuthority('ROLE_MEMBER'), params))
 
+            flash.messageInfo = [messages: [MessageUtils.getMessage("user.success.save")], messageType: "success"]
             redirect(action: "index")
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
