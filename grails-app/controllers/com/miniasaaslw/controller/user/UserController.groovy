@@ -32,12 +32,6 @@ class UserController extends BaseController {
     @CompileDynamic
     @Secured(['isAuthenticated()'])
     def show() {
-        def messageInfo = flash.messageInfo
-
-        if (messageInfo) {
-            return [messageInfo: messageInfo]
-        }
-
         try {
             User loggedUser = getAuthenticatedUser() as User
             Boolean isAdmin = loggedUser.getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
