@@ -3,7 +3,7 @@
         <atlas-row>
             <atlas-col>
                 <atlas-masked-input label="Email" name="email" mask-alias="email" required="true"
-                                    placeholder="maria.bernadete@asaas.com.br">
+                                    placeholder="maria.bernadete@asaas.com.br" value="${user.email}">
                 </atlas-masked-input>
             </atlas-col>
         </atlas-row>
