@@ -29,6 +29,29 @@ class UserController extends BaseController {
         }
     }
 
+    @CompileDynamic
+    @Secured(['isAuthenticated()'])
+    def show() {
+        try {
+            User loggedUser = getAuthenticatedUser() as User
+            Boolean isAdmin = loggedUser.getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
+
+            if (isAdmin) {
+                if(params.id){
+                    return [user: userService.find((getAuthenticatedUser() as User).customerId, params.long("id"))]
+                }
+            }
+
+            return [user: (getAuthenticatedUser() as User)]
+        } catch (RuntimeException runtimeException) {
+            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
+        } catch (Exception exception) {
+            flash.messageInfo = [messages: [MessageUtils.getMessage("user.errors.save.unknown")], messageType: "error"]
+        }
+
+        redirect(action: "index")
+    }
+
     def save() {
         try {
             userService.save(new UserAdapter((getAuthenticatedUser() as User).customer, Role.findByAuthority('ROLE_MEMBER'), params))
