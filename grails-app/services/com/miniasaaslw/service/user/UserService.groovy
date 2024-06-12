@@ -77,6 +77,10 @@ class UserService {
             user.errors.rejectValue("password", null, MessageUtils.getMessage("general.errors.password.weak"))
         }
 
+        if(UserRepository.query(["email": userAdapter.email]).exists()){
+            user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
+        }
+
         return user
     }
 
