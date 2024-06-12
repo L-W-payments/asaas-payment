@@ -23,6 +23,12 @@ class UserRepository implements Repository<User, UserRepository> {
             if (search.containsKey("email[like]")) {
                 ilike("email", "%" + search."email[like]" + "%")
             }
+
+            if (Boolean.valueOf(search.includeDeleted.toString())) {
+                inList("enabled", [true, false])
+            } else {
+                eq("enabled", true)
+            }
         }
     }
 

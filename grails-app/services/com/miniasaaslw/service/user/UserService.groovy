@@ -34,6 +34,15 @@ class UserService {
         return user
     }
 
+    public void delete(Long customerId, Long id) {
+        User user = find(customerId, id)
+
+        if (!user.enabled) throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
+
+        user.enabled = false
+        user.save(failOnError: true)
+    }
+
     public User find(Long customerId, Long id) {
         User user = UserRepository.query([customerId: customerId, id: id]).get()
 

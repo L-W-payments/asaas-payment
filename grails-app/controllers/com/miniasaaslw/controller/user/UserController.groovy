@@ -5,7 +5,6 @@ import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.security.Role
 import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.service.user.UserService
-import com.miniasaaslw.utils.LoggedCustomer
 import com.miniasaaslw.utils.MessageUtils
 
 import grails.compiler.GrailsCompileStatic
@@ -37,7 +36,7 @@ class UserController extends BaseController {
             Boolean isAdmin = loggedUser.getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
 
             if (isAdmin) {
-                if(params.id){
+                if (params.id) {
                     return [user: userService.find((getAuthenticatedUser() as User).customerId, params.long("id"))]
                 }
             }
@@ -67,14 +66,33 @@ class UserController extends BaseController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
+    def delete() {
+        try {
+            Long id = params.long("id")
+
+            User loggedUser = getAuthenticatedUser() as User
+
+            userService.delete(loggedUser.customer.id, id)
+            render([success: true] as JSON)
+        } catch (RuntimeException runtimeException) {
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (Exception exception) {
+            render([success: false, alert: MessageUtils.getMessage("user.errors.delete.unknown")] as JSON)
+        }
+    }
+
     def list() {
         return [userList: userService.list([customerId: (getAuthenticatedUser() as User).customerId], getLimitPerPage(), getOffset())]
     }
 
     @CompileDynamic
     def loadTableContent() {
-        Map search = [customerId: LoggedCustomer.CUSTOMER.id]
+        User loggedUser = getAuthenticatedUser() as User
 
+        Map search = [customerId: loggedUser.customer.id]
+
+        if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.email) search."email[like]" = params.email
 
         List<User> userList = userService.list(search, getLimitPerPage(), getOffset())

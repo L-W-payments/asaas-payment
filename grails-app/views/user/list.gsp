@@ -15,6 +15,14 @@
                         slot="search"></atlas-search-input>
 
                 <atlas-button description="Adicionar" icon="plus" href="/user" slot="actions"></atlas-button>
+
+                <atlas-filter class="js-payer-filter-input" slot="filter">
+                    <atlas-filter-form slot="simple-filter">
+                        <atlas-filter-group header="Listagem" name="includeDeleted" slot="col-1">
+                            <atlas-checkbox value="true">Exibir deletados</atlas-checkbox>
+                        </atlas-filter-group>
+                    </atlas-filter-form>
+                </atlas-filter>
             </atlas-toolbar>
 
             <g:render template="/user/templates/table"/>
