@@ -10,7 +10,9 @@
         <atlas-toolbar>
             <atlas-search-input class="js-payer-search-input" placeholder="Pesquisar" icon="magnifier"
                                 slot="search"></atlas-search-input>
-            <atlas-button description="Adicionar" icon="plus" slot="actions"></atlas-button>
+
+            <atlas-button description="Adicionar" icon="plus" href="/payer" slot="actions"></atlas-button>
+
             <atlas-filter class="js-payer-filter-input" slot="filter">
                 <atlas-filter-form slot="simple-filter">
                     <atlas-filter-group header="Listagem" name="includeDeleted" slot="col-1">

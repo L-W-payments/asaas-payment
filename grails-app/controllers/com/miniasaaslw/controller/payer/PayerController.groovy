@@ -1,18 +1,20 @@
 package com.miniasaaslw.controller.payer
 
+import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.payer.Payer
-import com.miniasaaslw.adapters.payer.PayerAdapter
-import com.miniasaaslw.utils.LoggedCustomer
+import com.miniasaaslw.domain.security.User
+import com.miniasaaslw.service.payer.PayerService
+import com.miniasaaslw.utils.MessageUtils
 
 import grails.converters.JSON
-import grails.validation.ValidationException
 import grails.plugin.springsecurity.annotation.Secured
+import grails.validation.ValidationException
 
-@Secured(['ROLE_MEMBER'])
+@Secured(['isAuthenticated()'])
 class PayerController extends BaseController {
 
-    def payerService
+    PayerService payerService
 
     def index() {
         def messageInfo = flash.messageInfo
@@ -26,28 +28,29 @@ class PayerController extends BaseController {
         Long id = params.long("id")
 
         try {
-            Payer payer = payerService.update(LoggedCustomer.CUSTOMER.id, id, new PayerAdapter(params))
+            Payer payer = payerService.update(id, new PayerAdapter((getAuthenticatedUser() as User).customer, params))
 
-            redirect(action: "show", params: [id: payer.id])
+            redirect(action: "show", id: payer.id)
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
-            redirect(action: "show", params: [id: id])
+            redirect(action: "show", id: id)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]
-            redirect(action: "show", params: [id: id])
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payer.errors.save.unknown")], messageType: "error"]
+            redirect(action: "show", id: id)
         }
     }
 
     def save() {
         try {
-            Payer payer = payerService.save(new PayerAdapter(LoggedCustomer.CUSTOMER, params))
+            Payer payer = payerService.save(new PayerAdapter((getAuthenticatedUser() as User).customer, params))
 
-            redirect(action: "show", params: [id: payer.id])
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payer.save.success")], messageType: "success"]
+            redirect(action: "show", id: payer.id)
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
             redirect(action: "index")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payer.errors.save.unknown")], messageType: "error"]
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payer.errors.save.unknown")], messageType: "error"]
             redirect(action: "index")
         }
     }
@@ -56,26 +59,32 @@ class PayerController extends BaseController {
         try {
             Long id = params.long("id")
 
-            payerService.restore(LoggedCustomer.CUSTOMER.id, id)
+            payerService.restore((getAuthenticatedUser() as User).customerId, id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
             render([success: false, alert: runtimeException.getMessage()] as JSON)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payer.errors.restore.unknown")], messageType: "error"]
-            render([success: false, alert: message(code: "payer.errors.restore.unknown")] as JSON)
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payer.errors.restore.unknown")], messageType: "error"]
+            render([success: false, alert: MessageUtils.getMessage("payer.errors.restore.unknown")] as JSON)
         }
     }
 
     def show() {
         try {
+            def messageInfo = flash.messageInfo
+
             Long id = params.long("id")
 
-            return [payer: payerService.find(LoggedCustomer.CUSTOMER.id, id)]
+            if (messageInfo) {
+                return [payer: payerService.find((getAuthenticatedUser() as User).customerId, id), messageInfo: messageInfo]
+            }
+
+            return [payer: payerService.find((getAuthenticatedUser() as User).customerId, id)]
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payer.errors.search.unknown")], messageType: "error"]
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payer.errors.search.unknown")], messageType: "error"]
         }
 
         redirect(action: "index")
@@ -85,21 +94,21 @@ class PayerController extends BaseController {
         try {
             Long id = params.long("id")
 
-            payerService.delete(LoggedCustomer.CUSTOMER.id, id)
+            payerService.delete((getAuthenticatedUser() as User).customerId, id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             render([success: false, alert: runtimeException.getMessage()] as JSON)
         } catch (Exception exception) {
-            render([success: false, alert: "Erro ao deletar o pagador"] as JSON)
+            render([success: false, alert: MessageUtils.getMessage("payer.errors.delete.unknown")] as JSON)
         }
     }
 
     def list() {
-        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [customerId: LoggedCustomer.CUSTOMER.id])]
+        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [customerId: (getAuthenticatedUser() as User).customerId])]
     }
 
     def loadTableContent() {
-        Map search = [customerId: LoggedCustomer.CUSTOMER.id]
+        Map search = [customerId: (getAuthenticatedUser() as User).customerId]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.name) search."name[like]" = params.name
@@ -110,5 +119,4 @@ class PayerController extends BaseController {
 
         render([totalRecords: totalRecords, content: content, success: true] as JSON)
     }
-
 }
