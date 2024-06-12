@@ -82,6 +82,24 @@ class UserController extends BaseController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
+    def restore() {
+        try {
+            Long id = params.long("id")
+
+            User loggedUser = getAuthenticatedUser() as User
+
+            userService.restore(loggedUser.customer.id, id)
+            render([success: true] as JSON)
+        } catch (RuntimeException runtimeException) {
+            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
+            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (Exception exception) {
+            flash.messageInfo = [messages: [MessageUtils.getMessage("user.errors.restore.unknown")], messageType: "error"]
+            render([success: false, alert: MessageUtils.getMessage("user.errors.restore.unknown")] as JSON)
+        }
+    }
+
     def list() {
         return [userList: userService.list([customerId: (getAuthenticatedUser() as User).customerId], getLimitPerPage(), getOffset())]
     }
