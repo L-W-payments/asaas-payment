@@ -16,7 +16,6 @@ class PaymentReceiptController {
     def show() {
         try {
             String publicId = params.id
-            throw new Exception("Sla")
             return [receipt: paymentReceiptService.find(publicId)]
         } catch (RuntimeException runtimeException) {
             return [message: MessageUtils.getMessage("paymentReceipt.errors.notFound"), messageType: "notFound"]
