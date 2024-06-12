@@ -4,14 +4,15 @@ import com.miniasaaslw.adapters.notification.NotificationAdapter
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.notification.Notification
 import com.miniasaaslw.repository.notification.NotificationRepository
-
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 
+@GrailsCompileStatic
 @Transactional
 class NotificationService {
 
-    public List<Notification> list(Long customerId, Integer max, Integer offset) {
-        return NotificationRepository.query([customerId: customerId]).list(max: max, offset: offset)
+    public List<Notification> list(Long customerId) {
+        return NotificationRepository.query([customerId: customerId]).list()
     }
 
     public void save(Customer customer, NotificationAdapter notificationAdapter) {

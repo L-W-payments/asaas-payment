@@ -34,6 +34,16 @@ class UserService {
         return user
     }
 
+    public User find(Long customerId, Long id) {
+        User user = UserRepository.query([customerId: customerId, id: id]).get()
+
+        if (!user) {
+            throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
+        }
+
+        return user
+    }
+
     private User validateUser(UserAdapter userAdapter) {
         User user = new User()
 

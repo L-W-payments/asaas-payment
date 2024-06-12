@@ -21,12 +21,42 @@ class UserController extends BaseController {
 
     UserService userService
 
-    def index() {}
+    def index() {
+        def messageInfo = flash.messageInfo
+
+        if (messageInfo) {
+            return [messageInfo: messageInfo]
+        }
+    }
+
+    @CompileDynamic
+    @Secured(['isAuthenticated()'])
+    def show() {
+        try {
+            User loggedUser = getAuthenticatedUser() as User
+            Boolean isAdmin = loggedUser.getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
+
+            if (isAdmin) {
+                if(params.id){
+                    return [user: userService.find((getAuthenticatedUser() as User).customerId, params.long("id"))]
+                }
+            }
+
+            return [user: (getAuthenticatedUser() as User)]
+        } catch (RuntimeException runtimeException) {
+            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
+        } catch (Exception exception) {
+            flash.messageInfo = [messages: [MessageUtils.getMessage("user.errors.save.unknown")], messageType: "error"]
+        }
+
+        redirect(action: "index")
+    }
 
     def save() {
         try {
-            userService.save(new UserAdapter(LoggedCustomer.CUSTOMER, Role.findByAuthority('ROLE_MEMBER'), params))
+            userService.save(new UserAdapter((getAuthenticatedUser() as User).customer, Role.findByAuthority('ROLE_MEMBER'), params))
 
+            flash.messageInfo = [messages: [MessageUtils.getMessage("user.success.save")], messageType: "success"]
             redirect(action: "index")
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
@@ -38,7 +68,7 @@ class UserController extends BaseController {
     }
 
     def list() {
-        return [userList: userService.list([customerId: LoggedCustomer.CUSTOMER.id], getLimitPerPage(), getOffset())]
+        return [userList: userService.list([customerId: (getAuthenticatedUser() as User).customerId], getLimitPerPage(), getOffset())]
     }
 
     @CompileDynamic

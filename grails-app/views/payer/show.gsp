@@ -8,6 +8,10 @@
 </head>
 
 <body page-title="Visualizar pagador">
+    <g:if test="${messageInfo}">
+        <g:render template="/utils/messages" model="${messageInfo}"/>
+    </g:if>
+
     <atlas-form-panel header="Dados de ${payer.name}" class="js-person-form"
                       action="${createLink(controller: 'payer', action: 'update', id: payer.id)}">
 
