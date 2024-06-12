@@ -9,9 +9,11 @@ import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.repository.payment.PaymentRepository
 import com.miniasaaslw.utils.*
 
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
+@GrailsCompileStatic
 @Transactional
 class PayerService {
 
@@ -53,14 +55,14 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
-    public Payer update(Long customerId, Long id, PayerAdapter payerAdapter) {
+    public Payer update(Long id, PayerAdapter payerAdapter) {
         Payer payerValues = validatePayerParams(payerAdapter)
 
         if (payerValues.hasErrors()) {
             throw new ValidationException("Erro ao validar os parâmetros do pagador", payerValues.errors)
         }
 
-        Payer payer = find(customerId, id)
+        Payer payer = find(payerAdapter.customer.id, id)
 
         payer = buildPayerProperties(payer, payerAdapter, payer.customer)
         payer.save(failOnError: true)

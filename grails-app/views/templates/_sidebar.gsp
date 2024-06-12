@@ -1,6 +1,4 @@
-<%@ page import="com.miniasaaslw.domain.security.User" %>
-
-<atlas-sidebar slot="sidebar" home-path="${createLink(controller: 'customer', action: 'index')}">
+<atlas-sidebar slot="sidebar" home-path="/">
 
     <atlas-sidebar-menu slot="body">
         <atlas-sidebar-menu-item icon="users" value="clients-group" text="Pagadores" ${controllerName == 'payer'
