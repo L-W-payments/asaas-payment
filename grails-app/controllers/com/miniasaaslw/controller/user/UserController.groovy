@@ -5,7 +5,6 @@ import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.security.Role
 import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.service.user.UserService
-import com.miniasaaslw.utils.LoggedCustomer
 import com.miniasaaslw.utils.MessageUtils
 
 import grails.compiler.GrailsCompileStatic
@@ -37,12 +36,12 @@ class UserController extends BaseController {
             Boolean isAdmin = loggedUser.getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
 
             if (isAdmin) {
-                if(params.id){
-                    return [user: userService.find((getAuthenticatedUser() as User).customerId, params.long("id"))]
+                if (params.id) {
+                    return [user: userService.find(loggedUser.customerId, params.long("id"))]
                 }
             }
 
-            return [user: (getAuthenticatedUser() as User)]
+            return [user: loggedUser]
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
         } catch (Exception exception) {
@@ -54,7 +53,9 @@ class UserController extends BaseController {
 
     def save() {
         try {
-            userService.save(new UserAdapter((getAuthenticatedUser() as User).customer, Role.findByAuthority('ROLE_MEMBER'), params))
+            User loggedCustomer = getAuthenticatedUser() as User
+
+            userService.save(new UserAdapter(loggedCustomer.customer, Role.findByAuthority('ROLE_MEMBER'), params))
 
             flash.messageInfo = [messages: [MessageUtils.getMessage("user.success.save")], messageType: "success"]
             redirect(action: "index")
@@ -68,12 +69,18 @@ class UserController extends BaseController {
     }
 
     def list() {
-        return [userList: userService.list([customerId: (getAuthenticatedUser() as User).customerId], getLimitPerPage(), getOffset())]
+        User loggedCustomer = getAuthenticatedUser() as User
+
+        List<User> list = userService.list([customerId: loggedCustomer.customer.id], getLimitPerPage(), getOffset())
+
+        return [userList: list]
     }
 
     @CompileDynamic
     def loadTableContent() {
-        Map search = [customerId: LoggedCustomer.CUSTOMER.id]
+        User loggedCustomer = getAuthenticatedUser() as User
+
+        Map search = [customerId: loggedCustomer.customer.id]
 
         if (params.email) search."email[like]" = params.email
 

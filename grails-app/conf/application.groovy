@@ -5,6 +5,7 @@ grails.plugin.springsecurity.authority.className = 'com.miniasaaslw.domain.secur
 grails.plugin.springsecurity.userLookup.usernamePropertyName='email'
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rememberMe.persistent = true
+grails.plugin.springsecurity.userDetailsService = 'customUserDetailsService'
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 		[pattern: '/',               access: 'isAuthenticated()'],
 		[pattern: '/error',          access: ['permitAll']],
