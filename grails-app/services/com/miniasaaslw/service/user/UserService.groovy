@@ -34,6 +34,21 @@ class UserService {
         return user
     }
 
+    public void updatePassword(UserAdapter userAdapter) {
+        User user = validateUserUpdate(userAdapter)
+
+        if (user.hasErrors()) {
+            throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), user.errors)
+        }
+
+        user = find(userAdapter.customer.id, userAdapter.id)
+
+        user.password = userAdapter.password
+
+        user.save(failOnError: true)
+    }
+
+
     public User find(Long customerId, Long id) {
         User user = UserRepository.query([customerId: customerId, id: id]).get()
 
@@ -59,23 +74,11 @@ class UserService {
             user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.required"))
         }
 
-        if (!userAdapter.password) {
-            user.errors.rejectValue("password", null, MessageUtils.getMessage("general.errors.password.required"))
-        }
-
-        if (!userAdapter.confirmPassword) {
-            user.errors.rejectValue("confirmPassword", null, MessageUtils.getMessage("general.errors.password.confirmation.required"))
-        }
-
         if (!EmailUtils.validateEmail(userAdapter.email)) {
             user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.invalid"))
         }
 
-        if (!PasswordUtils.matches(userAdapter.password, userAdapter.confirmPassword)) {
-            user.errors.rejectValue("password", null, MessageUtils.getMessage("general.errors.password.confirmation"))
-        } else if (!PasswordUtils.isStrong(userAdapter.password)) {
-            user.errors.rejectValue("password", null, MessageUtils.getMessage("general.errors.password.weak"))
-        }
+        validatePassword(userAdapter, user)
 
         return user
     }
@@ -86,5 +89,31 @@ class UserService {
         user.password = userAdapter.password
     }
 
+    User validateUserUpdate(UserAdapter userAdapter) {
+        User user = new User()
 
+        if (!userAdapter.customer) {
+            user.errors.rejectValue("customer", null, MessageUtils.getMessage("customer.errors.notFound"))
+        }
+
+        validatePassword(userAdapter, user)
+
+        return user
+    }
+
+    private void validatePassword(UserAdapter userAdapter, User user) {
+        if (!userAdapter.password) {
+            user.errors.rejectValue("password", null, MessageUtils.getMessage("general.errors.password.required"))
+        }
+
+        if (!userAdapter.confirmPassword) {
+            user.errors.rejectValue("confirmPassword", null, MessageUtils.getMessage("general.errors.password.confirmation.required"))
+        }
+
+        if (!PasswordUtils.matches(userAdapter.password, userAdapter.confirmPassword)) {
+            user.errors.rejectValue("password", null, MessageUtils.getMessage("general.errors.password.confirmation"))
+        } else if (!PasswordUtils.isStrong(userAdapter.password)) {
+            user.errors.rejectValue("password", null, MessageUtils.getMessage("general.errors.password.weak"))
+        }
+    }
 }
