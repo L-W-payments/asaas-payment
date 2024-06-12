@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
     <title>
     <g:layoutTitle default="Grails"/>
     </title>
@@ -13,7 +14,6 @@
 
     <asset:stylesheet src="application.css"/>
     <asset:stylesheet src="new-theme.scss"/>
-
 
     <link rel="stylesheet" href="https://atlas.asaas.com/v15.18.0/atlas.min.css" crossorigin="anonymous">
     <script defer src="https://atlas.asaas.com/v15.18.0/atlas.min.js" crossorigin="anonymous"></script>
@@ -30,8 +30,9 @@
         <atlas-page>
             <atlas-page-header slot="header" page-name="${pageProperty(name: 'body.page-title')}">
                 <atlas-breadcrumb slot="breadcrumb">
-                    <atlas-breadcrumb-item text="${pageProperty(name: 'body.page-title')}"
-                                           icon="home"></atlas-breadcrumb-item>
+                    <atlas-breadcrumb-item
+                            text="${pageProperty(name: 'body.page-title')}"
+                            icon="home"></atlas-breadcrumb-item>
                 </atlas-breadcrumb>
             </atlas-page-header>
 

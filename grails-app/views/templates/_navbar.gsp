@@ -1,5 +1,3 @@
-<%@ page import="com.miniasaaslw.utils.LoggedCustomer" %>
-
 <atlas-navbar slot="navbar">
     <div slot="actions">
         <atlas-icon-button
@@ -33,12 +31,22 @@
                 width="300"
                 auto-close
                 auto-close-trigger="outside">
-            <atlas-dropdown-item
-                    icon="cog"
-                    theme="secondary"
-                    href="${createLink(controller: 'customer', action: 'show', id: LoggedCustomer.CUSTOMER.id)}">
-                Meu perfil
-            </atlas-dropdown-item>
+            <sec:ifAllGranted roles="ROLE_ADMIN">
+                <atlas-dropdown-item
+                        icon="cog"
+                        theme="secondary"
+                        href="${createLink(controller: 'customer', action: 'show')}">
+                    Meu perfil
+                </atlas-dropdown-item>
+            </sec:ifAllGranted>
+            <sec:ifAllGranted roles="ROLE_MEMBER">
+                <atlas-dropdown-item
+                        icon="cog"
+                        theme="secondary"
+                        href="${createLink(controller: 'user', action: 'show')}">
+                    Meu perfil
+                </atlas-dropdown-item>
+            </sec:ifAllGranted>
             <atlas-dropdown-item href="/logout" icon="power" theme="danger">Sair</atlas-dropdown-item>
         </atlas-dropdown>
     </div>

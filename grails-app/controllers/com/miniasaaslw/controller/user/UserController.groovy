@@ -98,8 +98,7 @@ class UserController extends BaseController {
     def loadTableContent() {
         Map search = [customerId: LoggedCustomer.CUSTOMER.id]
 
-        if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
-        if (params.name) search."name[like]" = params.name
+        if (params.email) search."email[like]" = params.email
 
         List<User> userList = userService.list(search, getLimitPerPage(), getOffset())
         Integer totalRecords = userList.totalCount
