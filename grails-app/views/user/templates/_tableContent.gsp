@@ -21,7 +21,7 @@
                     tooltip="Remover usuário"
                     icon="trash"
                     theme="danger"
-                    description="Remover pagador">
+                    description="Remover usuário">
             </atlas-icon-button>
         </atlas-button-group>
     </atlas-table-row>
