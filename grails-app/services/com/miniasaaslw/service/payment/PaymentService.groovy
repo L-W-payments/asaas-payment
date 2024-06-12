@@ -171,6 +171,7 @@ class PaymentService {
         payment.dueDate = paymentAdapter.dueDate
         payment.paymentStatus = PaymentStatus.PENDING
         payment.billingType = paymentAdapter.billingType
+        payment.description = paymentAdapter.description
 
         return payment
     }
@@ -218,6 +219,10 @@ class PaymentService {
 
         if (payment.paymentStatus.isReceived()) {
             validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.received"))
+        }
+
+        if (payment.paymentStatus.isReceivedInCash()) {
+            validationPayment.errors.reject("paymentStatus", null, MessageUtils.getMessage("payment.errors.receivedInCash"))
         }
 
         return validationPayment
