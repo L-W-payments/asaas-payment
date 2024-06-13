@@ -28,8 +28,8 @@ class UserAdapter {
     public UserAdapter(Customer customer, Map params) {
         this.customer = customer
         this.id = params.id as Long
+        this.email = params.email
         this.password = params.password
         this.confirmPassword = params.confirmPassword
     }
-
 }

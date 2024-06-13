@@ -59,7 +59,9 @@ class CustomerController extends BaseController {
     @CompileDynamic
     def update() {
         try {
-            customerService.update(getCurrentCustomerId(), new CustomerAdapter(params))
+            customerService.update(getCurrentUser(), new CustomerAdapter(params))
+
+            addMessageCode("customer.success.update", MessageType.SUCCESS)
         } catch (Exception exception) {
             if (!handleException(exception)) addMessageCode("customer.errors.update.unknown", MessageType.ERROR)
         }
