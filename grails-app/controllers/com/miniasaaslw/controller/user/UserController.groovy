@@ -70,7 +70,7 @@ class UserController extends BaseController {
         try {
             Long id = params.long("id")
 
-            userService.delete(getCurrentCustomerId(), id)
+            userService.delete(getCurrentUser(), id)
 
             render([success: true] as JSON)
         } catch (GenericException genericException) {
