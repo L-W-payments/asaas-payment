@@ -32,23 +32,31 @@ class UserController extends BaseController {
     @Secured(['isAuthenticated()'])
     def show() {
         try {
+            def messageInfo = flash.messageInfo
+
             User loggedUser = getAuthenticatedUser() as User
+            User user
+
             Boolean isAdmin = loggedUser.getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
 
-            if (isAdmin) {
-                if (params.id) {
-                    return [user: userService.find((getAuthenticatedUser() as User).customerId, params.long("id"))]
-                }
+            if (isAdmin && params.id) {
+                user = userService.find(loggedUser.customerId, params.long("id"))
+            } else {
+                user = loggedUser
             }
 
-            return [user: (getAuthenticatedUser() as User)]
+            if (messageInfo) {
+                return [user: user, messageInfo: messageInfo]
+            }
+
+            return [user: user]
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
         } catch (Exception exception) {
             flash.messageInfo = [messages: [MessageUtils.getMessage("user.errors.save.unknown")], messageType: "error"]
         }
 
-        redirect(action: "index")
+        redirect(action: "show")
     }
 
     def save() {
@@ -80,6 +88,23 @@ class UserController extends BaseController {
         } catch (Exception exception) {
             render([success: false, alert: MessageUtils.getMessage("user.errors.delete.unknown")] as JSON)
         }
+    }
+
+    @Secured(['isAuthenticated()'])
+    def updatePassword() {
+        try {
+            User loggedUser = getAuthenticatedUser() as User
+
+            userService.updatePassword(new UserAdapter(loggedUser.customer, params))
+
+            flash.messageInfo = [messages: [MessageUtils.getMessage("user.success.update")], messageType: "success"]
+        } catch (ValidationException validationException) {
+            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
+        } catch (Exception exception) {
+            exception.printStackTrace()
+            flash.messageInfo = [messages: [MessageUtils.getMessage("user.errors.update.unknown")], messageType: "error"]
+        }
+        redirect(action: "show")
     }
 
     def list() {

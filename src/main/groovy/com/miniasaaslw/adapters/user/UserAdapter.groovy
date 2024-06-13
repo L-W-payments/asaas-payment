@@ -7,6 +7,8 @@ class UserAdapter {
 
     Customer customer
 
+    Long id
+
     Role role
 
     String email
@@ -22,4 +24,12 @@ class UserAdapter {
         this.password = params.password
         this.confirmPassword = params.confirmPassword
     }
+
+    public UserAdapter(Customer customer, Map params) {
+        this.customer = customer
+        this.id = params.id as Long
+        this.password = params.password
+        this.confirmPassword = params.confirmPassword
+    }
+
 }
