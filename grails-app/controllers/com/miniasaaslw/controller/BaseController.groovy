@@ -1,6 +1,8 @@
 package com.miniasaaslw.controller
 
-class BaseController {
+import com.miniasaaslw.ExceptionController
+
+class BaseController extends ExceptionController {
 
     protected Integer getLimitPerPage() {
         String itemsPerPage = params.itemsPerPage?.toString()
