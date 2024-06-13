@@ -6,6 +6,7 @@ import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.repository.payment.PaymentRepository
+import com.miniasaaslw.utils.DateUtils
 import com.miniasaaslw.utils.LoggedCustomer
 import com.miniasaaslw.utils.MessageUtils
 
@@ -263,7 +264,7 @@ class PaymentService {
     }
 
     private Boolean validateDueDate(Date dueDate) {
-        if (dueDate.before(new Date())) return false
+        if (dueDate.before(DateUtils.today())) return false
 
         Date dateLimit = new Date()
 
