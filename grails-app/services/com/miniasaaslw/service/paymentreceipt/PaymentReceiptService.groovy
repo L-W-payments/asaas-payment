@@ -4,9 +4,10 @@ import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.domain.paymentreceipt.PaymentReceipt
 import com.miniasaaslw.repository.paymentreceipt.PaymentReceiptRepository
 import com.miniasaaslw.utils.MessageUtils
-
+import grails.compiler.GrailsCompileStatic
 import grails.validation.ValidationException
 
+@GrailsCompileStatic
 class PaymentReceiptService {
 
     public PaymentReceipt find(String publicId) {
