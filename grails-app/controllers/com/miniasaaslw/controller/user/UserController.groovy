@@ -119,7 +119,7 @@ class UserController extends BaseController {
 
     @CompileDynamic
     def loadTableContent() {
-        Map search = [customerId: getCurrentCustomerId()]
+        Map search = [customerId: getCurrentCustomerId(), excludeUserId: getCurrentUser().id]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.email) search."email[like]" = params.email
