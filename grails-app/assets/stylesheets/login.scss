@@ -145,6 +145,7 @@ body {
     padding: 1rem 0;
 
     main {
+      padding: 0 1rem;
       flex-direction: column;
       justify-content: center;
       gap: 3rem;
@@ -165,6 +166,7 @@ body {
 
       .right {
         .form {
+          width: 100%;
           margin-top: 0;
 
           .form-group {
