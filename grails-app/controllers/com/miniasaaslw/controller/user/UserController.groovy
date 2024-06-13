@@ -109,7 +109,12 @@ class UserController extends BaseController {
     }
 
     def list() {
-        return [userList: userService.list([customerId: getCurrentCustomerId()], getLimitPerPage(), getOffset())]
+        try {
+            return [userList: userService.list([customerId: getCurrentCustomerId(), excludeUserId: getCurrentUser().id], getLimitPerPage(), getOffset())]
+
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
     }
 
     @CompileDynamic
