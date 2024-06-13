@@ -80,6 +80,10 @@ class UserService {
 
         validatePassword(userAdapter, user)
 
+        if(UserRepository.query(["email": userAdapter.email]).exists()){
+            user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
+        }
+
         return user
     }
 
