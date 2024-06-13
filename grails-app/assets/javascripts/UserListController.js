@@ -1,12 +1,14 @@
 function UserListController(reference) {
     const tableReference = reference.querySelector(".js-user-list-table");
     const inputReference = reference.querySelector(".js-user-search-input");
+    const filterReference = reference.querySelector(".js-payer-filter-input");
     let currentRow = null;
 
     function init() {
         bindInputReference();
         bindTableSearch();
         bindTableActions();
+        bindFilterReference();
     }
 
     function bindInputReference() {
@@ -17,16 +19,28 @@ function UserListController(reference) {
 
     function bindTableSearch() {
         tableReference.addEventListener("atlas-table-before-search", () => {
+            filterReference.enableButtons();
             inputReference.readonly = true;
 
-            tableReference.params = {
-                email: inputReference.value,
-            };
+            const filterData = filterReference.getFilterData();
+            filterData.email = inputReference.value;
+
+            tableReference.params = filterData;
         });
 
         tableReference.addEventListener("atlas-table-after-search", () => {
             inputReference.readonly = false;
             tableReference.params = {};
+        });
+    }
+
+    function bindFilterReference() {
+        filterReference.addEventListener("atlas-apply-filter", function () {
+            tableReference.fetchRecords(true);
+        });
+
+        filterReference.addEventListener("atlas-clean-filter", function () {
+            tableReference.fetchRecords(true);
         });
     }
 
