@@ -88,11 +88,8 @@ class PaymentController extends BaseController {
             Payment payment = paymentService.find(publicId)
 
             PaymentReceipt paymentReceipt = PaymentReceiptRepository.query([paymentId:payment.id]).get()
-            if (paymentReceipt) {
-                return [payment: payment, paymentReceiptId: paymentReceipt.publicId]
-            }
 
-            return [payment: payment]
+            return [payment: payment, paymentReceiptId: paymentReceipt?.publicId]
         } catch (Exception exception) {
             flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.notFound")], messageType: "error"]
             redirect(action: "index")
