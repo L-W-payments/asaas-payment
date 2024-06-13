@@ -31,15 +31,14 @@ class UserController extends BaseController {
     @Secured(['isAuthenticated()'])
     def show() {
         try {
-            User loggedUser = getAuthenticatedUser() as User
             User user
 
-            Boolean isAdmin = loggedUser.getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
+            Boolean isAdmin = getCurrentUser().getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
 
             if (isAdmin && params.id) {
-                user = userService.find(loggedUser.customerId, params.long("id"))
+                user = userService.find(getCurrentCustomerId(), params.long("id"))
             } else {
-                user = loggedUser
+                user = getCurrentUser()
             }
 
             if (hasMessages()) {
@@ -56,7 +55,7 @@ class UserController extends BaseController {
 
     def save() {
         try {
-            userService.save(new UserAdapter((getAuthenticatedUser() as User).customer, Role.findByAuthority('ROLE_MEMBER'), params))
+            userService.save(new UserAdapter(getCurrentCustomer(), Role.findByAuthority('ROLE_MEMBER'), params))
 
             addMessageCode("user.success.save", MessageType.SUCCESS)
         } catch (Exception exception) {
@@ -71,9 +70,8 @@ class UserController extends BaseController {
         try {
             Long id = params.long("id")
 
-            User loggedUser = getAuthenticatedUser() as User
+            userService.delete(getCurrentCustomerId(), id)
 
-            userService.delete(loggedUser.customer.id, id)
             render([success: true] as JSON)
         } catch (GenericException genericException) {
             render([success: false, alert: genericException.getMessage()] as JSON)
@@ -87,9 +85,8 @@ class UserController extends BaseController {
         try {
             Long id = params.long("id")
 
-            User loggedUser = getAuthenticatedUser() as User
+            userService.restore(getCurrentCustomerId(), id)
 
-            userService.restore(loggedUser.customer.id, id)
             render([success: true] as JSON)
         } catch (GenericException genericException) {
             render([success: false, alert: genericException.getMessage()] as JSON)
@@ -101,9 +98,7 @@ class UserController extends BaseController {
     @Secured(['isAuthenticated()'])
     def updatePassword() {
         try {
-            User loggedUser = getAuthenticatedUser() as User
-
-            userService.updatePassword(new UserAdapter(loggedUser.customer, params))
+            userService.updatePassword(new UserAdapter(getCurrentCustomer(), params))
 
             addMessageCode("user.success.update", MessageType.SUCCESS)
         } catch (Exception exception) {
@@ -114,14 +109,12 @@ class UserController extends BaseController {
     }
 
     def list() {
-        return [userList: userService.list([customerId: (getAuthenticatedUser() as User).customerId], getLimitPerPage(), getOffset())]
+        return [userList: userService.list([customerId: getCurrentCustomerId()], getLimitPerPage(), getOffset())]
     }
 
     @CompileDynamic
     def loadTableContent() {
-        User loggedUser = getAuthenticatedUser() as User
-
-        Map search = [customerId: loggedUser.customer.id]
+        Map search = [customerId: getCurrentCustomerId()]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.email) search."email[like]" = params.email

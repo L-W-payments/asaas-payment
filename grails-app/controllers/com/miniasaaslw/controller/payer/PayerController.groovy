@@ -3,15 +3,18 @@ package com.miniasaaslw.controller.payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.payer.Payer
-import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.entity.enums.MessageType
 import com.miniasaaslw.exception.GenericException
 import com.miniasaaslw.service.payer.PayerService
 import com.miniasaaslw.utils.MessageUtils
 
+import grails.compiler.GrailsCompileStatic
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
+import groovy.transform.CompileDynamic
+
+@GrailsCompileStatic
 @Secured(['isAuthenticated()'])
 class PayerController extends BaseController {
 
@@ -27,7 +30,7 @@ class PayerController extends BaseController {
         Long id = params.long("id")
 
         try {
-            payerService.update(id, new PayerAdapter((getAuthenticatedUser() as User).customer, params))
+            payerService.update(id, new PayerAdapter(getCurrentCustomer(), params))
 
             addMessageCode("payer.update.success", MessageType.SUCCESS)
         } catch (Exception exception) {
@@ -39,7 +42,7 @@ class PayerController extends BaseController {
 
     def save() {
         try {
-            Payer payer = payerService.save(new PayerAdapter((getAuthenticatedUser() as User).customer, params))
+            Payer payer = payerService.save(new PayerAdapter(getCurrentCustomer(), params))
 
             addMessageCode("payer.save.success", MessageType.SUCCESS)
 
@@ -55,7 +58,7 @@ class PayerController extends BaseController {
         try {
             Long id = params.long("id")
 
-            payerService.restore((getAuthenticatedUser() as User).customerId, id)
+            payerService.restore(getCurrentCustomerId(), id)
             render([success: true] as JSON)
         } catch (GenericException genericException) {
             render([success: false, alert: genericException.getMessage()] as JSON)
@@ -68,7 +71,7 @@ class PayerController extends BaseController {
         try {
             Long id = params.long("id")
 
-            Payer payer = payerService.find((getAuthenticatedUser() as User).customerId, id)
+            Payer payer = payerService.find(getCurrentCustomerId(), id)
 
             if (hasMessages()) {
                 return [payer: payer, messageInfo: getMessagesObject()]
@@ -86,7 +89,7 @@ class PayerController extends BaseController {
         try {
             Long id = params.long("id")
 
-            payerService.delete((getAuthenticatedUser() as User).customerId, id)
+            payerService.delete(getCurrentCustomerId(), id)
             render([success: true] as JSON)
         } catch (GenericException genericException) {
             render([success: false, alert: genericException.getMessage()] as JSON)
@@ -96,11 +99,12 @@ class PayerController extends BaseController {
     }
 
     def list() {
-        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [customerId: (getAuthenticatedUser() as User).customerId])]
+        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [customerId: getCurrentCustomerId()])]
     }
 
+    @CompileDynamic
     def loadTableContent() {
-        Map search = [customerId: (getAuthenticatedUser() as User).customerId]
+        Map search = [customerId: getCurrentCustomerId()]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.name) search."name[like]" = params.name

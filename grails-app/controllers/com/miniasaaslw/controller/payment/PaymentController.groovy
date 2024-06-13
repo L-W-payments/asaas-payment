@@ -4,7 +4,6 @@ import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.entity.enums.MessageType
 import com.miniasaaslw.exception.GenericException
 import com.miniasaaslw.repository.payer.PayerRepository
@@ -37,9 +36,7 @@ class PaymentController extends BaseController {
         try {
             Long id = params.long("id")
 
-            User loggedUser = (getAuthenticatedUser() as User)
-
-            paymentService.restore(loggedUser.customer.id, id)
+            paymentService.restore(getCurrentCustomerId(), id)
 
             render([success: true] as JSON)
         } catch (GenericException genericException) {
@@ -53,9 +50,7 @@ class PaymentController extends BaseController {
         try {
             Long id = params.long("id")
 
-            User loggedUser = (getAuthenticatedUser() as User)
-
-            paymentService.delete(loggedUser.customer.id, id)
+            paymentService.delete(getCurrentCustomerId(), id)
 
             render([success: true] as JSON)
         } catch (GenericException genericException) {
@@ -67,9 +62,7 @@ class PaymentController extends BaseController {
 
     def save() {
         try {
-            User loggedUser = (getAuthenticatedUser() as User)
-
-            paymentService.save(new PaymentAdapter(loggedUser.customer, params))
+            paymentService.save(new PaymentAdapter(getCurrentCustomer(), params))
 
             addMessageCode("payment.save.success", MessageType.SUCCESS)
         } catch (Exception exception) {
@@ -93,16 +86,12 @@ class PaymentController extends BaseController {
     }
 
     def list() {
-        User loggedUser = (getAuthenticatedUser() as User)
-
-        return [paymentList: paymentService.list([customerId: loggedUser.customer.id], getLimitPerPage(), getOffset())]
+        return [paymentList: paymentService.list([customerId: getCurrentCustomerId()], getLimitPerPage(), getOffset())]
     }
 
     @CompileDynamic
     def loadTableContent() {
-        User loggedUser = (getAuthenticatedUser() as User)
-
-        Map search = [customerId: loggedUser.customer.id]
+        Map search = [customerId: getCurrentCustomerId()]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.payerName) search."payerName[like]" = params.payerName
@@ -134,9 +123,7 @@ class PaymentController extends BaseController {
         try {
             Long id = params.long("id")
 
-            User loggedUser = (getAuthenticatedUser() as User)
-
-            paymentService.updateToReceivedInCash(loggedUser.customer.id, id)
+            paymentService.updateToReceivedInCash(getCurrentCustomerId(), id)
 
             addMessageCode("payment.updateToReceivedInCash.success", MessageType.SUCCESS)
 
@@ -150,9 +137,7 @@ class PaymentController extends BaseController {
 
     def show() {
         try {
-            User loggedUser = (getAuthenticatedUser() as User)
-
-            Payment payment = paymentService.find(loggedUser.customer.id, params.long("id"))
+            Payment payment = paymentService.find(getCurrentCustomerId(), params.long("id"))
 
             if (hasMessages()) {
                 return [payment: payment, messageInfo: getMessagesObject()]
