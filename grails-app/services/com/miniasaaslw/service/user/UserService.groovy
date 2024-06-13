@@ -3,6 +3,7 @@ package com.miniasaaslw.service.user
 import com.miniasaaslw.adapters.user.UserAdapter
 import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.domain.security.UserRole
+import com.miniasaaslw.exception.GenericException
 import com.miniasaaslw.repository.user.UserRepository
 import com.miniasaaslw.utils.EmailUtils
 import com.miniasaaslw.utils.MessageUtils
@@ -23,9 +24,7 @@ class UserService {
     public User save(UserAdapter userAdapter) {
         User user = validateUser(userAdapter)
 
-        if (user.hasErrors()) {
-            throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), user.errors)
-        }
+        if (user.hasErrors()) throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), user.errors)
 
         buildUserProperties(user, userAdapter)
         user.save(failOnError: true)
@@ -37,9 +36,9 @@ class UserService {
     public void restore(Long customerId, Long id) {
         User user = UserRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
 
-        if (!user) throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
+        if (!user) throw new GenericException(MessageUtils.getMessage("user.errors.notFound"))
 
-        if (user.enabled) throw new RuntimeException(MessageUtils.getMessage("user.errors.restore.notDeleted"))
+        if (user.enabled) throw new GenericException(MessageUtils.getMessage("user.errors.restore.notDeleted"))
 
         user.enabled = true
         user.save(failOnError: true)
@@ -48,7 +47,7 @@ class UserService {
     public void delete(Long customerId, Long id) {
         User user = find(customerId, id)
 
-        if (!user.enabled) throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
+        if (!user.enabled) throw new GenericException(MessageUtils.getMessage("user.errors.notFound"))
 
         user.enabled = false
         user.save(failOnError: true)
@@ -72,7 +71,7 @@ class UserService {
     public User find(Long customerId, Long id) {
         User user = UserRepository.query([customerId: customerId, id: id]).get()
 
-        if (!user) throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
+        if (!user) throw new GenericException(MessageUtils.getMessage("user.errors.notFound"))
 
         return user
     }
@@ -98,7 +97,7 @@ class UserService {
 
         validatePassword(userAdapter, user)
 
-        if(UserRepository.query(["email": userAdapter.email]).exists()){
+        if (UserRepository.query(["email": userAdapter.email]).exists()) {
             user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
         }
 
