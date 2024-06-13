@@ -10,7 +10,7 @@ class UrlMappings {
         }
 
         "/receipt/$id"(controller: "paymentReceipt", action: "show")
-        "/"(view:"/index")
+        "/"(controller: "index", action: "index")
         "500"(view:'/error')
         "404"(view:'/notFound')
     }

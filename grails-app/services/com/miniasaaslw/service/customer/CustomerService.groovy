@@ -144,11 +144,11 @@ class CustomerService {
         }
 
         if (!isUpdate) {
-            if (CustomerRepository.exists([cpfCnpj: customerAdapter.cpfCnpj])) {
+            if (CustomerRepository.query([cpfCnpj: customerAdapter.cpfCnpj]).exists()) {
                 customer.errors.reject("cpfCnpj", null, MessageUtils.getMessage("general.errors.cpfCnpj.duplicated"))
             }
 
-            if (CustomerRepository.exists([email: customerAdapter.email])) {
+            if (CustomerRepository.query([email: customerAdapter.email]).exists()) {
                 customer.errors.reject("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
             }
         }

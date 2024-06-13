@@ -20,6 +20,10 @@ class UserRepository implements Repository<User, UserRepository> {
                 eq("customer.id", search.customerId)
             }
 
+            if (search.containsKey("email")) {
+                eq("email", search.email)
+            }
+
             if (search.containsKey("email[like]")) {
                 ilike("email", "%" + search."email[like]" + "%")
             }
@@ -36,6 +40,7 @@ class UserRepository implements Repository<User, UserRepository> {
     List<String> listAllowedFilters() {
         return [
                 "customerId",
+                "email",
                 "email[like]"
         ]
     }

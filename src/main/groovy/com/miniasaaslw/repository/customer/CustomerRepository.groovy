@@ -36,7 +36,4 @@ class CustomerRepository implements Repository<Customer, CustomerRepository> {
         ]
     }
 
-    public static Boolean exists(Map search) {
-        return query(search).get().asBoolean()
-    }
 }

@@ -14,4 +14,17 @@ class DateUtils {
     public static String formatLongDate(Date date) {
         return new SimpleDateFormat(LONG_DATE_FORMAT).format(date)
     }
+
+    public static Date firstDayOfCurrentMonth() {
+        Calendar calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        return calendar.getTime()
+    }
+
+    public static Date lastDayOfCurrentMonth() {
+        Calendar calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+        return calendar.getTime()
+    }
+
 }
