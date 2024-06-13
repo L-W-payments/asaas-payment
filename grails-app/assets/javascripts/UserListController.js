@@ -57,6 +57,12 @@ function UserListController(reference) {
             if (buttonAction === "delete") {
                 openConfirmDeleteModal();
                 currentRow = event.detail.row;
+                return;
+            }
+
+            if (buttonAction === "restore") {
+                openConfirmRestoreModal();
+                currentRow = event.detail.row;
             }
         });
     }
@@ -84,6 +90,33 @@ function UserListController(reference) {
                 theme: "danger"
             },
             onConfirm: confirmDelete,
+            disableAutoClose: false
+        })
+    }
+
+    async function confirmRestore(modal) {
+        const response = await Atlas.request.post(currentRow.dataset.actionUrl);
+
+        modal.closeModal();
+
+        if (response.success) {
+            Atlas.notifications.showAlert("Usuário restaurado com sucesso!", "success");
+            tableReference.fetchRecords(true);
+            return;
+        }
+
+        Atlas.notifications.showAlert(response.alert, "error");
+    }
+
+    function openConfirmRestoreModal() {
+        Atlas.notifications.showConfirmation({
+            illustration: "user-avatar-groups",
+            title: "Deseja restaurar este usuário?",
+            confirmButton: {
+                description: "Confirmar restauração",
+                theme: "primary"
+            },
+            onConfirm: confirmRestore,
             disableAutoClose: false
         })
     }

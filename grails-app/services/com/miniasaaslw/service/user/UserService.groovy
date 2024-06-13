@@ -34,6 +34,17 @@ class UserService {
         return user
     }
 
+    public void restore(Long customerId, Long id) {
+        User user = UserRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
+
+        if (!user) throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
+
+        if (user.enabled) throw new RuntimeException(MessageUtils.getMessage("user.errors.restore.notDeleted"))
+
+        user.enabled = true
+        user.save(failOnError: true)
+    }
+
     public void delete(Long customerId, Long id) {
         User user = find(customerId, id)
 
@@ -61,9 +72,7 @@ class UserService {
     public User find(Long customerId, Long id) {
         User user = UserRepository.query([customerId: customerId, id: id]).get()
 
-        if (!user) {
-            throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
-        }
+        if (!user) throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
 
         return user
     }
