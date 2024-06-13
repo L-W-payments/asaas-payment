@@ -24,9 +24,14 @@
 
                     <atlas-panel header="Informações da cobrança">
                             <g:if test="${paymentReceiptId}">
-                                <atlas-text slot="actions" muted>
-                                    <atlas-link href="/receipt/${paymentReceiptId}">Acessar comprovante de pagamento</atlas-link>
-                                </atlas-text>
+                                <atlas-button is-external-link
+                                              icon="arrow-up-right"
+                                              href="/receipt/${paymentReceiptId}"
+                                              description="Comprovante de pagamento"
+                                              type="ghost"
+                                              theme="highlight"
+                                              slot="actions">
+                                </atlas-button>
                             </g:if>
                         <atlas-layout justify="space-between" inline>
                             <atlas-summary-item
