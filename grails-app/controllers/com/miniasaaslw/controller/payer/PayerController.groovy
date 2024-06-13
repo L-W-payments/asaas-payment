@@ -3,14 +3,15 @@ package com.miniasaaslw.controller.payer
 import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.payer.Payer
-import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.service.payer.PayerService
 import com.miniasaaslw.utils.MessageUtils
-
+import grails.compiler.GrailsCompileStatic
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
+import groovy.transform.CompileDynamic
 
+@GrailsCompileStatic
 @Secured(['isAuthenticated()'])
 class PayerController extends BaseController {
 
@@ -28,7 +29,7 @@ class PayerController extends BaseController {
         Long id = params.long("id")
 
         try {
-            Payer payer = payerService.update(id, new PayerAdapter((getAuthenticatedUser() as User).customer, params))
+            Payer payer = payerService.update(id, new PayerAdapter(getCurrentCustomer(), params))
 
             redirect(action: "show", id: payer.id)
         } catch (ValidationException validationException) {
@@ -42,7 +43,7 @@ class PayerController extends BaseController {
 
     def save() {
         try {
-            Payer payer = payerService.save(new PayerAdapter((getAuthenticatedUser() as User).customer, params))
+            Payer payer = payerService.save(new PayerAdapter(getCurrentCustomer(), params))
 
             flash.messageInfo = [messages: [MessageUtils.getMessage("payer.save.success")], messageType: "success"]
             redirect(action: "show", id: payer.id)
@@ -59,7 +60,7 @@ class PayerController extends BaseController {
         try {
             Long id = params.long("id")
 
-            payerService.restore((getAuthenticatedUser() as User).customerId, id)
+            payerService.restore(getCurrentCustomerId(), id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
@@ -77,10 +78,10 @@ class PayerController extends BaseController {
             Long id = params.long("id")
 
             if (messageInfo) {
-                return [payer: payerService.find((getAuthenticatedUser() as User).customerId, id), messageInfo: messageInfo]
+                return [payer: payerService.find(getCurrentCustomerId(), id), messageInfo: messageInfo]
             }
 
-            return [payer: payerService.find((getAuthenticatedUser() as User).customerId, id)]
+            return [payer: payerService.find(getCurrentCustomerId(), id)]
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
         } catch (Exception exception) {
@@ -94,7 +95,7 @@ class PayerController extends BaseController {
         try {
             Long id = params.long("id")
 
-            payerService.delete((getAuthenticatedUser() as User).customerId, id)
+            payerService.delete(getCurrentCustomerId(), id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             render([success: false, alert: runtimeException.getMessage()] as JSON)
@@ -104,11 +105,12 @@ class PayerController extends BaseController {
     }
 
     def list() {
-        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [customerId: (getAuthenticatedUser() as User).customerId])]
+        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [customerId: getCurrentCustomerId()])]
     }
 
+    @CompileDynamic
     def loadTableContent() {
-        Map search = [customerId: (getAuthenticatedUser() as User).customerId]
+        Map search = [customerId: getCurrentCustomerId()]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.name) search."name[like]" = params.name
