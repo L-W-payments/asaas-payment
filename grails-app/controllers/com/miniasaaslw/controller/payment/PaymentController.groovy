@@ -4,17 +4,23 @@ import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.domain.payment.Payment
+import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.repository.payer.PayerRepository
-import com.miniasaaslw.utils.LoggedCustomer
+import com.miniasaaslw.service.payment.PaymentService
+import com.miniasaaslw.utils.MessageUtils
 
+import grails.compiler.GrailsCompileStatic
 import grails.converters.JSON
-import grails.validation.ValidationException
 import grails.plugin.springsecurity.annotation.Secured
+import grails.validation.ValidationException
 
-@Secured(['ROLE_MEMBER'])
+import groovy.transform.CompileDynamic
+
+@GrailsCompileStatic
+@Secured(['isAuthenticated()'])
 class PaymentController extends BaseController {
 
-    def paymentService
+    PaymentService paymentService
 
     def index() {
         def messageInfo = flash.messageInfo
@@ -32,14 +38,16 @@ class PaymentController extends BaseController {
         try {
             Long id = params.long("id")
 
-            paymentService.restore(LoggedCustomer.CUSTOMER.id, id)
+            User loggedUser = (getAuthenticatedUser() as User)
+
+            paymentService.restore(loggedUser.customer.id, id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
             render([success: false, alert: runtimeException.getMessage()] as JSON)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payment.errors.restore.unknown")], messageType: "error"]
-            render([success: false, alert: message(code: "payment.errors.restore.unknown")] as JSON)
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.restore.unknown")], messageType: "error"]
+            render([success: false, alert: MessageUtils.getMessage("payment.errors.restore.unknown")] as JSON)
         }
     }
 
@@ -47,24 +55,30 @@ class PaymentController extends BaseController {
         try {
             Long id = params.long("id")
 
-            paymentService.delete(LoggedCustomer.CUSTOMER.id, id)
+            User loggedUser = (getAuthenticatedUser() as User)
+
+            paymentService.delete(loggedUser.customer.id, id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             render([success: false, alert: runtimeException.getMessage()] as JSON)
         } catch (Exception exception) {
-            render([success: false, alert: message(code: "payment.errors.delete.unknown")] as JSON)
+            render([success: false, alert: MessageUtils.getMessage("payment.errors.delete.unknown")] as JSON)
         }
     }
 
     def save() {
         try {
-            paymentService.save(new PaymentAdapter(params))
+            User loggedUser = (getAuthenticatedUser() as User)
 
-            flash.messageInfo = [messages: [message(code: "payment.save.success")], messageType: "success"]
+            paymentService.save(new PaymentAdapter(loggedUser.customer, params))
+
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.save.success")], messageType: "success"]
         } catch (ValidationException validationException) {
+            println("VALIDAÇÃO: " + validationException)
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payment.errors.save.unknown")], messageType: "error"]
+            println("ERRO: " + exception)
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.save.unknown")], messageType: "error"]
         }
 
         redirect(action: "index")
@@ -77,17 +91,22 @@ class PaymentController extends BaseController {
 
             return [payment: paymentService.find(publicId)]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payment.errors.notFound")], messageType: "error"]
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.notFound")], messageType: "error"]
             redirect(action: "index")
         }
     }
 
     def list() {
-        return [paymentList: paymentService.list([customerId: LoggedCustomer.CUSTOMER.id], getLimitPerPage(), getOffset())]
+        User loggedUser = (getAuthenticatedUser() as User)
+
+        return [paymentList: paymentService.list([customerId: loggedUser.customer.id], getLimitPerPage(), getOffset())]
     }
 
+    @CompileDynamic
     def loadTableContent() {
-        Map search = [customerId: LoggedCustomer.CUSTOMER.id]
+        User loggedUser = (getAuthenticatedUser() as User)
+
+        Map search = [customerId: loggedUser.customer.id]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.payerName) search."payerName[like]" = params.payerName
@@ -99,6 +118,7 @@ class PaymentController extends BaseController {
         render([totalRecords: totalRecords, content: content, success: true] as JSON)
     }
 
+    @Secured(['permitAll'])
     def updateToReceived() {
         try {
             Long id = params.long("id")
@@ -111,33 +131,36 @@ class PaymentController extends BaseController {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
             redirect(action: "index")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payment.errors.pay")], messageType: "error"]
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.pay")], messageType: "error"]
             redirect(action: "index")
         }
     }
 
-    @Secured(['permitAll'])
     def updateToReceivedInCash() {
         try {
             Long id = params.long("id")
 
-            paymentService.updateToReceivedInCash(LoggedCustomer.CUSTOMER.id, id)
+            User loggedUser = (getAuthenticatedUser() as User)
+
+            paymentService.updateToReceivedInCash(loggedUser.customer.id, id)
 
             redirect(action: "show", id: id)
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [runtimeException.getMessage()]
             redirect(action: "index")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payment.errors.pay")], messageType: "error"]
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.pay")], messageType: "error"]
             redirect(action: "index")
         }
     }
 
     def show() {
         try {
-            return [payment: paymentService.find(LoggedCustomer.CUSTOMER.id, params.long("id"))]
+            User loggedUser = (getAuthenticatedUser() as User)
+
+            return [payment: paymentService.find(loggedUser.customer.id, params.long("id"))]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [message(code: "payment.errors.notFound")], messageType: "error"]
+            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.notFound")], messageType: "error"]
             redirect(action: "index")
         }
     }
