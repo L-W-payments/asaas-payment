@@ -1,5 +1,8 @@
 package com.miniasaaslw.controller
 
+import com.miniasaaslw.domain.customer.Customer
+import com.miniasaaslw.domain.security.User
+
 class BaseController {
 
     protected Integer getLimitPerPage() {
@@ -20,5 +23,17 @@ class BaseController {
 
     protected Integer getOffset() {
         return getPage() * getLimitPerPage()
+    }
+
+    protected User getCurrentUser() {
+        return getAuthenticatedUser() as User
+    }
+
+    protected Customer getCurrentCustomer() {
+        return getCurrentUser().customer
+    }
+
+    protected Long getCurrentCustomerId() {
+        return getCurrentCustomer().id
     }
 }
