@@ -1,30 +1,28 @@
 package com.miniasaaslw.controller.customer
 
 import com.miniasaaslw.adapters.customer.CustomerAdapter
+import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.security.User
+import com.miniasaaslw.entity.enums.MessageType
+import com.miniasaaslw.exception.GenericException
 import com.miniasaaslw.service.customer.CustomerService
 import com.miniasaaslw.utils.MessageUtils
-
 import grails.compiler.GrailsCompileStatic
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
-import grails.validation.ValidationException
-
 import groovy.transform.CompileDynamic
 
 @GrailsCompileStatic
 @Secured(["ROLE_ADMIN"])
-class CustomerController {
+class CustomerController extends BaseController {
 
     CustomerService customerService
 
     @Secured(["permitAll"])
     def index() {
-        def messageInfo = flash.messageInfo
-
-        if (messageInfo) {
-            return [messageInfo: messageInfo]
+        if (hasMessages()) {
+            return [messageInfo: getMessagesObject()]
         }
     }
 
@@ -32,33 +30,26 @@ class CustomerController {
     def save() {
         try {
             customerService.save(new CustomerAdapter(params), params)
-        } catch (ValidationException validationException) {
-            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
+            redirect(uri: "/", params: [registered: true])
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("customer.errors.save.unknown")], messageType: "error"]
-        }
+            if (!handleException(exception)) addMessageCode("customer.errors.save.unknown", MessageType.ERROR)
 
-        redirect(uri: "/index")
+            redirect(action: "index")
+        }
     }
 
     @CompileDynamic
     def show() {
-        def messageInfo = flash.messageInfo
-
         try {
             Customer customer = customerService.find((getAuthenticatedUser() as User).customerId)
 
-            if (customer) {
-                if (messageInfo) {
-                    return [customer: customer, messageInfo: messageInfo]
-                }
-
-                return [customer: customer]
+            if (hasMessages()) {
+                return [customer: customer, messageInfo: getMessagesObject()]
             }
-        } catch (RuntimeException runtimeException) {
-            redirect(uri: "/index")
+
+            return [customer: customer]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("customer.errors.search.unknown")], messageType: "error"]
+            if (!handleException(exception)) addMessageCode("customer.errors.search.unknown", MessageType.ERROR)
             redirect(uri: "/index")
         }
     }
@@ -69,14 +60,11 @@ class CustomerController {
 
         try {
             customerService.update(customerId, new CustomerAdapter(params))
-            redirect(action: "show")
-        } catch (ValidationException validationException) {
-            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
-            redirect(action: "show")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: ["Erro ao atualizar sua conta"], messageType: "error"]
-            redirect(uri: "/index")
+            if (!handleException(exception)) addMessageCode("customer.errors.update.unknown", MessageType.ERROR)
         }
+
+        redirect(action: "show")
     }
 
     @CompileDynamic
@@ -84,13 +72,10 @@ class CustomerController {
         try {
             customerService.delete((getAuthenticatedUser() as User).customerId)
             render([success: true] as JSON)
-        } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
-            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (GenericException genericException) {
+            render([success: false, alert: genericException.getMessage()] as JSON)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("customer.errors.delete.unknown")], messageType: "error"]
             render([success: false, alert: MessageUtils.getMessage("customer.errors.delete.unknown")] as JSON)
         }
-        redirect(uri: "/index")
     }
 }
