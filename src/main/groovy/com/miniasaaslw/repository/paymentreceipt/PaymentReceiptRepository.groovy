@@ -32,6 +32,10 @@ class PaymentReceiptRepository implements Repository<PaymentReceipt, PaymentRece
                 gt("dateCreated", search."dateCreated[gt]")
             }
 
+            if (search.containsKey("paymentId")) {
+                eq("payment.id", search.paymentId)
+            }
+
         }
     }
 
@@ -41,6 +45,7 @@ class PaymentReceiptRepository implements Repository<PaymentReceipt, PaymentRece
                 "publicId",
                 "dateCreated[lt]",
                 "dateCreated[gt]",
+                "paymentId",
                 "customerId"
         ]
     }
@@ -51,6 +56,6 @@ class PaymentReceiptRepository implements Repository<PaymentReceipt, PaymentRece
     }
 
     private static Boolean joinWithPayment(Map search) {
-         return search.containsKey("customerId")
+        return search.containsKey("customerId")
     }
 }
