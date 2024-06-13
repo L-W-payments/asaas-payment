@@ -2,8 +2,10 @@ package com.miniasaaslw.service.paymentreceipt
 
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.domain.paymentreceipt.PaymentReceipt
+import com.miniasaaslw.exception.GenericException
 import com.miniasaaslw.repository.paymentreceipt.PaymentReceiptRepository
 import com.miniasaaslw.utils.MessageUtils
+
 import grails.compiler.GrailsCompileStatic
 import grails.validation.ValidationException
 
@@ -13,7 +15,7 @@ class PaymentReceiptService {
     public PaymentReceipt find(String publicId) {
         PaymentReceipt paymentReceipt = PaymentReceiptRepository.query([publicId: publicId]).get()
 
-        if (!paymentReceipt) throw new RuntimeException(MessageUtils.getMessage("paymentReceipt.errors.notFound"))
+        if (!paymentReceipt) throw new GenericException(MessageUtils.getMessage("paymentReceipt.errors.notFound"))
 
         return paymentReceipt
     }
