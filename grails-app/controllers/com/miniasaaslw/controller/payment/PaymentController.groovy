@@ -4,8 +4,10 @@ import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.domain.payment.Payment
+import com.miniasaaslw.domain.paymentreceipt.PaymentReceipt
 import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.repository.payer.PayerRepository
+import com.miniasaaslw.repository.paymentreceipt.PaymentReceiptRepository
 import com.miniasaaslw.service.payment.PaymentService
 import com.miniasaaslw.utils.MessageUtils
 
@@ -83,7 +85,14 @@ class PaymentController extends BaseController {
         try {
             String publicId = params.id
 
-            return [payment: paymentService.find(publicId)]
+            Payment payment = paymentService.find(publicId)
+
+            PaymentReceipt paymentReceipt = PaymentReceiptRepository.query([paymentId:payment.id]).get()
+            if (paymentReceipt) {
+                return [payment: payment, paymentReceiptId: paymentReceipt.publicId]
+            }
+
+            return [payment: payment]
         } catch (Exception exception) {
             flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.notFound")], messageType: "error"]
             redirect(action: "index")

@@ -23,10 +23,11 @@
                     </atlas-layout>
 
                     <atlas-panel header="Informações da cobrança">
-                        <atlas-text slot="actions" muted>
-                            Rastreabilidade #${payment.id}
-                        </atlas-text>
-
+                            <g:if test="${paymentReceiptId}">
+                                <atlas-text slot="actions" muted>
+                                    <atlas-link href="/receipt/${paymentReceiptId}">Acessar comprovante de pagamento</atlas-link>
+                                </atlas-text>
+                            </g:if>
                         <atlas-layout justify="space-between" inline>
                             <atlas-summary-item
                                     label="Data de vencimento"
