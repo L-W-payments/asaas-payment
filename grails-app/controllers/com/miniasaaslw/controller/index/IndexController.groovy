@@ -1,26 +1,26 @@
 package com.miniasaaslw.controller.index
 
-import com.miniasaaslw.domain.customer.Customer
+import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.domain.payment.Payment
-import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.repository.payment.PaymentRepository
 import com.miniasaaslw.repository.paymentreceipt.PaymentReceiptRepository
 import com.miniasaaslw.utils.DateUtils
+
 import grails.compiler.GrailsCompileStatic
 import grails.plugin.springsecurity.annotation.Secured
 
 @GrailsCompileStatic
 @Secured(["isAuthenticated()"])
-class IndexController {
+class IndexController extends BaseController {
 
     def index() {
-        Customer loggedCustomer = (getAuthenticatedUser() as User).customer
+        Long customerId = getCurrentCustomerId()
 
-        List<Payment> paymentReceivedList = getReceivedPaymentList(loggedCustomer.id)
-        List<Payment> paymentPendingList = getPaymentList(loggedCustomer.id, "PENDING")
-        List<Payment> paymentOverdueList = getPaymentList(loggedCustomer.id, "OVERDUE")
-        List<Payment> paymentReceivedInCashList = getPaymentList(loggedCustomer.id, "RECEIVED_IN_CASH")
+        List<Payment> paymentReceivedList = getReceivedPaymentList(customerId)
+        List<Payment> paymentPendingList = getPaymentList(customerId, "PENDING")
+        List<Payment> paymentOverdueList = getPaymentList(customerId, "OVERDUE")
+        List<Payment> paymentReceivedInCashList = getPaymentList(customerId, "RECEIVED_IN_CASH")
 
         def cardData = [
                 [

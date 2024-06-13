@@ -33,16 +33,14 @@ class UserController extends BaseController {
     def show() {
         try {
             def messageInfo = flash.messageInfo
-
-            User loggedUser = getAuthenticatedUser() as User
             User user
 
-            Boolean isAdmin = loggedUser.getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
+            Boolean isAdmin = getCurrentUser().getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
 
             if (isAdmin && params.id) {
-                user = userService.find(loggedUser.customerId, params.long("id"))
+                user = userService.find(getCurrentCustomerId(), params.long("id"))
             } else {
-                user = loggedUser
+                user = getCurrentUser()
             }
 
             if (messageInfo) {
@@ -61,7 +59,7 @@ class UserController extends BaseController {
 
     def save() {
         try {
-            userService.save(new UserAdapter((getAuthenticatedUser() as User).customer, Role.findByAuthority('ROLE_MEMBER'), params))
+            userService.save(new UserAdapter(getCurrentCustomer(), Role.findByAuthority('ROLE_MEMBER'), params))
 
             flash.messageInfo = [messages: [MessageUtils.getMessage("user.success.save")], messageType: "success"]
             redirect(action: "index")
@@ -79,9 +77,8 @@ class UserController extends BaseController {
         try {
             Long id = params.long("id")
 
-            User loggedUser = getAuthenticatedUser() as User
 
-            userService.delete(loggedUser.customer.id, id)
+            userService.delete(getCurrentCustomerId(), id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             render([success: false, alert: runtimeException.getMessage()] as JSON)
@@ -95,9 +92,8 @@ class UserController extends BaseController {
         try {
             Long id = params.long("id")
 
-            User loggedUser = getAuthenticatedUser() as User
 
-            userService.restore(loggedUser.customer.id, id)
+            userService.restore(getCurrentCustomerId(), id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
@@ -111,9 +107,8 @@ class UserController extends BaseController {
     @Secured(['isAuthenticated()'])
     def updatePassword() {
         try {
-            User loggedUser = getAuthenticatedUser() as User
 
-            userService.updatePassword(new UserAdapter(loggedUser.customer, params))
+            userService.updatePassword(new UserAdapter(getCurrentCustomer(), params))
 
             flash.messageInfo = [messages: [MessageUtils.getMessage("user.success.update")], messageType: "success"]
         } catch (ValidationException validationException) {
@@ -126,14 +121,13 @@ class UserController extends BaseController {
     }
 
     def list() {
-        return [userList: userService.list([customerId: (getAuthenticatedUser() as User).customerId], getLimitPerPage(), getOffset())]
+        return [userList: userService.list([customerId: getCurrentCustomerId()], getLimitPerPage(), getOffset())]
     }
 
     @CompileDynamic
     def loadTableContent() {
-        User loggedUser = getAuthenticatedUser() as User
 
-        Map search = [customerId: loggedUser.customer.id]
+        Map search = [customerId: getCurrentCustomerId()]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.email) search."email[like]" = params.email

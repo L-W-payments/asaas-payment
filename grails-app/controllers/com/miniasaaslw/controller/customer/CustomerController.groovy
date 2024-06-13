@@ -1,8 +1,8 @@
 package com.miniasaaslw.controller.customer
 
 import com.miniasaaslw.adapters.customer.CustomerAdapter
+import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.customer.Customer
-import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.service.customer.CustomerService
 import com.miniasaaslw.utils.MessageUtils
 
@@ -15,7 +15,7 @@ import groovy.transform.CompileDynamic
 
 @GrailsCompileStatic
 @Secured(["ROLE_ADMIN"])
-class CustomerController {
+class CustomerController extends BaseController {
 
     CustomerService customerService
 
@@ -46,7 +46,7 @@ class CustomerController {
         def messageInfo = flash.messageInfo
 
         try {
-            Customer customer = customerService.find((getAuthenticatedUser() as User).customerId)
+            Customer customer = customerService.find(getCurrentCustomerId())
 
             if (customer) {
                 if (messageInfo) {
@@ -65,10 +65,8 @@ class CustomerController {
 
     @CompileDynamic
     def update() {
-        Long customerId = (getAuthenticatedUser() as User).customerId
-
         try {
-            customerService.update(customerId, new CustomerAdapter(params))
+            customerService.update(getCurrentCustomerId(), new CustomerAdapter(params))
             redirect(action: "show")
         } catch (ValidationException validationException) {
             flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
@@ -82,7 +80,7 @@ class CustomerController {
     @CompileDynamic
     def delete() {
         try {
-            customerService.delete((getAuthenticatedUser() as User).customerId)
+            customerService.delete(getCurrentCustomerId())
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]

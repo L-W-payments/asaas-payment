@@ -38,9 +38,7 @@ class PaymentController extends BaseController {
         try {
             Long id = params.long("id")
 
-            User loggedUser = (getAuthenticatedUser() as User)
-
-            paymentService.restore(loggedUser.customer.id, id)
+            paymentService.restore(getCurrentCustomerId(), id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
@@ -55,9 +53,7 @@ class PaymentController extends BaseController {
         try {
             Long id = params.long("id")
 
-            User loggedUser = (getAuthenticatedUser() as User)
-
-            paymentService.delete(loggedUser.customer.id, id)
+            paymentService.delete(getCurrentCustomerId(), id)
             render([success: true] as JSON)
         } catch (RuntimeException runtimeException) {
             render([success: false, alert: runtimeException.getMessage()] as JSON)
@@ -68,9 +64,7 @@ class PaymentController extends BaseController {
 
     def save() {
         try {
-            User loggedUser = (getAuthenticatedUser() as User)
-
-            paymentService.save(new PaymentAdapter(loggedUser.customer, params))
+            paymentService.save(new PaymentAdapter(getCurrentCustomer(), params))
 
             flash.messageInfo = [messages: [MessageUtils.getMessage("payment.save.success")], messageType: "success"]
         } catch (ValidationException validationException) {
@@ -97,16 +91,12 @@ class PaymentController extends BaseController {
     }
 
     def list() {
-        User loggedUser = (getAuthenticatedUser() as User)
-
-        return [paymentList: paymentService.list([customerId: loggedUser.customer.id], getLimitPerPage(), getOffset())]
+        return [paymentList: paymentService.list([customerId: getCurrentCustomerId()], getLimitPerPage(), getOffset())]
     }
 
     @CompileDynamic
     def loadTableContent() {
-        User loggedUser = (getAuthenticatedUser() as User)
-
-        Map search = [customerId: loggedUser.customer.id]
+        Map search = [customerId: getCurrentCustomerId()]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.payerName) search."payerName[like]" = params.payerName
@@ -140,9 +130,7 @@ class PaymentController extends BaseController {
         try {
             Long id = params.long("id")
 
-            User loggedUser = (getAuthenticatedUser() as User)
-
-            paymentService.updateToReceivedInCash(loggedUser.customer.id, id)
+            paymentService.updateToReceivedInCash(getCurrentCustomerId(), id)
 
             redirect(action: "show", id: id)
         } catch (RuntimeException runtimeException) {
@@ -156,13 +144,10 @@ class PaymentController extends BaseController {
 
     def show() {
         try {
-            User loggedUser = (getAuthenticatedUser() as User)
-
-            return [payment: paymentService.find(loggedUser.customer.id, params.long("id"))]
+            return [payment: paymentService.find(getCurrentCustomerId(), params.long("id"))]
         } catch (Exception exception) {
             flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.notFound")], messageType: "error"]
             redirect(action: "index")
         }
     }
-
 }
