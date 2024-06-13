@@ -264,7 +264,7 @@ class PaymentService {
     }
 
     private Boolean validateDueDate(Date dueDate) {
-        if (dueDate.before(DateUtils.today())) return false
+        if (dueDate.before(new Date().clearTime())) return false
 
         Date dateLimit = new Date()
 
