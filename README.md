@@ -24,6 +24,8 @@ delete para registros no banco de dados.
 
 2. Configure o banco de dados no arquivo `application.yml`:
 
+- Altere as variáveis `username`, `password` e `url` para as credenciais do seu banco de dados.
+
     ```yaml
     dataSource:
         pooled: true
@@ -41,13 +43,16 @@ delete para registros no banco de dados.
     ```
    
 3. Configure o smtp no arquivo `application.yml`:
-    ```yaml
+
+- Altere as variáveis `username` e `password` para as credenciais do seu email.
+
+    ```ymal
     grails:
-            mail:
-                host: "smtp.gmail.com"
-                port: 587
-                username: "youremail@email.com"
-                password: "yourAppPassowrd"
+       mail:
+          host: "smtp.gmail.com"
+          port: 587
+          username: "youremail@email.com"
+          password: "yourAppPassowrd"
     ```
 
 4. Execute o projeto:
