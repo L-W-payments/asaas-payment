@@ -31,7 +31,7 @@ class CustomerController extends BaseController {
     def save() {
         try {
             customerService.save(new CustomerAdapter(params), params)
-            redirect(uri: "/index", params: [registered: true])
+            redirect(uri: "/login/auth", params: [registered: true])
         } catch (Exception exception) {
             if (!handleException(exception)) addMessageCode("customer.errors.save.unknown", MessageType.ERROR)
 
