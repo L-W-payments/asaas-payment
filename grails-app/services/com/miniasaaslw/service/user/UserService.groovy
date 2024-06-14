@@ -9,6 +9,7 @@ import com.miniasaaslw.utils.EmailUtils
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.utils.PasswordUtils
 import grails.compiler.GrailsCompileStatic
+
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -46,7 +47,7 @@ class UserService {
     public void delete(User loggedUser, Long id) {
         User user = find(loggedUser.customer.id, id)
 
-        if (loggedUser.id == user.id) throw new GenericException(MessageUtils.getMessage("user.errors.delete.self"))
+        if (loggedUser.id == user.id) throw new BusinessException(MessageUtils.getMessage("user.errors.delete.self"))
 
         if (!user.enabled) throw new BusinessException(MessageUtils.getMessage("user.errors.notFound"))
 
