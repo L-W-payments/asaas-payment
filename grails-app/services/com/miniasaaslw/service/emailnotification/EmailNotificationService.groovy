@@ -4,14 +4,19 @@ import com.miniasaaslw.adapters.emailnotification.EmailNotificationAdapter
 import com.miniasaaslw.domain.emailnotification.EmailNotification
 import com.miniasaaslw.repository.emailnotification.EmailNotificationRepository
 
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
+import grails.plugins.mail.MailService
 
+import org.springframework.transaction.TransactionStatus
+
+@GrailsCompileStatic
 @Transactional
 class EmailNotificationService {
 
     private static final String BASE_URL = "http://localhost:8080"
 
-    def mailService
+    MailService mailService
 
     public void save(EmailNotificationAdapter adapter) {
         EmailNotification emailNotification = new EmailNotification()
@@ -29,7 +34,7 @@ class EmailNotificationService {
         List<Long> notSentEmailList = EmailNotificationRepository.query([sent: false]).column("id").list(max: 500) as List<Long>
 
         for (Long emailNotificationId : notSentEmailList) {
-            EmailNotification.withNewTransaction { status ->
+            EmailNotification.withNewTransaction { TransactionStatus status ->
                 try {
                     sendEmail(emailNotificationId)
                 } catch (Exception exception) {
@@ -45,7 +50,7 @@ class EmailNotificationService {
         emailNotification.save(failOnError: true)
     }
 
-    private void sendEmail(long emailNotificationId) {
+    private void sendEmail(Long emailNotificationId) {
         EmailNotification emailNotification = EmailNotificationRepository.query([id: emailNotificationId]).get()
 
         Map model = [
