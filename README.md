@@ -5,6 +5,59 @@ de pagadores, geração de cobranças e confirmação de pagamentos. Além disso
 gestão multiusuário e mecanismos específicos no backend, como o uso do Spring Security para controle de conta e soft
 delete para registros no banco de dados.
 
+## Quickstart
+
+### Requisitos
+
+- JDK 11
+- Grails 5
+- MySQL
+
+### Passos para Rodar o Projeto
+
+1. Clone o repositório:
+
+    ```sh
+    git clone https://github.com/L-W-payments/asaas-payment.git
+    cd asaas-payment
+    ```
+
+2. Configure o banco de dados no arquivo `application.yml`:
+
+    ```yaml
+    dataSource:
+        pooled: true
+        jmxExport: true
+        driverClassName: com.mysql.cj.jdbc.Driver
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        username: yourUsername
+        password: yourPassword
+    
+      environments:
+            development:
+                dataSource:
+                    dbCreate: update
+                    url: yourDatabaseUrl
+    ```
+   
+3. Configure o smtp no arquivo `application.yml`:
+    ```yaml
+    grails:
+            mail:
+                host: "smtp.gmail.com"
+                port: 587
+                username: "youremail@email.com"
+                password: "yourAppPassowrd"
+    ```
+
+4. Execute o projeto:
+
+    ```sh
+    grails run-app
+    ```
+
+5. Acesse a aplicação em `http://localhost:8080`
+
 ## RFs (Requisitos funcionais)
 
 - [x] Deve ser possível um cliente se cadastrar;
@@ -65,3 +118,6 @@ delete para registros no banco de dados.
 - [x] A aplicação deve ser desenvolvida com o Atlas;
 - [x] A aplicação deve utilizar repositórios para interação com domínios;
 - [x] A aplicação deve utilizar Jobs para vencer as cobranças;
+
+## Criadores
+Este projeto foi criado por [Luiz Filipe](https://github.com/luizfiliperm) e [Wollace Buarque](https://github.com/Wollace-Buarque).
