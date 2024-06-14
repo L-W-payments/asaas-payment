@@ -25,7 +25,7 @@ class PaymentController extends BaseController {
     PaymentService paymentService
 
     def index() {
-        List<Payer> payers = PayerRepository.query([:]).list()
+        List<Payer> payers = PayerRepository.query([customerId: getCurrentCustomerId()]).list()
 
         if (hasMessages()) {
             return [payers: payers, messageInfo: getMessagesObject()]
