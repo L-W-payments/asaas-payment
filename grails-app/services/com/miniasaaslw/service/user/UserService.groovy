@@ -8,7 +8,6 @@ import com.miniasaaslw.repository.user.UserRepository
 import com.miniasaaslw.utils.EmailUtils
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.utils.PasswordUtils
-
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -50,6 +49,18 @@ class UserService {
         if (!user.enabled) throw new GenericException(MessageUtils.getMessage("user.errors.notFound"))
 
         user.enabled = false
+        user.save(failOnError: true)
+    }
+
+    public void updateEmail(UserAdapter userAdapter) {
+        User user = validateUserEmail(userAdapter)
+
+        if (user.hasErrors()) throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), user.errors)
+
+        user = find(userAdapter.customer.id, userAdapter.id)
+
+        user.email = userAdapter.email
+
         user.save(failOnError: true)
     }
 
@@ -97,7 +108,7 @@ class UserService {
 
         validatePassword(userAdapter, user)
 
-        if (UserRepository.query(["email": userAdapter.email]).exists()) {
+        if (UserRepository.query([email: userAdapter.email]).exists()) {
             user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
         }
 
@@ -118,6 +129,20 @@ class UserService {
         }
 
         validatePassword(userAdapter, user)
+
+        return user
+    }
+
+    private User validateUserEmail(UserAdapter userAdapter) {
+        User user = new User()
+
+        if (!EmailUtils.validateEmail(userAdapter.email)) {
+            user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.invalid"))
+        }
+
+        if (UserRepository.query([email: userAdapter.email]).exists()) {
+            user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
+        }
 
         return user
     }
