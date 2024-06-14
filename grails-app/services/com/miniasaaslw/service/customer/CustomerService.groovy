@@ -5,7 +5,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.adapters.customer.CustomerAdapter
 import com.miniasaaslw.domain.security.Role
 import com.miniasaaslw.entity.enums.PersonType
-import com.miniasaaslw.exception.GenericException
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.repository.customer.CustomerRepository
 import com.miniasaaslw.service.user.UserService
 import com.miniasaaslw.utils.PostalCodeUtils
@@ -62,7 +62,7 @@ class CustomerService {
     public Customer find(Long id) {
         Customer customer = CustomerRepository.query([id: id]).get()
 
-        if (!customer) throw new GenericException(MessageUtils.getMessage("customer.errors.notFound"))
+        if (!customer) throw new BusinessException(MessageUtils.getMessage("customer.errors.notFound"))
 
         return customer
     }

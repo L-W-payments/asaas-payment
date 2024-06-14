@@ -3,7 +3,7 @@ package com.miniasaaslw.service.user
 import com.miniasaaslw.adapters.user.UserAdapter
 import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.domain.security.UserRole
-import com.miniasaaslw.exception.GenericException
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.repository.user.UserRepository
 import com.miniasaaslw.utils.EmailUtils
 import com.miniasaaslw.utils.MessageUtils
@@ -36,9 +36,9 @@ class UserService {
     public void restore(Long customerId, Long id) {
         User user = UserRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
 
-        if (!user) throw new GenericException(MessageUtils.getMessage("user.errors.notFound"))
+        if (!user) throw new BusinessException(MessageUtils.getMessage("user.errors.notFound"))
 
-        if (user.enabled) throw new GenericException(MessageUtils.getMessage("user.errors.restore.notDeleted"))
+        if (user.enabled) throw new BusinessException(MessageUtils.getMessage("user.errors.restore.notDeleted"))
 
         user.enabled = true
         user.save(failOnError: true)
@@ -47,7 +47,7 @@ class UserService {
     public void delete(Long customerId, Long id) {
         User user = find(customerId, id)
 
-        if (!user.enabled) throw new GenericException(MessageUtils.getMessage("user.errors.notFound"))
+        if (!user.enabled) throw new BusinessException(MessageUtils.getMessage("user.errors.notFound"))
 
         user.enabled = false
         user.save(failOnError: true)
@@ -71,7 +71,7 @@ class UserService {
     public User find(Long customerId, Long id) {
         User user = UserRepository.query([customerId: customerId, id: id]).get()
 
-        if (!user) throw new GenericException(MessageUtils.getMessage("user.errors.notFound"))
+        if (!user) throw new BusinessException(MessageUtils.getMessage("user.errors.notFound"))
 
         return user
     }

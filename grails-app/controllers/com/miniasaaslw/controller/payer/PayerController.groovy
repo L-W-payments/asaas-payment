@@ -4,7 +4,7 @@ import com.miniasaaslw.adapters.payer.PayerAdapter
 import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.entity.enums.MessageType
-import com.miniasaaslw.exception.GenericException
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.service.payer.PayerService
 import com.miniasaaslw.utils.MessageUtils
 
@@ -60,7 +60,7 @@ class PayerController extends BaseController {
 
             payerService.restore(getCurrentCustomerId(), id)
             render([success: true] as JSON)
-        } catch (GenericException genericException) {
+        } catch (BusinessException genericException) {
             render([success: false, alert: genericException.getMessage()] as JSON)
         } catch (Exception exception) {
             render([success: false, alert: MessageUtils.getMessage("payer.errors.restore.unknown")] as JSON)
@@ -91,7 +91,7 @@ class PayerController extends BaseController {
 
             payerService.delete(getCurrentCustomerId(), id)
             render([success: true] as JSON)
-        } catch (GenericException genericException) {
+        } catch (BusinessException genericException) {
             render([success: false, alert: genericException.getMessage()] as JSON)
         } catch (Exception exception) {
             render([success: false, alert: MessageUtils.getMessage("payer.errors.delete.unknown")] as JSON)

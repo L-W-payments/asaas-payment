@@ -1,6 +1,6 @@
 package com.miniasaaslw.controller.paymentreceipt
 
-import com.miniasaaslw.exception.GenericException
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.service.paymentreceipt.PaymentReceiptService
 import com.miniasaaslw.utils.MessageUtils
 
@@ -20,7 +20,7 @@ class PaymentReceiptController {
             String publicId = params.id
 
             return [receipt: paymentReceiptService.find(publicId)]
-        } catch (GenericException genericException) {
+        } catch (BusinessException genericException) {
             return [message: MessageUtils.getMessage("paymentReceipt.errors.notFound"), messageType: "notFound"]
         } catch (Exception exception) {
             return [message: MessageUtils.getMessage("paymentReceipt.errors.show.unknown"), messageType: "unknown"]

@@ -5,7 +5,7 @@ import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.security.Role
 import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.entity.enums.MessageType
-import com.miniasaaslw.exception.GenericException
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.service.user.UserService
 import com.miniasaaslw.utils.MessageUtils
 
@@ -73,7 +73,7 @@ class UserController extends BaseController {
             userService.delete(getCurrentCustomerId(), id)
 
             render([success: true] as JSON)
-        } catch (GenericException genericException) {
+        } catch (BusinessException genericException) {
             render([success: false, alert: genericException.getMessage()] as JSON)
         } catch (Exception exception) {
             render([success: false, alert: MessageUtils.getMessage("user.errors.delete.unknown")] as JSON)
@@ -88,7 +88,7 @@ class UserController extends BaseController {
             userService.restore(getCurrentCustomerId(), id)
 
             render([success: true] as JSON)
-        } catch (GenericException genericException) {
+        } catch (BusinessException genericException) {
             render([success: false, alert: genericException.getMessage()] as JSON)
         } catch (Exception exception) {
             render([success: false, alert: MessageUtils.getMessage("user.errors.restore.unknown")] as JSON)

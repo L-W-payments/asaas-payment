@@ -4,7 +4,7 @@ import com.miniasaaslw.adapters.customer.CustomerAdapter
 import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.entity.enums.MessageType
-import com.miniasaaslw.exception.GenericException
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.service.customer.CustomerService
 import com.miniasaaslw.utils.MessageUtils
 
@@ -72,7 +72,7 @@ class CustomerController extends BaseController {
         try {
             customerService.delete(getCurrentCustomerId())
             render([success: true] as JSON)
-        } catch (GenericException genericException) {
+        } catch (BusinessException genericException) {
             render([success: false, alert: genericException.getMessage()] as JSON)
         } catch (Exception exception) {
             render([success: false, alert: MessageUtils.getMessage("customer.errors.delete.unknown")] as JSON)

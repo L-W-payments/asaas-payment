@@ -5,7 +5,7 @@ import com.miniasaaslw.adapters.notification.NotificationAdapter
 import com.miniasaaslw.adapters.payment.PaymentAdapter
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
-import com.miniasaaslw.exception.GenericException
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.repository.payment.PaymentRepository
 import com.miniasaaslw.utils.LoggedCustomer
 import com.miniasaaslw.utils.MessageUtils
@@ -46,7 +46,7 @@ class PaymentService {
     public Payment find(String publicId) {
         Payment payment = PaymentRepository.query([publicId: publicId]).get()
 
-        if (!payment) throw new GenericException(MessageUtils.getMessage("payment.errors.notFound"))
+        if (!payment) throw new BusinessException(MessageUtils.getMessage("payment.errors.notFound"))
 
         return payment
     }
@@ -54,7 +54,7 @@ class PaymentService {
     public Payment find(Long customerId, Long id) {
         Payment payment = PaymentRepository.query([id: id, customerId: customerId]).get()
 
-        if (!payment) throw new GenericException(MessageUtils.getMessage("payment.errors.notFound"))
+        if (!payment) throw new BusinessException(MessageUtils.getMessage("payment.errors.notFound"))
 
         return payment
     }
@@ -62,9 +62,9 @@ class PaymentService {
     public void restore(Long customerId, Long id) {
         Payment payment = PaymentRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
 
-        if (!payment) throw new GenericException(MessageUtils.getMessage("payment.errors.notFound"))
+        if (!payment) throw new BusinessException(MessageUtils.getMessage("payment.errors.notFound"))
 
-        if (!payment.deleted) throw new GenericException(MessageUtils.getMessage("payment.errors.notDeleted"))
+        if (!payment.deleted) throw new BusinessException(MessageUtils.getMessage("payment.errors.notDeleted"))
 
         payment.deleted = false
         payment.save(failOnError: true)
@@ -79,7 +79,7 @@ class PaymentService {
     public void delete(Long customerId, Long paymentId) {
         Payment payment = find(customerId, paymentId)
 
-        if (payment.deleted) throw new GenericException(MessageUtils.getMessage("payment.errors.notDeleted"))
+        if (payment.deleted) throw new BusinessException(MessageUtils.getMessage("payment.errors.notDeleted"))
 
         payment.deleted = true
         payment.save(failOnError: true)
@@ -98,7 +98,7 @@ class PaymentService {
     public void updateToReceived(Long id) {
         Payment payment = PaymentRepository.query([id: id]).get()
 
-        if (!payment) throw new GenericException(MessageUtils.getMessage("payment.errors.notFound"))
+        if (!payment) throw new BusinessException(MessageUtils.getMessage("payment.errors.notFound"))
 
         Payment validatedPayment = validateUpdateToReceived(payment)
         if (validatedPayment.hasErrors()) throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), validatedPayment.errors)
@@ -133,9 +133,9 @@ class PaymentService {
     public void updateToOverdue(Long id) {
         Payment payment = PaymentRepository.query([id: id]).get()
 
-        if (!payment) throw new GenericException(MessageUtils.getMessage("payment.errors.notFound"))
+        if (!payment) throw new BusinessException(MessageUtils.getMessage("payment.errors.notFound"))
 
-        if (!payment.paymentStatus.isPending()) throw new GenericException(MessageUtils.getMessage("payment.errors.status.update.pending"))
+        if (!payment.paymentStatus.isPending()) throw new BusinessException(MessageUtils.getMessage("payment.errors.status.update.pending"))
 
         payment.paymentStatus = PaymentStatus.OVERDUE
         payment.save(failOnError: true)

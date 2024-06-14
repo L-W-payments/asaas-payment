@@ -1,7 +1,7 @@
 package com.miniasaaslw
 
 import com.miniasaaslw.entity.enums.MessageType
-import com.miniasaaslw.exception.GenericException
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.utils.MessageUtils
 
 import grails.validation.ValidationException
@@ -38,7 +38,7 @@ class ExceptionController {
             return true
         }
 
-        if (exception instanceof GenericException) {
+        if (exception instanceof BusinessException) {
             addMessage(exception.message, MessageType.ERROR)
             return true
         }

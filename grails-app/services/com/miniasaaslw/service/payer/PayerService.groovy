@@ -5,7 +5,7 @@ import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.entity.enums.PersonType
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
-import com.miniasaaslw.exception.GenericException
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.repository.payment.PaymentRepository
 import com.miniasaaslw.utils.*
@@ -25,7 +25,7 @@ class PayerService {
     public Payer find(Long customerId, Long id) {
         Payer payer = PayerRepository.query([customerId: customerId, id: id]).get()
 
-        if (!payer) throw new GenericException(MessageUtils.getMessage("payer.errors.notFound"))
+        if (!payer) throw new BusinessException(MessageUtils.getMessage("payer.errors.notFound"))
 
         return payer
     }
@@ -33,9 +33,9 @@ class PayerService {
     public void restore(Long customerId, Long id) {
         Payer payer = PayerRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
 
-        if (!payer) throw new GenericException(MessageUtils.getMessage("payer.errors.notFound"))
+        if (!payer) throw new BusinessException(MessageUtils.getMessage("payer.errors.notFound"))
 
-        if (!payer.deleted) throw new GenericException(MessageUtils.getMessage("payer.errors.restore.notDeleted"))
+        if (!payer.deleted) throw new BusinessException(MessageUtils.getMessage("payer.errors.restore.notDeleted"))
 
         payer.deleted = false
 
@@ -45,11 +45,11 @@ class PayerService {
     public void delete(Long customerId, Long id) {
         Payer payer = find(customerId, id)
 
-        if (payer.deleted) throw new GenericException(MessageUtils.getMessage("payer.errors.delete.unknown"))
+        if (payer.deleted) throw new BusinessException(MessageUtils.getMessage("payer.errors.delete.unknown"))
 
         Boolean hasActivePayments = PaymentRepository.query([payerId: id, "paymentStatus[in]": [PaymentStatus.PENDING, PaymentStatus.OVERDUE]]).exists()
 
-        if (hasActivePayments) throw new GenericException(MessageUtils.getMessage("payer.errors.delete.pendingPayments"))
+        if (hasActivePayments) throw new BusinessException(MessageUtils.getMessage("payer.errors.delete.pendingPayments"))
 
         payer.deleted = true
 
