@@ -8,6 +8,10 @@
 </head>
 
 <body page-title="Visualizar cobrança">
+    <g:if test="${messageInfo}">
+        <g:render template="/utils/messages" model="${messageInfo}"/>
+    </g:if>
+
     <atlas-form-panel class="js-show-payment-panel">
         <atlas-button slot="actions"
                       icon="arrow-up-right"

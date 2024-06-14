@@ -1,9 +1,10 @@
 package com.miniasaaslw.controller
 
+
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.domain.security.User
 
-class BaseController {
+class BaseController extends ExceptionController {
 
     protected Integer getLimitPerPage() {
         String itemsPerPage = params.itemsPerPage?.toString()

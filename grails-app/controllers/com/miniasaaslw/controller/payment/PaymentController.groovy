@@ -5,7 +5,8 @@ import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.payer.Payer
 import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.domain.paymentreceipt.PaymentReceipt
-import com.miniasaaslw.domain.security.User
+import com.miniasaaslw.entity.enums.MessageType
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.repository.payer.PayerRepository
 import com.miniasaaslw.repository.paymentreceipt.PaymentReceiptRepository
 import com.miniasaaslw.service.payment.PaymentService
@@ -14,7 +15,6 @@ import com.miniasaaslw.utils.MessageUtils
 import grails.compiler.GrailsCompileStatic
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
-import grails.validation.ValidationException
 
 import groovy.transform.CompileDynamic
 
@@ -25,12 +25,10 @@ class PaymentController extends BaseController {
     PaymentService paymentService
 
     def index() {
-        def messageInfo = flash.messageInfo
-
         List<Payer> payers = PayerRepository.query([:]).list()
 
-        if (messageInfo) {
-            return [payers: payers, messageInfo: messageInfo]
+        if (hasMessages()) {
+            return [payers: payers, messageInfo: getMessagesObject()]
         }
 
         return [payers: payers]
@@ -41,12 +39,11 @@ class PaymentController extends BaseController {
             Long id = params.long("id")
 
             paymentService.restore(getCurrentCustomerId(), id)
+
             render([success: true] as JSON)
-        } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
-            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (BusinessException genericException) {
+            render([success: false, alert: genericException.getMessage()] as JSON)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.restore.unknown")], messageType: "error"]
             render([success: false, alert: MessageUtils.getMessage("payment.errors.restore.unknown")] as JSON)
         }
     }
@@ -56,9 +53,10 @@ class PaymentController extends BaseController {
             Long id = params.long("id")
 
             paymentService.delete(getCurrentCustomerId(), id)
+
             render([success: true] as JSON)
-        } catch (RuntimeException runtimeException) {
-            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (BusinessException genericException) {
+            render([success: false, alert: genericException.getMessage()] as JSON)
         } catch (Exception exception) {
             render([success: false, alert: MessageUtils.getMessage("payment.errors.delete.unknown")] as JSON)
         }
@@ -68,13 +66,9 @@ class PaymentController extends BaseController {
         try {
             paymentService.save(new PaymentAdapter(getCurrentCustomer(), params))
 
-            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.save.success")], messageType: "success"]
-        } catch (ValidationException validationException) {
-            println("VALIDAÇÃO: " + validationException)
-            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
+            addMessageCode("payment.save.success", MessageType.SUCCESS)
         } catch (Exception exception) {
-            println("ERRO: " + exception)
-            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.save.unknown")], messageType: "error"]
+            if (!handleException(exception)) addMessageCode("payment.errors.save.unknown", MessageType.ERROR)
         }
 
         redirect(action: "index")
@@ -91,7 +85,8 @@ class PaymentController extends BaseController {
 
             return [payment: payment, paymentReceiptId: paymentReceipt?.publicId]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.notFound")], messageType: "error"]
+            if (!handleException(exception)) addMessageCode("payment.errors.notFound", MessageType.ERROR)
+
             redirect(action: "index")
         }
     }
@@ -123,11 +118,9 @@ class PaymentController extends BaseController {
             paymentService.updateToReceived(id)
 
             redirect(action: "checkout", id: publicId)
-        } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
-            redirect(action: "index")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.pay")], messageType: "error"]
+            if (!handleException(exception)) addMessageCode("payment.errors.pay.unknown", MessageType.ERROR)
+
             redirect(action: "index")
         }
     }
@@ -138,21 +131,28 @@ class PaymentController extends BaseController {
 
             paymentService.updateToReceivedInCash(getCurrentCustomerId(), id)
 
+            addMessageCode("payment.updateToReceivedInCash.success", MessageType.SUCCESS)
+
             redirect(action: "show", id: id)
-        } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [runtimeException.getMessage()]
-            redirect(action: "index")
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.pay")], messageType: "error"]
+            if (!handleException(exception)) addMessageCode("payment.errors.pay.unknown", MessageType.ERROR)
+
             redirect(action: "index")
         }
     }
 
     def show() {
         try {
-            return [payment: paymentService.find(getCurrentCustomerId(), params.long("id"))]
+            Payment payment = paymentService.find(getCurrentCustomerId(), params.long("id"))
+
+            if (hasMessages()) {
+                return [payment: payment, messageInfo: getMessagesObject()]
+            }
+
+            return [payment: payment]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("payment.errors.notFound")], messageType: "error"]
+            if (!handleException(exception)) addMessageCode("payment.errors.find.unknown", MessageType.ERROR)
+
             redirect(action: "index")
         }
     }

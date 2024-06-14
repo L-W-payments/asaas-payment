@@ -4,13 +4,14 @@ import com.miniasaaslw.adapters.user.UserAdapter
 import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.security.Role
 import com.miniasaaslw.domain.security.User
+import com.miniasaaslw.entity.enums.MessageType
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.service.user.UserService
 import com.miniasaaslw.utils.MessageUtils
 
-import grails.converters.JSON
 import grails.compiler.GrailsCompileStatic
+import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
-import grails.validation.ValidationException
 
 import groovy.transform.CompileDynamic
 
@@ -21,10 +22,8 @@ class UserController extends BaseController {
     UserService userService
 
     def index() {
-        def messageInfo = flash.messageInfo
-
-        if (messageInfo) {
-            return [messageInfo: messageInfo]
+        if (hasMessages()) {
+            return [messageInfo: getMessagesObject()]
         }
     }
 
@@ -32,7 +31,6 @@ class UserController extends BaseController {
     @Secured(['isAuthenticated()'])
     def show() {
         try {
-            def messageInfo = flash.messageInfo
             User user
 
             Boolean isAdmin = getCurrentUser().getAuthorities().stream().any { it.authority == 'ROLE_ADMIN' }
@@ -43,33 +41,28 @@ class UserController extends BaseController {
                 user = getCurrentUser()
             }
 
-            if (messageInfo) {
-                return [user: user, messageInfo: messageInfo]
+            if (hasMessages()) {
+                return [user: user, messageInfo: getMessagesObject()]
             }
 
             return [user: user]
-        } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("user.errors.save.unknown")], messageType: "error"]
-        }
+            if (!handleException(exception)) addMessageCode("user.errors.show.unknown", MessageType.ERROR)
 
-        redirect(action: "show")
+            redirect(action: "show")
+        }
     }
 
     def save() {
         try {
             userService.save(new UserAdapter(getCurrentCustomer(), Role.findByAuthority('ROLE_MEMBER'), params))
 
-            flash.messageInfo = [messages: [MessageUtils.getMessage("user.success.save")], messageType: "success"]
-            redirect(action: "index")
-        } catch (ValidationException validationException) {
-            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
-            redirect(action: "index")
+            addMessageCode("user.success.save", MessageType.SUCCESS)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("user.errors.save.unknown")], messageType: "error"]
-            redirect(action: "index")
+            if (!handleException(exception)) addMessageCode("user.errors.save.unknown", MessageType.ERROR)
         }
+
+        redirect(action: "index")
     }
 
     @Secured(['ROLE_ADMIN'])
@@ -77,11 +70,11 @@ class UserController extends BaseController {
         try {
             Long id = params.long("id")
 
-
             userService.delete(getCurrentCustomerId(), id)
+
             render([success: true] as JSON)
-        } catch (RuntimeException runtimeException) {
-            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (BusinessException genericException) {
+            render([success: false, alert: genericException.getMessage()] as JSON)
         } catch (Exception exception) {
             render([success: false, alert: MessageUtils.getMessage("user.errors.delete.unknown")] as JSON)
         }
@@ -92,14 +85,12 @@ class UserController extends BaseController {
         try {
             Long id = params.long("id")
 
-
             userService.restore(getCurrentCustomerId(), id)
+
             render([success: true] as JSON)
-        } catch (RuntimeException runtimeException) {
-            flash.messageInfo = [messages: [runtimeException.getMessage()], messageType: "error"]
-            render([success: false, alert: runtimeException.getMessage()] as JSON)
+        } catch (BusinessException genericException) {
+            render([success: false, alert: genericException.getMessage()] as JSON)
         } catch (Exception exception) {
-            flash.messageInfo = [messages: [MessageUtils.getMessage("user.errors.restore.unknown")], messageType: "error"]
             render([success: false, alert: MessageUtils.getMessage("user.errors.restore.unknown")] as JSON)
         }
     }
@@ -107,16 +98,13 @@ class UserController extends BaseController {
     @Secured(['isAuthenticated()'])
     def updatePassword() {
         try {
-
             userService.updatePassword(new UserAdapter(getCurrentCustomer(), params))
 
-            flash.messageInfo = [messages: [MessageUtils.getMessage("user.success.update")], messageType: "success"]
-        } catch (ValidationException validationException) {
-            flash.messageInfo = [messages: validationException.errors.allErrors.collect { it.defaultMessage }, messageType: "error"]
+            addMessageCode("user.success.update", MessageType.SUCCESS)
         } catch (Exception exception) {
-            exception.printStackTrace()
-            flash.messageInfo = [messages: [MessageUtils.getMessage("user.errors.update.unknown")], messageType: "error"]
+            if (!handleException(exception)) addMessageCode("user.errors.update.unknown", MessageType.ERROR)
         }
+
         redirect(action: "show")
     }
 
@@ -126,7 +114,6 @@ class UserController extends BaseController {
 
     @CompileDynamic
     def loadTableContent() {
-
         Map search = [customerId: getCurrentCustomerId()]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
