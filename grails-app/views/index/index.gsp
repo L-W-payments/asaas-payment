@@ -12,7 +12,7 @@
     <atlas-panel header="Para você" items-per-page="4" carousel>
         <atlas-card background="light">
             <atlas-layout alignment="center" gap="4">
-                <atlas-image src="https://storybook.atlas.asaas.com/assets/illustrations/happy-woman-notebook.svg" height="200"></atlas-image>
+                <atlas-image src="${resource(dir: 'images', file: 'homepage/happy-woman-notebook.svg')}" height="200"></atlas-image>
                 <atlas-layout gap="3">
                     <atlas-heading size="h7">Adicione pagadores</atlas-heading>
                     <atlas-text line-clamp="5" size="sm">
@@ -24,7 +24,7 @@
         </atlas-card>
         <atlas-card background="light">
             <atlas-layout alignment="center" gap="4">
-                <atlas-image src="https://storybook.atlas.asaas.com/assets/illustrations/papers.svg" height="200"></atlas-image>
+                <atlas-image src="${resource(dir: 'images', file: 'homepage/papers.svg')}" height="200"></atlas-image>
                 <atlas-layout gap="3">
                     <atlas-heading size="h7">Visualize os pagadores</atlas-heading>
                     <atlas-text line-clamp="5" size="sm">
@@ -36,7 +36,7 @@
         </atlas-card>
         <atlas-card background="light">
             <atlas-layout alignment="center" gap="4">
-                <atlas-image src="https://storybook.atlas.asaas.com/assets/illustrations/man-coin-money.svg" height="200"></atlas-image>
+                <atlas-image src="${resource(dir: 'images', file: 'homepage/man-coin-money.svg')}" height="200"></atlas-image>
                 <atlas-layout gap="3">
                     <atlas-heading size="h7">Crie cobranças</atlas-heading>
                     <atlas-text line-clamp="5" size="sm">
@@ -48,7 +48,7 @@
         </atlas-card>
         <atlas-card background="light">
             <atlas-layout alignment="center" gap="4">
-                <atlas-image src="https://storybook.atlas.asaas.com/assets/illustrations/flow-money-coins.svg" height="200"></atlas-image>
+                <<atlas-image src="${resource(dir: 'images', file: 'homepage/flow-money-coins.svg')}" height="200"></atlas-image>
                 <atlas-layout gap="3">
                     <atlas-heading size="h7">Visualize suas cobranças</atlas-heading>
                     <atlas-text line-clamp="5" size="sm">
