@@ -48,7 +48,7 @@
         </atlas-card>
         <atlas-card background="light">
             <atlas-layout alignment="center" gap="4">
-                <<atlas-image src="${resource(dir: 'images', file: 'homepage/flow-money-coins.svg')}" height="200"></atlas-image>
+                <atlas-image src="${resource(dir: 'images', file: 'homepage/flow-money-coins.svg')}" height="200"></atlas-image>
                 <atlas-layout gap="3">
                     <atlas-heading size="h7">Visualize suas cobranças</atlas-heading>
                     <atlas-text line-clamp="5" size="sm">
