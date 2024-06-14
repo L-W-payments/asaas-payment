@@ -111,9 +111,8 @@ class UserController extends BaseController {
     def list() {
         try {
             return [userList: userService.list([customerId: getCurrentCustomerId(), excludeUserId: getCurrentUser().id], getLimitPerPage(), getOffset())]
-
-        } catch (Exception e) {
-            e.printStackTrace()
+        } catch (Exception exception) {
+            if (!handleException(exception)) addMessageCode("user.errors.list.unknown", MessageType.ERROR)
         }
     }
 
