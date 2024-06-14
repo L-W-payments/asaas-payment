@@ -99,7 +99,13 @@ class PayerController extends BaseController {
     }
 
     def list() {
-        return [payerList: payerService.list(getLimitPerPage(), getOffset(), [customerId: getCurrentCustomerId()])]
+        try {
+            return [payerList: payerService.list(getLimitPerPage(), getOffset(), [customerId: getCurrentCustomerId()])]
+        } catch (Exception exception) {
+            if (!handleException(exception)) addMessageCode("payer.errors.list.unknown", MessageType.ERROR)
+
+            redirect(action: "index")
+        }
     }
 
     @CompileDynamic

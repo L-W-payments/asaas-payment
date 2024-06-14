@@ -92,7 +92,13 @@ class PaymentController extends BaseController {
     }
 
     def list() {
-        return [paymentList: paymentService.list([customerId: getCurrentCustomerId()], getLimitPerPage(), getOffset())]
+        try {
+            return [paymentList: paymentService.list([customerId: getCurrentCustomerId()], getLimitPerPage(), getOffset())]
+        } catch (Exception exception) {
+            if (!handleException(exception)) addMessageCode("payment.errors.list.unknown", MessageType.ERROR)
+
+            redirect(action: "index")
+        }
     }
 
     @CompileDynamic
