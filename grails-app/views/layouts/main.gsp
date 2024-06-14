@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="pt-BR" class="no-js">
 
+<%
+    String pageTitle = pageProperty(name: 'body.page-title')
+    String breadcrumbTitle = pageProperty(name: 'body.breadcrumb-title', default: pageTitle)
+%>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -28,11 +33,12 @@
         <g:render template="/templates/navbar"/>
 
         <atlas-page>
-            <atlas-page-header slot="header" page-name="${pageProperty(name: 'body.page-title')}">
+            <atlas-page-header slot="header"
+                               page-name="${pageTitle}">
                 <atlas-breadcrumb slot="breadcrumb">
                     <atlas-breadcrumb-item
-                            text="${pageProperty(name: 'body.page-title')}"
-                            icon="home"></atlas-breadcrumb-item>
+                            text="${breadcrumbTitle}"
+                            icon="${pageProperty(name: 'body.page-icon', default: 'home')}"></atlas-breadcrumb-item>
                 </atlas-breadcrumb>
             </atlas-page-header>
 
