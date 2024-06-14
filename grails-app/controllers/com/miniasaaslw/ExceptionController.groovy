@@ -30,8 +30,6 @@ class ExceptionController {
 
     def handleException(Exception exception) {
         if (exception instanceof ValidationException) {
-            println(exception.errors.allErrors.collect { it.defaultMessage })
-
             List<String> errors = exception.errors.allErrors.collect { it.defaultMessage }
 
             addMessage(errors, MessageType.ERROR)
