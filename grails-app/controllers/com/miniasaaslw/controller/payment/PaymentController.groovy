@@ -64,14 +64,14 @@ class PaymentController extends BaseController {
 
     def save() {
         try {
-            paymentService.save(new PaymentAdapter(getCurrentCustomer(), params))
+            Payment payment = paymentService.save(new PaymentAdapter(getCurrentCustomer(), params))
 
             addMessageCode("payment.save.success", MessageType.SUCCESS)
+            redirect(action: "show", id: payment.id)
         } catch (Exception exception) {
             if (!handleException(exception)) addMessageCode("payment.errors.save.unknown", MessageType.ERROR)
+            redirect(action: "index")
         }
-
-        redirect(action: "index")
     }
 
     @Secured(["permitAll"])
