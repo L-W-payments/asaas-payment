@@ -3,12 +3,13 @@ package com.miniasaaslw.service.user
 import com.miniasaaslw.adapters.user.UserAdapter
 import com.miniasaaslw.domain.security.User
 import com.miniasaaslw.domain.security.UserRole
+import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.repository.user.UserRepository
 import com.miniasaaslw.utils.EmailUtils
 import com.miniasaaslw.utils.MessageUtils
 import com.miniasaaslw.utils.PasswordUtils
-
 import grails.compiler.GrailsCompileStatic
+
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
@@ -23,9 +24,7 @@ class UserService {
     public User save(UserAdapter userAdapter) {
         User user = validateUser(userAdapter)
 
-        if (user.hasErrors()) {
-            throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), user.errors)
-        }
+        if (user.hasErrors()) throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), user.errors)
 
         buildUserProperties(user, userAdapter)
         user.save(failOnError: true)
@@ -37,20 +36,34 @@ class UserService {
     public void restore(Long customerId, Long id) {
         User user = UserRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
 
-        if (!user) throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
+        if (!user) throw new BusinessException(MessageUtils.getMessage("user.errors.notFound"))
 
-        if (user.enabled) throw new RuntimeException(MessageUtils.getMessage("user.errors.restore.notDeleted"))
+        if (user.enabled) throw new BusinessException(MessageUtils.getMessage("user.errors.restore.notDeleted"))
 
         user.enabled = true
         user.save(failOnError: true)
     }
 
-    public void delete(Long customerId, Long id) {
-        User user = find(customerId, id)
+    public void delete(User loggedUser, Long id) {
+        User user = find(loggedUser.customer.id, id)
 
-        if (!user.enabled) throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
+        if (loggedUser.id == user.id) throw new BusinessException(MessageUtils.getMessage("user.errors.delete.self"))
+
+        if (!user.enabled) throw new BusinessException(MessageUtils.getMessage("user.errors.notFound"))
 
         user.enabled = false
+        user.save(failOnError: true)
+    }
+
+    public void updateEmail(UserAdapter userAdapter) {
+        User user = validateUserEmail(userAdapter)
+
+        if (user.hasErrors()) throw new ValidationException(MessageUtils.getMessage("general.errors.validation"), user.errors)
+
+        user = find(userAdapter.customer.id, userAdapter.id)
+
+        user.email = userAdapter.email
+
         user.save(failOnError: true)
     }
 
@@ -72,7 +85,7 @@ class UserService {
     public User find(Long customerId, Long id) {
         User user = UserRepository.query([customerId: customerId, id: id]).get()
 
-        if (!user) throw new RuntimeException(MessageUtils.getMessage("user.errors.notFound"))
+        if (!user) throw new BusinessException(MessageUtils.getMessage("user.errors.notFound"))
 
         return user
     }
@@ -98,7 +111,7 @@ class UserService {
 
         validatePassword(userAdapter, user)
 
-        if(UserRepository.query(["email": userAdapter.email]).exists()){
+        if (UserRepository.query([email: userAdapter.email]).exists()) {
             user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
         }
 
@@ -119,6 +132,20 @@ class UserService {
         }
 
         validatePassword(userAdapter, user)
+
+        return user
+    }
+
+    private User validateUserEmail(UserAdapter userAdapter) {
+        User user = new User()
+
+        if (!EmailUtils.validateEmail(userAdapter.email)) {
+            user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.invalid"))
+        }
+
+        if (UserRepository.query([email: userAdapter.email]).exists()) {
+            user.errors.rejectValue("email", null, MessageUtils.getMessage("general.errors.email.duplicated"))
+        }
 
         return user
     }

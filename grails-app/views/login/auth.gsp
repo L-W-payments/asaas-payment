@@ -2,6 +2,10 @@
 
 <html>
 <head>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <title>Entrar - Asaas</title>
     <asset:stylesheet src="login.scss"/>
 </head>
@@ -21,11 +25,22 @@
             </div>
 
             <div class="right">
-                <h1 class="title">Acesse sua conta Asaas! 🚀</h1>
 
-                <p class="description">
-                    Estamos felizes em te ver por aqui! Faça login para acessar sua conta.
-                </p>
+                <g:if test="${params.registered}">
+                    <h1 class="title success">Sua conta foi criada! 🚀</h1>
+
+                    <p class="description">
+                        Entre com seu <strong>e-mail</strong> e <strong>senha</strong> cadastrado para começarmos.
+                    </p>
+
+                </g:if>
+                <g:else>
+                    <h1 class="title">Acesse sua conta Asaas! 🚀</h1>
+
+                    <p class="description">
+                        Estamos felizes em te ver por aqui! Faça login para acessar sua conta.
+                    </p>
+                </g:else>
 
                 <form class="form" action="${postUrl ?: '/login/authenticate'}" method="post" autocomplete="off">
                     <div class="form-group">
@@ -42,7 +57,8 @@
 
                     <button type="submit">Entrar</button>
 
-                    <p class="description">Não possui uma conta? <a class="link" href="/customer">Registre-se</a></p>
+                    <span class="description">Não possui uma conta? <a class="link" href="/customer">Registre-se</a>
+                    </span>
 
                     <g:if test="${flash.message}">
                         <div class="error">${flash.message}</div>
@@ -51,5 +67,7 @@
             </div>
         </main>
     </div>
+
+    <asset:javascript src="LoginController.js"/>
 </body>
 </html>
