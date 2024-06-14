@@ -91,7 +91,6 @@ delete para registros no banco de dados.
 - [x] O cliente não deve se cadastrar com um cpf ou cnpj duplicado;
 - [x] O cliente não deve se cadastrar com informações inválidas;
 - [x] O cliente não deve se cadastrar um pagador com informações inválidas;
-- [ ] O cliente não deve deletar sua conta se possuir cobranças em aberto;
 - [x] O cliente não deve deletar um pagador que possui cobranças em aberto;
 - [x] O cliente não deve alterar uma cobrança;
 - [x] O cliente não deve criar uma cobrança com data de vencimento menor que a data atual;
