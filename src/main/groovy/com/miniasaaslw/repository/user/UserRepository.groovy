@@ -28,6 +28,10 @@ class UserRepository implements Repository<User, UserRepository> {
                 ilike("email", "%" + search."email[like]" + "%")
             }
 
+            if (search.containsKey("excludeUserId")) {
+                ne("id", search.excludeUserId)
+            }
+
             if (Boolean.valueOf(search.includeDeleted.toString())) {
                 inList("enabled", [true, false])
             } else {
@@ -41,7 +45,8 @@ class UserRepository implements Repository<User, UserRepository> {
         return [
                 "customerId",
                 "email",
-                "email[like]"
+                "email[like]",
+                "excludeUserId",
         ]
     }
 

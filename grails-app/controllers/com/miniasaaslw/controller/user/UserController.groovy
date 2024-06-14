@@ -70,7 +70,7 @@ class UserController extends BaseController {
         try {
             Long id = params.long("id")
 
-            userService.delete(getCurrentCustomerId(), id)
+            userService.delete(getCurrentUser(), id)
 
             render([success: true] as JSON)
         } catch (BusinessException genericException) {
@@ -109,12 +109,18 @@ class UserController extends BaseController {
     }
 
     def list() {
-        return [userList: userService.list([customerId: getCurrentCustomerId()], getLimitPerPage(), getOffset())]
+        try {
+            return [userList: userService.list([customerId: getCurrentCustomerId(), excludeUserId: getCurrentUser().id], getLimitPerPage(), getOffset())]
+        } catch (Exception exception) {
+            if (!handleException(exception)) addMessageCode("user.errors.list.unknown", MessageType.ERROR)
+
+            redirect(action: "index")
+        }
     }
 
     @CompileDynamic
     def loadTableContent() {
-        Map search = [customerId: getCurrentCustomerId()]
+        Map search = [customerId: getCurrentCustomerId(), excludeUserId: getCurrentUser().id]
 
         if (params.includeDeleted) search.includeDeleted = Boolean.valueOf(params.includeDeleted)
         if (params.email) search."email[like]" = params.email

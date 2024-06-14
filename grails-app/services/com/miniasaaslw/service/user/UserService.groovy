@@ -43,8 +43,10 @@ class UserService {
         user.save(failOnError: true)
     }
 
-    public void delete(Long customerId, Long id) {
-        User user = find(customerId, id)
+    public void delete(User loggedUser, Long id) {
+        User user = find(loggedUser.customer.id, id)
+
+        if (loggedUser.id == user.id) throw new GenericException(MessageUtils.getMessage("user.errors.delete.self"))
 
         if (!user.enabled) throw new BusinessException(MessageUtils.getMessage("user.errors.notFound"))
 
