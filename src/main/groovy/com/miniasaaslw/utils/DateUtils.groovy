@@ -26,5 +26,4 @@ class DateUtils {
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
         return calendar.getTime()
     }
-
 }
