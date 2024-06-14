@@ -1,4 +1,4 @@
-package com.miniasaaslw
+package com.miniasaaslw.controller
 
 import com.miniasaaslw.entity.enums.MessageType
 import com.miniasaaslw.exception.BusinessException
