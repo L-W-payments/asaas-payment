@@ -113,6 +113,8 @@ class UserController extends BaseController {
             return [userList: userService.list([customerId: getCurrentCustomerId(), excludeUserId: getCurrentUser().id], getLimitPerPage(), getOffset())]
         } catch (Exception exception) {
             if (!handleException(exception)) addMessageCode("user.errors.list.unknown", MessageType.ERROR)
+
+            redirect(action: "index")
         }
     }
 
