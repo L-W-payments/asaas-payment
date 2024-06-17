@@ -15,15 +15,6 @@
             action="${createLink(controller: 'customer', action: 'update')}">
         <atlas-button slot="actions" data-panel-start-editing icon="pencil" description="Editar"></atlas-button>
 
-        <atlas-button
-                class="js-delete-button"
-                type="outlined"
-                slot="actions"
-                data-action="delete"
-                data-delete-url="${createLink(controller: 'customer', action: 'delete')}"
-                data-redirect-url="/logout"
-                description="Apagar"></atlas-button>
-
         <atlas-input hidden name="country" value="Brasil"></atlas-input>
 
         <g:render template="/templates/basePersonForm" model="${[person: customer, isCustomer: false]}"/>

@@ -4,12 +4,9 @@ import com.miniasaaslw.adapters.customer.CustomerAdapter
 import com.miniasaaslw.controller.BaseController
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.entity.enums.MessageType
-import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.service.customer.CustomerService
-import com.miniasaaslw.utils.MessageUtils
 
 import grails.compiler.GrailsCompileStatic
-import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
 import groovy.transform.CompileDynamic
@@ -31,6 +28,7 @@ class CustomerController extends BaseController {
     def save() {
         try {
             customerService.save(new CustomerAdapter(params), params)
+
             redirect(uri: "/login/auth", params: [registered: true])
         } catch (Exception exception) {
             if (!handleException(exception)) addMessageCode("customer.errors.save.unknown", MessageType.ERROR)
@@ -67,17 +65,5 @@ class CustomerController extends BaseController {
         }
 
         redirect(action: "show")
-    }
-
-    @CompileDynamic
-    def delete() {
-        try {
-            customerService.delete(getCurrentCustomerId())
-            render([success: true] as JSON)
-        } catch (BusinessException genericException) {
-            render([success: false, alert: genericException.getMessage()] as JSON)
-        } catch (Exception exception) {
-            render([success: false, alert: MessageUtils.getMessage("customer.errors.delete.unknown")] as JSON)
-        }
     }
 }

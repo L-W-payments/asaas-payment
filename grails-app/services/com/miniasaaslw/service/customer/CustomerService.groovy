@@ -54,13 +54,6 @@ class CustomerService {
         return customer
     }
 
-    public void delete(Long id) {
-        Customer customer = find(id)
-
-        customer.deleted = true
-        customer.save(failOnError: true)
-    }
-
     public Customer find(Long id) {
         Customer customer = CustomerRepository.query([id: id]).get()
 
