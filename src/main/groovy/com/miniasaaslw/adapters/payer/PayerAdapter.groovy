@@ -2,7 +2,7 @@ package com.miniasaaslw.adapters.payer
 
 import com.miniasaaslw.domain.customer.Customer
 import com.miniasaaslw.entity.enums.PersonType
-import com.miniasaaslw.utils.LoggedCustomer
+
 import com.miniasaaslw.utils.StringUtils
 
 class PayerAdapter {

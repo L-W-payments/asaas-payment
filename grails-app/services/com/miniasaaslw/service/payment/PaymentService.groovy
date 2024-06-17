@@ -7,23 +7,27 @@ import com.miniasaaslw.domain.payment.Payment
 import com.miniasaaslw.entity.enums.payment.PaymentStatus
 import com.miniasaaslw.exception.BusinessException
 import com.miniasaaslw.repository.payment.PaymentRepository
-import com.miniasaaslw.utils.DateUtils
-import com.miniasaaslw.utils.LoggedCustomer
+import com.miniasaaslw.service.emailnotification.EmailNotificationService
+import com.miniasaaslw.service.notification.NotificationService
+import com.miniasaaslw.service.paymentreceipt.PaymentReceiptService
 import com.miniasaaslw.utils.MessageUtils
-
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 
 import groovy.time.TimeCategory
+import groovy.transform.CompileDynamic
+import org.springframework.transaction.TransactionStatus
 
+@GrailsCompileStatic
 @Transactional
 class PaymentService {
 
-    def emailNotificationService
+    EmailNotificationService emailNotificationService
 
-    def notificationService
+    NotificationService notificationService
 
-    def paymentReceiptService
+    PaymentReceiptService paymentReceiptService
 
     public Payment save(PaymentAdapter paymentAdapter) {
         Payment paymentData = validatePayment(paymentAdapter)
@@ -36,7 +40,7 @@ class PaymentService {
 
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentCreated(payment))
+        notificationService.save(payment.customer, NotificationAdapter.buildPaymentCreated(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentCreated(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentCreated(payment))
@@ -70,7 +74,7 @@ class PaymentService {
         payment.deleted = false
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentRestored(payment))
+        notificationService.save(payment.customer, NotificationAdapter.buildPaymentRestored(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentRestored(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentRestored(payment))
@@ -85,7 +89,7 @@ class PaymentService {
         payment.deleted = true
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentDeleted(payment))
+        notificationService.save(payment.customer, NotificationAdapter.buildPaymentDeleted(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentDeleted(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentDeleted(payment))
@@ -109,7 +113,7 @@ class PaymentService {
 
         paymentReceiptService.save(payment)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentReceived(payment))
+        notificationService.save(payment.customer, NotificationAdapter.buildPaymentReceived(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaid(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentPaid(payment))
@@ -125,7 +129,7 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.RECEIVED_IN_CASH
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentReceived(payment))
+        notificationService.save(payment.customer, NotificationAdapter.buildPaymentReceived(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentPaidInCash(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentPaidInCash(payment))
@@ -141,7 +145,7 @@ class PaymentService {
         payment.paymentStatus = PaymentStatus.OVERDUE
         payment.save(failOnError: true)
 
-        notificationService.save(LoggedCustomer.CUSTOMER, NotificationAdapter.buildPaymentOverdue(payment))
+        notificationService.save(payment.customer, NotificationAdapter.buildPaymentOverdue(payment))
 
         emailNotificationService.save(EmailNotificationAdapter.buildCustomerEmailPaymentOverdue(payment))
         emailNotificationService.save(EmailNotificationAdapter.buildPayerEmailPaymentOverdue(payment))
@@ -154,7 +158,7 @@ class PaymentService {
         ]).column("id").list(max: 500) as List<Long>
 
         for (Long paymentId : overduePendingPaymentsIdList) {
-            Payment.withNewTransaction { status ->
+            Payment.withNewTransaction { TransactionStatus status ->
                 try {
                     updateToOverdue(paymentId)
                 } catch (Exception exception) {
@@ -264,6 +268,7 @@ class PaymentService {
         return true
     }
 
+    @CompileDynamic
     private Boolean validateDueDate(Date dueDate) {
         if (dueDate.before(new Date().clearTime())) return false
 
